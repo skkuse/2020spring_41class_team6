@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "284979240067",
+    "firebase_url": "https://skku-fooding.firebaseio.com",
+    "project_id": "skku-fooding",
+    "storage_bucket": "skku-fooding.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284979240067:android:6a39d22282c3d0e5a5cfb6",
+        "android_client_info": {
+          "package_name": "team6.skku_fooding"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284979240067-ef7buji6hdgabgl4dljra5dd05pcvhs4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa5FxPiKMrKU8qefzOj1vcHOm4noEWof8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284979240067-ef7buji6hdgabgl4dljra5dd05pcvhs4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
