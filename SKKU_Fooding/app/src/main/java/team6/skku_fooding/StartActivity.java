@@ -14,7 +14,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_page);
+        setContentView(R.layout.activity_start);
         intent = new Intent(StartActivity.this, LoginActivity.class);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
