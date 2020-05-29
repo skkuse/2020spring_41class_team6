@@ -1,6 +1,7 @@
-package team6.skku_fooding;
+package team6.skku_fooding.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import team6.skku_fooding.R;
 
 import android.content.Intent;
 import android.os.Bundle;

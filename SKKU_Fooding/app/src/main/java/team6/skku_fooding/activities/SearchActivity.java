@@ -1,8 +1,9 @@
-package team6.skku_fooding;
+package team6.skku_fooding.activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import team6.skku_fooding.R;
 
 public class SearchActivity extends AppCompatActivity {
 

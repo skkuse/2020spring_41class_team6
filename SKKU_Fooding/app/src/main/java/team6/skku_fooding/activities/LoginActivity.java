@@ -1,7 +1,8 @@
-package team6.skku_fooding;
+package team6.skku_fooding.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import team6.skku_fooding.R;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("login", shakey);
                                         editor.commit();
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
                                         intent = new Intent(LoginActivity.this, SearchActivity.class);
                                         // get user's user_id & nickname from firebase database
                                         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {

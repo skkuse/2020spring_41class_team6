@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".activities.SearchActivity">
+    tools:context=".activities.SurveyActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search Activity"
+            android:text="Survey Activity"
             android:textColor="@android:color/black" />
 
     </LinearLayout>
