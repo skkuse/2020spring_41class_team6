@@ -9,20 +9,117 @@
     tools:context=".activities.SearchActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/sub_orange"
+        android:gravity="fill_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/_listView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0">
+
+        <ImageView
+            android:id="@+id/app_icon2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="0px"
+            android:layout_marginBottom="0px"
+            android:src="@drawable/app_icon" />
+
+        <EditText
+            android:id="@+id/search_string"
+            android:layout_width="190dp"
+            android:layout_height="45dp"
+            android:hint="Enter the string"
+            android:inputType="text"
+            android:textSize="15sp"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/login_button2"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:background="@color/sub_yellow"
+            android:padding="0dp"
+            android:text="SEARCH"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
 
-        <TextView
+    <HorizontalScrollView
+        android:id="@+id/horizontalscroll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/sub_yellow"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/_listView">
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search Activity"
-            android:textColor="@android:color/black" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="home"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/recommendation"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="recommendation"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/delivery"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="delivery"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mypage"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="mypage"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
