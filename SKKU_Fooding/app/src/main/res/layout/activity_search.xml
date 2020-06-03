@@ -39,7 +39,7 @@
             android:autofillHints="" />
 
         <Button
-            android:id="@+id/login_button2"
+            android:id="@+id/button_search"
             android:layout_width="100dp"
             android:layout_height="45dp"
             android:background="@color/sub_yellow"
