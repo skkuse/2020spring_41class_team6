@@ -27,11 +27,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import team6.skku_fooding.R;
+import team6.skku_fooding.models.Product;
 
 public class SearchActivity extends AppCompatActivity {
 
     String search_string;
     Button search_button;
+    DataSnapshot dataSnapshot_from_firebase;
+    ArrayList<Product> product_array_list;
+
     private DatabaseReference dbReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +56,17 @@ public class SearchActivity extends AppCompatActivity {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d("TAG", "onChildAdded:" + dataSnapshot.getKey());
+                dataSnapshot_from_firebase=dataSnapshot;
+                Log.d("TAG", "onChildAdded:" + dataSnapshot_from_firebase.getKey());
 
-                Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
+                Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot_from_firebase.getValue();
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
+
+                Product new_product=new Product();
+                new_product.productName=name;
+                new_product.price=price;
+                new_product.companyName=data
 
                 adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
                         name, price);
