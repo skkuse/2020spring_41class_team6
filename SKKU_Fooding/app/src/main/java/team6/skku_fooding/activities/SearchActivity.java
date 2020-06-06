@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -40,10 +42,13 @@ public class SearchActivity extends AppCompatActivity {
 
     String search_string;
     Button button_sorting;
-    DataSnapshot dataSnapshot_from_firebase;
-    ArrayList<Product> product_array_list;
     Integer sorting_order=0;
     ListView listview ;
+    ListViewAdapter adapter;
+    TextView home;
+    TextView recommendation;
+    TextView delivery;
+    TextView mypage;
 
     private DatabaseReference dbReference;
     @Override
@@ -52,74 +57,34 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // Listview
-        ListViewAdapter adapter;
         adapter = new ListViewAdapter() ;
 
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
 
-        product_array_list=new ArrayList<Product>();
-
         // Firebase data load
         dbReference= FirebaseDatabase.getInstance().getReference().child("product");
-        ChildEventListener childEventListener = new ChildEventListener() {
+        Query query=dbReference.orderByChild("uploaded_date");
+        query.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-
-                dataSnapshot_from_firebase=dataSnapshot;
-                Log.d("TAG", "onChildAdded:" + dataSnapshot_from_firebase.getKey());
-
-                Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot_from_firebase.getValue();
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
 
-                // Make product object
-                Product new_product=new Product();
-                new_product.productName=name;
-                new_product.productId=Integer.parseInt(dataSnapshot_from_firebase.getKey());
-                new_product.uploadedDate=new_product.stringToDate(currentObject.get("uploaded_date").toString());
-                new_product.price=Integer.parseInt(currentObject.get("price").toString());
-                new_product.companyName=currentObject.get("company").toString();
-                String tmp_str[]=currentObject.get("ingredient").toString().split(",");
-
-                // If there's no category in Ingredient.java, error occurs
-                for(String ing:tmp_str){
-                    new_product.ingredients.add(Ingredient.valueOf(ing.toUpperCase()));
-                }
-
-                // Object log
-                Log.d("Product Name", new_product.productName);
-                Log.d("Product Id", String.valueOf(new_product.productId));
-                Log.d("Product UploadedDate", String.valueOf(new_product.uploadedDate));
-                Log.d("Product price", String.valueOf(new_product.price));;
-                Log.d("Company Name", new_product.companyName);
-                Log.d("Ingredients", String.valueOf(new_product.ingredients));
-
-                // All products are saved into product_array_list
-                product_array_list.add(new_product);
                 adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
                         name, price);
-
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d("TAG", "onChildChanged:" + dataSnapshot.getKey());
-            }
-
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-            }
-
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-        dbReference.addChildEventListener(childEventListener);
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
 
         // Search button
         Button button_search=(Button)findViewById(R.id.button_search);
@@ -132,6 +97,7 @@ public class SearchActivity extends AppCompatActivity {
                     Log.d("edittext","dismissed");
                 }else {
                     search_string = edittext_search.getText().toString();
+                    search(search_string);
                     Log.d("edittext", search_string);
                 }
         }});
@@ -144,13 +110,11 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder dlg = new AlertDialog.Builder(SearchActivity.this);
                 dlg.setTitle("Sorting order");
-                final String[] versionArray = new String[] {"Recent","High Price","Low Price", "High Rating"};
-
-                dlg.setSingleChoiceItems(versionArray, 0, new DialogInterface.OnClickListener() {
+                final String[] versionArray = new String[] {"Recent","High Price","Low Price"};
+                dlg.setSingleChoiceItems(versionArray, sorting_order, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         sorting_order=which;
-                        Log.d("Sorting order",String.valueOf(sorting_order));
                     }
                 });
                 dlg.setPositiveButton("Select",new DialogInterface.OnClickListener(){
@@ -161,6 +125,36 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
                 dlg.show();
+            }
+        });
+
+        home=(TextView)findViewById(R.id.home);
+        recommendation=(TextView)findViewById(R.id.recommendation);
+        delivery=(TextView)findViewById(R.id.delivery);
+        mypage=(TextView)findViewById(R.id.mypage);
+
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Connect to home (now)
+            }
+        });
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("recommendation","I'm here");
+            }
+        });
+        delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("delivery","I'm here");
+            }
+        });
+        mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("mypage","I'm here");
             }
         });
     }
@@ -180,9 +174,6 @@ public class SearchActivity extends AppCompatActivity {
         }else if(sorting_order==2){
             button_sorting.setText("ORDER: LOW PRICE");
             query=dbReference.orderByChild("price");
-        }else if(sorting_order==3){
-            button_sorting.setText("ORDER: HIGH RATING");
-            query=dbReference.orderByChild("price");
         }else{
             query=dbReference.orderByChild("uploaded_date");
         }
@@ -197,31 +188,39 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
 
-                adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                        name, price);
-                adapter.notifyDataSetChanged();
+                if(sorting_order==1) {
+                    adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
+                            name, price);
+                    adapter.notifyDataSetChanged();
+                }
+                else{
+                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
+                            name, price);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+    }
+
+    void search(String text){
+        ListViewAdapter tmp=new ListViewAdapter();
+        Integer count=adapter.getCount();
+
+        for(int i=0;i<count;i++){
+            if(adapter.listViewItemList.get(i).getTitle().toLowerCase().contains(text.toLowerCase())){
+                tmp.addListViewItem(adapter.listViewItemList.get((i)));
+            }
+        }
+        listview.setAdapter(tmp);
     }
 }
 
@@ -256,7 +255,7 @@ class ListViewItem {
 }
 
 class ListViewAdapter extends BaseAdapter {
-    private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+    public ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
 
     public ListViewAdapter() {
 
@@ -287,6 +286,28 @@ class ListViewAdapter extends BaseAdapter {
         titleTextView.setText(listViewItem.getTitle());
         descTextView.setText(listViewItem.getDesc());
 
+        iconImageView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("image",listViewItemList.get(position).getTitle());
+            }
+        });
+        titleTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("title",listViewItemList.get(position).getTitle());
+            }
+        });
+        descTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("desc",listViewItemList.get(position).getTitle());
+            }
+        });
+
         return convertView;
     }
 
@@ -307,6 +328,18 @@ class ListViewAdapter extends BaseAdapter {
         item.setTitle(title);
         item.setDesc(desc);
 
+        listViewItemList.add(item);
+    }
+    public void addItemIndex(Integer index, Drawable icon, String title, String desc){
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setTitle(title);
+        item.setDesc(desc);
+
+        listViewItemList.add(index, item);
+    }
+    public void addListViewItem(ListViewItem item){
         listViewItemList.add(item);
     }
 }
