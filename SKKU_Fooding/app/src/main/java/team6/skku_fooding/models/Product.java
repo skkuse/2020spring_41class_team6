@@ -8,7 +8,7 @@ import java.util.List;
 public class Product {
     public int productId;
     public String companyName;
-    public Date uploadedDate;
+    public String uploadedDate;
     public List<Ingredient> ingredients;
     // Image container: String URI
     public String image;

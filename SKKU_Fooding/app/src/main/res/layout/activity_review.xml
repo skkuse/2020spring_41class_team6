@@ -35,7 +35,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewTextView"
+        android:onClick="setStar"
+        app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/twoStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
         app:srcCompat="@android:drawable/btn_star" />
@@ -47,7 +48,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewTextView"
+        android:onClick="setStar"
+        app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
         app:srcCompat="@android:drawable/btn_star" />
@@ -58,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewTextView"
+        android:onClick="setStar"
+        app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
@@ -71,7 +74,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewTextView"
+        android:onClick="setStar"
+        app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
         app:srcCompat="@android:drawable/btn_star" />
@@ -83,13 +87,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewTextView"
+        android:onClick="setStar"
+        app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/fourStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
         app:srcCompat="@android:drawable/btn_star" />
 
     <EditText
-        android:id="@+id/reviewTextView"
+        android:id="@+id/reviewTitleView"
         android:layout_width="0dp"
         android:layout_height="39dp"
         android:layout_marginStart="24dp"
@@ -117,21 +122,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reviewTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/reviewTitleView" />
 
     <HorizontalScrollView
         android:id="@+id/reviewImageScrollView"
         android:layout_width="0dp"
         android:layout_height="185dp"
         android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="auto"
         app:layout_constraintBottom_toTopOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
+            android:id="@+id/reviewImageLinearLayout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="auto"
+            android:orientation="horizontal"
+            android:weightSum="3" />
     </HorizontalScrollView>
 
     <Button
@@ -143,6 +154,16 @@
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/addUserImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
