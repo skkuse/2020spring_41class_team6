@@ -26,14 +26,6 @@
             android:textSize="@android:dimen/notification_large_icon_height"
            />
         <TextView
-            android:id="@+id/test_survey2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="VEGAN"
-            android:textAlignment="center"
-            android:textSize="@android:dimen/notification_large_icon_height"
-            />
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/radio_group"
