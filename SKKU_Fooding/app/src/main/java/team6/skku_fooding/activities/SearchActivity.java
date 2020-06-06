@@ -1,7 +1,6 @@
 package team6.skku_fooding.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -22,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 
 import team6.skku_fooding.R;
@@ -44,10 +39,11 @@ import team6.skku_fooding.models.Product;
 public class SearchActivity extends AppCompatActivity {
 
     String search_string;
-    Button search_button;
+    Button button_sorting;
     DataSnapshot dataSnapshot_from_firebase;
     ArrayList<Product> product_array_list;
     Integer sorting_order=0;
+    ListView listview ;
 
     private DatabaseReference dbReference;
     @Override
@@ -56,7 +52,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // Listview
-        ListView listview ;
         ListViewAdapter adapter;
         adapter = new ListViewAdapter() ;
 
@@ -142,8 +137,8 @@ public class SearchActivity extends AppCompatActivity {
         }});
 
         // Sorting order button
-        Button button_search_2=(Button)findViewById(R.id.button_search2);
-        button_search_2.setOnClickListener(new View.OnClickListener(){
+        button_sorting =(Button)findViewById(R.id.button_search2);
+        button_sorting.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -161,57 +156,7 @@ public class SearchActivity extends AppCompatActivity {
                 dlg.setPositiveButton("Select",new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which) {
                         // Change button_search_2 text according to the selection
-                        if(sorting_order==0){
-                            button_search_2.setText("ORDER: RECENT");
-                        }else if(sorting_order==1){
-                            button_search_2.setText("ORDER: HIGH PRICE");
-                            Query high_price_query=dbReference.orderByChild("price");
-
-                            //ListViewAdapter adapter = (ListViewAdapter)listview.getAdapter();
-                            ListViewAdapter adapter=new ListViewAdapter();
-                            listview.setAdapter(adapter);
-
-                            high_price_query.addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                    Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
-
-                                    Log.d("High: TAG", "onChildAdded:" + dataSnapshot_from_firebase.getKey());
-                                    Log.d("High: Product price", currentObject.get("price").toString());
-
-                                    String name=currentObject.get("name").toString();
-                                    String price=currentObject.get("price").toString();
-
-                                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                                            name, price);
-                                    adapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                }
-
-                                @Override
-                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }else if(sorting_order==2){
-                            button_search_2.setText("ORDER: LOW PRICE");
-                        }else if(sorting_order==3){
-                            button_search_2.setText("ORDER: HIGH RATING");
-                        }
+                        sortByOrder(sorting_order);
                         Toast.makeText(SearchActivity.this,"Sorting order changed", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -224,6 +169,60 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
+    void sortByOrder(Integer sorting_order){
+        Query query;
+        if(sorting_order==0){
+            button_sorting.setText("ORDER: RECENT");
+            query=dbReference.orderByChild("uploaded_date");
+        }else if(sorting_order==1){
+            button_sorting.setText("ORDER: HIGH PRICE");
+            query=dbReference.orderByChild("price");
+        }else if(sorting_order==2){
+            button_sorting.setText("ORDER: LOW PRICE");
+            query=dbReference.orderByChild("price");
+        }else if(sorting_order==3){
+            button_sorting.setText("ORDER: HIGH RATING");
+            query=dbReference.orderByChild("price");
+        }else{
+            query=dbReference.orderByChild("uploaded_date");
+        }
+
+        ListViewAdapter adapter=new ListViewAdapter();
+        listview.setAdapter(adapter);
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
+                String name=currentObject.get("name").toString();
+                String price=currentObject.get("price").toString();
+
+                adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                        name, price);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
 
 class ListViewItem {
