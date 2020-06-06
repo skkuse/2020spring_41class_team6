@@ -24,15 +24,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import team6.skku_fooding.R;
+import team6.skku_fooding.models.Ingredient;
 import team6.skku_fooding.models.Product;
 
 public class SearchActivity extends AppCompatActivity {
 
     String search_string;
     Button search_button;
+    Button sorting_order_button;
     DataSnapshot dataSnapshot_from_firebase;
     ArrayList<Product> product_array_list;
 
@@ -56,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+
                 dataSnapshot_from_firebase=dataSnapshot;
                 Log.d("TAG", "onChildAdded:" + dataSnapshot_from_firebase.getKey());
 
@@ -63,23 +67,33 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
 
+                // Make product object
                 Product new_product=new Product();
                 new_product.productName=name;
-                new_product.price=price;
-                new_product.companyName=data
+                new_product.productId=Integer.parseInt(dataSnapshot_from_firebase.getKey());
+                new_product.uploadedDate=new_product.stringToDate(currentObject.get("uploaded_date").toString());
+                new_product.price=Integer.parseInt(currentObject.get("price").toString());
+                new_product.companyName=currentObject.get("company").toString();
+                String tmp_str[]=currentObject.get("ingredient").toString().split(",");
 
+                // If there's no category in Ingredient.java, error occurs
+                for(String ing:tmp_str){
+                    new_product.ingredients.add(Ingredient.valueOf(ing.toUpperCase()));
+                }
+
+                // Object log
+                Log.d("Product Name", new_product.productName);
+                Log.d("Product Id", String.valueOf(new_product.productId));
+                Log.d("Product UploadedDate", String.valueOf(new_product.uploadedDate));
+                Log.d("Product price", String.valueOf(new_product.price));;
+                Log.d("Company Name", new_product.companyName);
+                Log.d("Ingredients", String.valueOf(new_product.ingredients));
+
+                // All products are saved into product_array_list
+                product_array_list.add(new_product);
                 adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
                         name, price);
 
-                /*
-                for(String child: user.keySet()) {
-                    Map<String, Object> currentObject = (Map<String, Object>) user.get(child);
-                    String name=currentObject.get("name").toString();
-                    String price=currentObject.get("price").toString();
-
-                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                            name, price);
-                }*/
             }
 
             @Override
