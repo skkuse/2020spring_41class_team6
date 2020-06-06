@@ -112,7 +112,7 @@ public class ReviewActivity extends AppCompatActivity {
                     b64Imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                 }
                 dbRef.child("count");
-
+/*
                 Review r = new Review(
                         ServerValue.TIMESTAMP.toString(),
                         ServerValue.TIMESTAMP.toString(),
@@ -120,7 +120,7 @@ public class ReviewActivity extends AppCompatActivity {
                         title,
                         userScore,
                         b64Imgs);
-
+*/
 
 
 
