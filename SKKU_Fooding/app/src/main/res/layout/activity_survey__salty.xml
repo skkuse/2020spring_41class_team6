@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    tools:context=".activities.SurveyActivity">
+    tools:context=".activities.SurveyActivity_Salty">
 
     <LinearLayout
         android:orientation="vertical"
@@ -16,68 +16,66 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TASTE"
+            android:text="SALTY"
             android:textAlignment="center"
-            android:textSize="@android:dimen/notification_large_icon_height" />
+            android:textSize="@android:dimen/notification_large_icon_height"
+           />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/radio_group"
-            android:text="Choose one favourite taste you like"
+            android:text="Choose the level of the taste"
             android:textAlignment="center"
             android:textSize="20sp" />
 
         <RadioGroup
-            android:id="@+id/radio_group"
+            android:id="@+id/salty_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
 
             <RadioButton
-                android:id="@+id/spicy_btn"
+                android:id="@+id/spicy_level1_btn"
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Spicy"
+                android:text="LEVEL 1"
                 android:textSize="35dp"
                 android:checked="true"
-                android:onClick="checkButton"
                 />
 
             <RadioButton
-                android:id="@+id/sweet_btn"
+                android:id="@+id/spicy_level2_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Sweet"
+                android:text="LEVEL 2"
                 android:textSize="35dp"
-                android:onClick="checkButton"
                 />
 
             <RadioButton
-                android:id="@+id/salty_btn"
+                android:id="@+id/spicy_level3_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Salty"
+                android:text="LEVEL 3"
                 android:textSize="35dp"
-                android:onClick="checkButton"
                 />
         </RadioGroup>
 
         <Button
-            android:id="@+id/taste_next_btn"
+            android:id="@+id/salty_next_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/radio_group"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:text="NEXT" />
+            android:layout_gravity="center_horizontal|center"
+            android:text="NEXT"
+            android:outlineAmbientShadowColor="@color/sub_orange"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
