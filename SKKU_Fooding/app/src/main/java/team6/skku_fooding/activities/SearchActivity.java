@@ -1,6 +1,9 @@
 package team6.skku_fooding.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,17 +16,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -35,9 +45,9 @@ public class SearchActivity extends AppCompatActivity {
 
     String search_string;
     Button search_button;
-    Button sorting_order_button;
     DataSnapshot dataSnapshot_from_firebase;
     ArrayList<Product> product_array_list;
+    Integer sorting_order=0;
 
     private DatabaseReference dbReference;
     @Override
@@ -53,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
 
+        product_array_list=new ArrayList<Product>();
 
         // Firebase data load
         dbReference= FirebaseDatabase.getInstance().getReference().child("product");
@@ -122,9 +133,91 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                search_string=edittext_search.getText().toString();
-                Log.d("edittext", search_string);
+                if(edittext_search.getText()==null){
+                    Log.d("edittext","dismissed");
+                }else {
+                    search_string = edittext_search.getText().toString();
+                    Log.d("edittext", search_string);
+                }
         }});
+
+        // Sorting order button
+        Button button_search_2=(Button)findViewById(R.id.button_search2);
+        button_search_2.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dlg = new AlertDialog.Builder(SearchActivity.this);
+                dlg.setTitle("Sorting order");
+                final String[] versionArray = new String[] {"Recent","High Price","Low Price", "High Rating"};
+
+                dlg.setSingleChoiceItems(versionArray, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sorting_order=which;
+                        Log.d("Sorting order",String.valueOf(sorting_order));
+                    }
+                });
+                dlg.setPositiveButton("Select",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Change button_search_2 text according to the selection
+                        if(sorting_order==0){
+                            button_search_2.setText("ORDER: RECENT");
+                        }else if(sorting_order==1){
+                            button_search_2.setText("ORDER: HIGH PRICE");
+                            Query high_price_query=dbReference.orderByChild("price");
+
+                            //ListViewAdapter adapter = (ListViewAdapter)listview.getAdapter();
+                            ListViewAdapter adapter=new ListViewAdapter();
+                            listview.setAdapter(adapter);
+
+                            high_price_query.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                    Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
+
+                                    Log.d("High: TAG", "onChildAdded:" + dataSnapshot_from_firebase.getKey());
+                                    Log.d("High: Product price", currentObject.get("price").toString());
+
+                                    String name=currentObject.get("name").toString();
+                                    String price=currentObject.get("price").toString();
+
+                                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                                            name, price);
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }else if(sorting_order==2){
+                            button_search_2.setText("ORDER: LOW PRICE");
+                        }else if(sorting_order==3){
+                            button_search_2.setText("ORDER: HIGH RATING");
+                        }
+                        Toast.makeText(SearchActivity.this,"Sorting order changed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dlg.show();
+            }
+        });
     }
 
     @Override
