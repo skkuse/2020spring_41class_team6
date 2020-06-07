@@ -20,7 +20,10 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
     RadioButton radioButton;
     int checked;
     int idfinal;
+    @Override
+    public void onBackPressed(){
 
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +83,11 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         });
         int radioId = radioGroup.getCheckedRadioButtonId();
         radioButton=findViewById(radioId);
-
-
     }
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity_Ingredient.this,SurveyActivity_Vegetarian.class);
-
         intent.putExtra(ID_NUMBER2,idfinal);
         startActivity(intent);
+        finish();
     }
 }
