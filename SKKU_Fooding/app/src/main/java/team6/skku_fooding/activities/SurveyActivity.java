@@ -64,15 +64,18 @@ public class SurveyActivity extends AppCompatActivity {
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Spicy.class);
         startActivity(intent);
+        finish();
     }
 
     private void startSurvey2(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Sweet.class);
         startActivity(intent);
+        finish();
     }
     private void startSurvey3(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Salty.class);
         startActivity(intent);
+        finish();
     }
 
 }
