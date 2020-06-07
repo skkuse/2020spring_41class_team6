@@ -36,31 +36,35 @@
         <activity
             android:name=".activities.SurveyActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Spicy"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Sweet"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Salty"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Ingredient"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Vegetarian"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
             android:name=".activities.SurveyActivity_Allergen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeWilliam" />
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.DeliveryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeDelivery"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
