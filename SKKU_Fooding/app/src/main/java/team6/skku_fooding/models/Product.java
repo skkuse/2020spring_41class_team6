@@ -2,6 +2,9 @@ package team6.skku_fooding.models;
 
 import android.graphics.Bitmap;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +19,9 @@ public class Product {
     // Image container: Base64 String
     public double overallScore;
 
-    public Product() {}
+    public Product() {
+        ingredients=new ArrayList<Ingredient>();
+    }
     public Product(int pid, String comp, String img, String ing, String pn, int p, String upd) {
         this.productId = pid;
         this.company = comp;
@@ -26,4 +31,16 @@ public class Product {
         this.price = p;
         this.uploadedDate = upd;
     }
+    public Date stringToDate(String str){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(str);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
+

@@ -20,6 +20,10 @@ public class SurveyActivity_Salty extends AppCompatActivity {
     int checked;
     int id;
     @Override
+    public void onBackPressed(){
+
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__salty);
@@ -64,5 +68,6 @@ public class SurveyActivity_Salty extends AppCompatActivity {
         }
         intent.putExtra(ID_NUMBER,id);
         startActivity(intent);
+        finish();
     }
 }

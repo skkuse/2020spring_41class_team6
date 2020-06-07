@@ -20,6 +20,10 @@ public class SurveyActivity_Spicy extends AppCompatActivity {
     int id;
 
     @Override
+    public void onBackPressed(){
+
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__spicy);
@@ -65,5 +69,6 @@ public class SurveyActivity_Spicy extends AppCompatActivity {
         }
         intent.putExtra(ID_NUMBER,id);
         startActivity(intent);
+        finish();
     }
 }
