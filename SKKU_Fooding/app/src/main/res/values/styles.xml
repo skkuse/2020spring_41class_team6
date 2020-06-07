@@ -8,8 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.CustomThemeWilliam" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.CustomThemeSurvey" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="AppTheme.CustomThemeDelivery" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 </resources>
