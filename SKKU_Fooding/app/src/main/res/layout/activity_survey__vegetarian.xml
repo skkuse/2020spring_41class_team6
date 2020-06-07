@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    tools:context=".activities.SurveyActivity_Vegetarian">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="VEGAN"
+            android:textAlignment="center"
+            android:textSize="@android:dimen/notification_large_icon_height"
+           />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/radio_group"
+            android:text="Are you vegetarian?"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:id="@+id/vegan_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <RadioButton
+                android:id="@+id/vegan_none"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:textSize="20dp"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/vegan_vegan"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vegan (Only vegetable)"
+                android:textSize="20dp"
+                />
+            <RadioButton
+                android:id="@+id/vegan_ovo"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ovo (Eggs)"
+                android:textSize="20dp"
+                />
+
+            <RadioButton
+                android:id="@+id/vegan_lacto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Lacto (Milk)"
+                android:textSize="20dp" />
+
+            <RadioButton
+                android:id="@+id/vegan_lacto_ovo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Lacto Ovo (Egg,Milk)"
+                android:textSize="20dp" />
+
+            <RadioButton
+                android:id="@+id/vegan_pesco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Pesco (Egg,Milk,Fish)"
+                android:textSize="20dp" />
+
+            <RadioButton
+            android:id="@+id/vegan_pollo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Pollo (Egg,Milk,Fish,Bird)"
+            android:textSize="20dp" />
+
+        </RadioGroup>
+        <Button
+            android:id="@+id/vegan_next_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="NEXT"
+            android:layout_gravity="center_horizontal|center"
+            android:outlineAmbientShadowColor="@color/sub_orange"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

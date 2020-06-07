@@ -4,6 +4,8 @@
     package="team6.skku_fooding">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,24 +15,61 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".activities.SearchActivity"
-            android:screenOrientation="portrait" >
+
+        <activity
+            android:name=".activities.StartActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity"
+        <activity
+            android:name=".activities.LoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.SignupActivity"
-        android:screenOrientation="portrait" />
-        <!-- <activity android:name=".activities.SearchActivity"
-            android:screenOrientation="portrait" />*/ -->
-        <activity android:name=".activities.ReviewActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activities.SurveyActivity"
-            android:screenOrientation="portrait" />
-    </application>
 
+
+        <activity
+            android:name=".activities.SignupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ReviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SurveyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Spicy"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Sweet"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Salty"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Ingredient"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Vegetarian"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.SurveyActivity_Allergen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeSurvey" />
+        <activity
+            android:name=".activities.DeliveryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomThemeDelivery"/>
+    </application>
 </manifest>
