@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,18 +13,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Layout;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,67 +29,88 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
 
 import team6.skku_fooding.R;
 import team6.skku_fooding.models.Ingredient;
 import team6.skku_fooding.models.Product;
 import team6.skku_fooding.models.Review;
 
-public class ReviewActivity extends AppCompatActivity {
-    public int userScore;
-    public Product p;
-    private LinearLayout lnrImages;
-    private DatabaseReference dbRef;
-    private int cnt;
 
-    @SuppressLint("SetTextI18n")
+@SuppressLint("SetTextI18n")
+public class ReviewActivity extends AppCompatActivity {
+    private Product p;
+    private LinearLayout lnrImages;
+    private FirebaseDatabase db;
+    private DatabaseReference userRef;
+    private DatabaseReference reviewRef;
+    private DatabaseReference productRef;
+    public int reviewId;
+    public int categoryId;
+    public int productId;
+    public String title;
+    public String description;
+    public int userScore;
+    public ArrayList<String> b64Imgs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        dbRef = FirebaseDatabase.getInstance().getReference("review").child("count");
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot ds) {
-                ReviewActivity.this.cnt = ((Long)ds.getValue()).intValue();
-            }
+        db = FirebaseDatabase.getInstance();
+        userRef = db.getReference("user");
+        reviewRef = db.getReference("review");
+        productRef = db.getReference("product");
+        productId = getIntent().getIntExtra("product_id", -1);
+        b64Imgs = new ArrayList<>();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError de) {
-                ReviewActivity.this.cnt = -1;
-            }
-        });
+        // This is mock-up data.
+        // It will overwrite if query is successfully done.
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)
+                .compress(Bitmap.CompressFormat.PNG,100, bs);
 
-        if (false) {
-            p = new Product(
-                    Integer.parseInt(getIntent().getStringExtra("PRODUCT_ID"))
-            );
-        } else {
-            p = new Product();
-            p.productId = 100;
-            p.companyName = "Dongwon";
-            p.uploadedDate = (new Date()).toString();
-            p.ingredients = new ArrayList<Ingredient>();
-            p.overallScore = 3.72;
-            p.productName = "Fishcake(Square, 12 pieces)";
-            p.price = 12000;
-            ((ImageView)findViewById(R.id.productImageView)).setImageResource(R.drawable.test_prod);
+        p = new Product(
+                100, "Dongwon",
+                Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT),
+                "seafood",
+                "Fishcake(Square, 12 pieces)",
+                12000,
+                (new Date()).toString());
+
+        if (productId != -1) {
+            productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
+                @Override public void onDataChange(@NonNull DataSnapshot ds) {
+                    if (ds.exists()) {
+                        ReviewActivity.this.p = ds.getValue(Product.class);
+                        Log.d("ReviewActivity", "ProductId: "+ReviewActivity.this.productId+" successfully loaded.");
+                    }
+                    else {
+                        ReviewActivity.this.productId = -1;
+                        Log.w("ReviewActivity", "ProductId: "+ReviewActivity.this.productId+" not found. Replace to fallback...");
+                    }
+                    ReviewActivity.this.refreshProductRelatedViews();
+                }
+                @Override public void onCancelled(@NonNull DatabaseError de) {
+                    ReviewActivity.this.productId = -1;
+                    Log.w("ReviewActivity", "ProductId query cancelled.");
+                    ReviewActivity.this.refreshProductRelatedViews();
+                }
+            });
         }
-        ((TextView)findViewById(R.id.productTextView)).setText("Write review about " + p.productName + ".");
+        reviewId = -1; // Initialize later with transaction.
+        // TODO: categoryId is missing...
+
         lnrImages = (LinearLayout)findViewById(R.id.reviewImageLinearLayout);
         ((Button)findViewById(R.id.addUserImageButton)).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -103,33 +122,48 @@ public class ReviewActivity extends AppCompatActivity {
         });
         ((Button)findViewById(R.id.sendButton)).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                String title = ((TextView)findViewById(R.id.reviewTitleView)).getText().toString();
-                String desc = ((TextView)findViewById(R.id.reviewDetailText)).getText().toString();
-                ArrayList<String> b64Imgs = new ArrayList<>();
+                ReviewActivity.this.title = ((TextView)findViewById(R.id.reviewTitleView)).getText().toString();
+                ReviewActivity.this.description = ((TextView)findViewById(R.id.reviewDetailText)).getText().toString();
+                b64Imgs = new ArrayList<>();
                 for (int i = 0; i < lnrImages.getChildCount(); i++) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap().compress(Bitmap.CompressFormat.WEBP, 100, baos);
+                    ((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, baos);
                     b64Imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                 }
-                dbRef.child("count");
-/*
-                Review r = new Review(
-                        ServerValue.TIMESTAMP.toString(),
-                        ServerValue.TIMESTAMP.toString(),
-                        desc,
-                        title,
-                        userScore,
-                        b64Imgs);
-*/
+                reviewRef.runTransaction(new Transaction.Handler() {
+                    @NonNull @Override public Transaction.Result doTransaction(@NonNull MutableData md) {
+                        ArrayList<Review> ar = md.getValue(new GenericTypeIndicator<ArrayList<Review>>() {});
+                        int rid = -1;
+                        if (ar != null) {
+                            ar.removeAll(Collections.singleton(null));
+                            rid = ar.size() + 1;
+                        }
+                        else rid = 1;
+                        String now = (new Date()).toString();
+                        Review r = new Review(
+                                rid,
+                                getIntent().getStringExtra("user_id"),
+                                ReviewActivity.this.productId,
+                                now, now,
+                                ReviewActivity.this.description,
+                                ReviewActivity.this.title,
+                                ReviewActivity.this.userScore,
+                                b64Imgs);
+                        md.child(Integer.toString(rid)).setValue(r);
+                        return Transaction.success(md);
+                    }
 
-
-
+                    @Override public void onComplete(@Nullable DatabaseError de, boolean b, @Nullable DataSnapshot ds) {
+                        Log.d("ReviewActivity", "postTransaction:onComplete:" + de);
+                        ReviewActivity.this.finish();
+                    }
+                });
             }
         });
     }
+
     @Override protected void onActivityResult(int reqCode, int resCode, Intent data) {
         super.onActivityResult(reqCode, resCode, data);
-
         if (reqCode == 1 && resCode == RESULT_OK && data != null) {
             // This is from addUserImageButton.
             if (data.getData() != null) {
@@ -139,8 +173,6 @@ public class ReviewActivity extends AppCompatActivity {
                 Cursor cur = getContentResolver()
                         .query(imagesPath, filePathColumn, null, null, null);
                 cur.moveToFirst();
-                BitmapFactory.Options op = new BitmapFactory.Options();
-                op.inSampleSize = 2;
                 Bitmap b = null;
                 try {
                     b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
@@ -177,9 +209,6 @@ public class ReviewActivity extends AppCompatActivity {
                 Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_LONG).show();
                 for (int i = 0; i < mcd.getItemCount(); i++) {
                     ClipData.Item it = mcd.getItemAt(i);
-                    BitmapFactory.Options op = new BitmapFactory.Options();
-                    op.inSampleSize = 2;
-                    // Bitmap b = BitmapFactory.decodeFile(it.getUri().getPath(), op);
                     Bitmap b = null;
                     try {
                         b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), it.getUri());
@@ -188,7 +217,6 @@ public class ReviewActivity extends AppCompatActivity {
                     }
                     ImageView iv = new ImageView(ReviewActivity.this);
                     iv.setImageBitmap(b);
-                    // iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     iv.setLayoutParams(new LinearLayout.LayoutParams(800,800, 1f));
                     iv.setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
@@ -219,17 +247,59 @@ public class ReviewActivity extends AppCompatActivity {
     public void setStar(View v) {
         switch (v.getId()) {
             case R.id.oneStarView:
-                userScore = 1; break;
+                userScore = 1;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                break;
             case R.id.twoStarView:
-                userScore = 2; break;
+                userScore = 2;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                break;
             case R.id.threeStarView:
-                userScore = 3; break;
+                userScore = 3;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                break;
             case R.id.fourStarView:
-                userScore = 4; break;
+                userScore = 4;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                break;
             case R.id.fiveStarView:
-                userScore = 5; break;
+                userScore = 5;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_on);
+                break;
             default:
                 userScore = 0;
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
         }
+    }
+    private void refreshProductRelatedViews() {
+        byte[] ib = Base64.decode(p.image, Base64.DEFAULT);
+        ((ImageView)findViewById(R.id.productImageView)).setImageBitmap(
+                BitmapFactory.decodeByteArray(ib, 0, ib.length)
+        );
+        ((TextView)findViewById(R.id.productTextView)).setText("Write review about " + p.name + ".");
     }
 }

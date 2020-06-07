@@ -39,7 +39,7 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/twoStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <ImageView
         android:id="@+id/twoStarView"
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <ImageView
         android:id="@+id/threeStarView"
@@ -65,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <ImageView
         android:id="@+id/fourStarView"
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <ImageView
         android:id="@+id/fiveStarView"
@@ -91,7 +91,7 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/fourStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <EditText
         android:id="@+id/reviewTitleView"
