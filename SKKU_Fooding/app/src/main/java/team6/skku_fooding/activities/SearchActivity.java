@@ -49,6 +49,8 @@ public class SearchActivity extends AppCompatActivity {
     TextView recommendation;
     TextView delivery;
     TextView mypage;
+    Integer search_filter=0;
+    String dummy_filter="pork,seafood";
 
     private DatabaseReference dbReference;
     @Override
@@ -71,9 +73,25 @@ public class SearchActivity extends AppCompatActivity {
                 Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
+                String ingredient=currentObject.get("ingredient").toString();
 
-                adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                        name, price);
+                if(search_filter==0){
+                    Integer flag=0;
+                    String[] ingredients_parsed=ingredient.split(",");
+                    for (String ing:ingredients_parsed){
+                        if(dummy_filter.toLowerCase().contains(ingredient)){
+                            flag=1;
+                            break;
+                        }
+                    }
+                    if(flag==0)
+                        adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                                name, price, ingredient);
+                }
+                else{
+                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                            name, price, ingredient);
+                }
             }
 
             @Override
@@ -122,6 +140,35 @@ public class SearchActivity extends AppCompatActivity {
                         // Change button_search_2 text according to the selection
                         sortByOrder(sorting_order);
                         Toast.makeText(SearchActivity.this,"Sorting order changed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dlg.show();
+            }
+        });
+
+        Button filter_onoff_button=(Button)findViewById(R.id.button_search3);
+        filter_onoff_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dlg = new AlertDialog.Builder(SearchActivity.this);
+                dlg.setTitle("Filter ON/OFF");
+                final String[] versionArray = new String[] {"ON","OFF"};
+                dlg.setSingleChoiceItems(versionArray, search_filter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        search_filter=which;
+                    }
+                });
+                dlg.setPositiveButton("Select",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Change button_search_3 text according to the selection
+                        if(search_filter==0){
+                            filter_onoff_button.setText("FILTER: ON");
+                            Toast.makeText(SearchActivity.this,"Filter ON", Toast.LENGTH_SHORT).show();
+                        }else if(search_filter==1){
+                            filter_onoff_button.setText("FILTER: OFF");
+                            Toast.makeText(SearchActivity.this,"Filter OFF", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 dlg.show();
@@ -187,15 +234,16 @@ public class SearchActivity extends AppCompatActivity {
                 Map<String, Object> currentObject = (Map<String, Object>) dataSnapshot.getValue();
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
+                String ingredient=currentObject.get("ingredient").toString();
 
                 if(sorting_order==1) {
                     adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                            name, price);
+                            name, price, ingredient);
                     adapter.notifyDataSetChanged();
                 }
                 else{
                     adapter.addItem(ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                            name, price);
+                            name, price, ingredient);
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -214,12 +262,16 @@ public class SearchActivity extends AppCompatActivity {
     void search(String text){
         ListViewAdapter tmp=new ListViewAdapter();
         Integer count=adapter.getCount();
+        String[] filters=dummy_filter.split(",");
 
         for(int i=0;i<count;i++){
             if(adapter.listViewItemList.get(i).getTitle().toLowerCase().contains(text.toLowerCase())){
-                tmp.addListViewItem(adapter.listViewItemList.get((i)));
+                if(!dummy_filter.toLowerCase().contains(adapter.listViewItemList.get(i).getIngredient().toLowerCase())){
+                    tmp.addListViewItem(adapter.listViewItemList.get((i)));
+                }
             }
         }
+
         listview.setAdapter(tmp);
     }
 }
@@ -228,6 +280,7 @@ class ListViewItem {
     private Drawable iconDrawable;
     private String titleStr;
     private String descStr;
+    private String ingredient;
 
     public void setIcon(Drawable icon) {
         iconDrawable = icon;
@@ -241,6 +294,8 @@ class ListViewItem {
         descStr = desc;
     }
 
+    public void setIngredient(String ing){ingredient=ing;}
+
     public Drawable getIcon() {
         return this.iconDrawable;
     }
@@ -252,6 +307,8 @@ class ListViewItem {
     public String getDesc() {
         return this.descStr;
     }
+
+    public String getIngredient(){return this.ingredient;}
 }
 
 class ListViewAdapter extends BaseAdapter {
@@ -321,21 +378,23 @@ class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-    public void addItem(Drawable icon, String title, String desc) {
+    public void addItem(Drawable icon, String title, String desc, String ingredient) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setDesc(desc);
+        item.setIngredient(ingredient);
 
         listViewItemList.add(item);
     }
-    public void addItemIndex(Integer index, Drawable icon, String title, String desc){
+    public void addItemIndex(Integer index, Drawable icon, String title, String desc, String ingredient){
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setDesc(desc);
+        item.setIngredient(ingredient);
 
         listViewItemList.add(index, item);
     }
