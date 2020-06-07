@@ -1,12 +1,12 @@
 package team6.skku_fooding.activities;
 
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -73,23 +72,30 @@ public class SearchActivity extends AppCompatActivity {
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
 
+                String imageString;
+                Bitmap decodedImage;
+                if(currentObject.get("image")!=null) {
+                    imageString = currentObject.get("image").toString();
+                    byte[]imageBytes = Base64.decode(imageString, Base64.DEFAULT);
+                    decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }else{
+                    decodedImage=null;
+                }
 
                 if(search_filter==0){
                     Integer flag=0;
                     String[] ingredients_parsed=ingredient.split(",");
                     for (String ing:ingredients_parsed){
-                        if(dummy_filter.toLowerCase().contains(ingredient)){
+                        if(dummy_filter.toLowerCase().contains(ing)){
                             flag=1;
                             break;
                         }
                     }
                     if(flag==0)
-                        adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                                name, price, ingredient);
+                        adapter.addItem(decodedImage, name, price, ingredient);
                 }
                 else{
-                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                            name, price, ingredient);
+                    adapter.addItem(decodedImage, name, price, ingredient);
                 }
             }
 
@@ -104,10 +110,9 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         // Search button
-        Button button_search=(Button)findViewById(R.id.button_search);
-        EditText edittext_search=(EditText)findViewById(R.id.search_string);
+        Button button_search=findViewById(R.id.button_search);
+        EditText edittext_search=findViewById(R.id.search_string);
         button_search.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
                 if(edittext_search.getText()==null){
@@ -145,6 +150,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        // Filtering button
         Button filter_onoff_button=(Button)findViewById(R.id.button_search3);
         filter_onoff_button.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -176,6 +182,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        // Bottom menu bar
         home=(TextView)findViewById(R.id.home);
         recommendation=(TextView)findViewById(R.id.recommendation);
         delivery=(TextView)findViewById(R.id.delivery);
@@ -237,6 +244,16 @@ public class SearchActivity extends AppCompatActivity {
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
 
+                String imageString;
+                Bitmap decodedImage;
+                if(currentObject.get("image")!=null) {
+                    imageString = currentObject.get("image").toString();
+                    byte[]imageBytes = Base64.decode(imageString, Base64.DEFAULT);
+                    decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }else{
+                    imageString=null; decodedImage=null;
+                }
+
                 if(sorting_order==1) {
                     if(search_filter==0){
                         Integer flag=0;
@@ -248,12 +265,10 @@ public class SearchActivity extends AppCompatActivity {
                             }
                         }
                         if(flag==0)
-                            adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                                    name, price, ingredient);
+                            adapter.addItemIndex(0,decodedImage, name, price, ingredient);
                     }
                     else{
-                        adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                                name, price, ingredient);
+                        adapter.addItemIndex(0,decodedImage, name, price, ingredient);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -268,12 +283,10 @@ public class SearchActivity extends AppCompatActivity {
                             }
                         }
                         if(flag==0)
-                            adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                                    name, price, ingredient);
+                            adapter.addItem(decodedImage, name, price, ingredient);
                     }
                     else{
-                        adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
-                                name, price, ingredient);
+                        adapter.addItem(decodedImage, name, price, ingredient);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -319,12 +332,12 @@ public class SearchActivity extends AppCompatActivity {
 }
 
 class ListViewItem {
-    private Drawable iconDrawable;
+    private Bitmap iconDrawable;
     private String titleStr;
     private String descStr;
     private String ingredient;
 
-    public void setIcon(Drawable icon) {
+    public void setIcon(Bitmap icon) {
         iconDrawable = icon;
     }
 
@@ -338,7 +351,7 @@ class ListViewItem {
 
     public void setIngredient(String ing){ingredient=ing;}
 
-    public Drawable getIcon() {
+    public Bitmap getIcon() {
         return this.iconDrawable;
     }
 
@@ -381,10 +394,9 @@ class ListViewAdapter extends BaseAdapter {
 
         ListViewItem listViewItem = listViewItemList.get(position);
 
-        //iconImageView.setImageDrawable(listViewItem.getIcon());
         titleTextView.setText(listViewItem.getTitle());
         descTextView.setText(listViewItem.getDesc());
-        iconImageView.setImageDrawable(listViewItem.getIcon());
+        iconImageView.setImageBitmap(listViewItem.getIcon());
 
         iconImageView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -421,7 +433,7 @@ class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-    public void addItem(Drawable icon, String title, String desc, String ingredient) {
+    public void addItem(Bitmap icon, String title, String desc, String ingredient) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
@@ -431,7 +443,8 @@ class ListViewAdapter extends BaseAdapter {
 
         listViewItemList.add(item);
     }
-    public void addItemIndex(Integer index, Drawable icon, String title, String desc, String ingredient){
+
+    public void addItemIndex(Integer index, Bitmap icon, String title, String desc, String ingredient){
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
