@@ -1,9 +1,11 @@
 package team6.skku_fooding.activities;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,14 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Map;
 
 import team6.skku_fooding.R;
-import team6.skku_fooding.models.Ingredient;
-import team6.skku_fooding.models.Product;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -74,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
+
 
                 if(search_filter==0){
                     Integer flag=0;
@@ -138,7 +137,7 @@ public class SearchActivity extends AppCompatActivity {
                 dlg.setPositiveButton("Select",new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which) {
                         // Change button_search_2 text according to the selection
-                        sortByOrder(sorting_order);
+                        listviewRebuild(sorting_order);
                         Toast.makeText(SearchActivity.this,"Sorting order changed", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -164,9 +163,11 @@ public class SearchActivity extends AppCompatActivity {
                         // Change button_search_3 text according to the selection
                         if(search_filter==0){
                             filter_onoff_button.setText("FILTER: ON");
+                            listviewRebuild(sorting_order);
                             Toast.makeText(SearchActivity.this,"Filter ON", Toast.LENGTH_SHORT).show();
                         }else if(search_filter==1){
                             filter_onoff_button.setText("FILTER: OFF");
+                            listviewRebuild(sorting_order);
                             Toast.makeText(SearchActivity.this,"Filter OFF", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -210,7 +211,7 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    void sortByOrder(Integer sorting_order){
+    void listviewRebuild(Integer sorting_order){
         Query query;
         if(sorting_order==0){
             button_sorting.setText("ORDER: RECENT");
@@ -237,13 +238,43 @@ public class SearchActivity extends AppCompatActivity {
                 String ingredient=currentObject.get("ingredient").toString();
 
                 if(sorting_order==1) {
-                    adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                            name, price, ingredient);
+                    if(search_filter==0){
+                        Integer flag=0;
+                        String[] ingredients_parsed=ingredient.split(",");
+                        for (String ing:ingredients_parsed){
+                            if(dummy_filter.toLowerCase().contains(ingredient)){
+                                flag=1;
+                                break;
+                            }
+                        }
+                        if(flag==0)
+                            adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
+                                    name, price, ingredient);
+                    }
+                    else{
+                        adapter.addItemIndex(0,ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
+                                name, price, ingredient);
+                    }
                     adapter.notifyDataSetChanged();
                 }
                 else{
-                    adapter.addItem(ContextCompat.getDrawable(SearchActivity.this, R.drawable.app_icon),
-                            name, price, ingredient);
+                    if(search_filter==0){
+                        Integer flag=0;
+                        String[] ingredients_parsed=ingredient.split(",");
+                        for (String ing:ingredients_parsed){
+                            if(dummy_filter.toLowerCase().contains(ingredient)){
+                                flag=1;
+                                break;
+                            }
+                        }
+                        if(flag==0)
+                            adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                                    name, price, ingredient);
+                    }
+                    else{
+                        adapter.addItem(ContextCompat.getDrawable(SearchActivity.this,R.drawable.app_icon),
+                                name, price, ingredient);
+                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -262,11 +293,22 @@ public class SearchActivity extends AppCompatActivity {
     void search(String text){
         ListViewAdapter tmp=new ListViewAdapter();
         Integer count=adapter.getCount();
-        String[] filters=dummy_filter.split(",");
 
         for(int i=0;i<count;i++){
             if(adapter.listViewItemList.get(i).getTitle().toLowerCase().contains(text.toLowerCase())){
-                if(!dummy_filter.toLowerCase().contains(adapter.listViewItemList.get(i).getIngredient().toLowerCase())){
+                if(search_filter==0){
+                    Integer flag=0;
+                    String[] ingredients_parsed=adapter.listViewItemList.get(i).getIngredient().split(",");
+                    for (String ing:ingredients_parsed){
+                        if(dummy_filter.toLowerCase().contains(ing)){
+                            flag=1;
+                            break;
+                        }
+                    }
+                    if(flag==0)
+                        tmp.addListViewItem(adapter.listViewItemList.get((i)));
+                }
+                else{
                     tmp.addListViewItem(adapter.listViewItemList.get((i)));
                 }
             }
@@ -339,9 +381,10 @@ class ListViewAdapter extends BaseAdapter {
 
         ListViewItem listViewItem = listViewItemList.get(position);
 
-        iconImageView.setImageDrawable(listViewItem.getIcon());
+        //iconImageView.setImageDrawable(listViewItem.getIcon());
         titleTextView.setText(listViewItem.getTitle());
         descTextView.setText(listViewItem.getDesc());
+        iconImageView.setImageDrawable(listViewItem.getIcon());
 
         iconImageView.setOnClickListener(new View.OnClickListener(){
             @Override
