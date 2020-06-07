@@ -20,7 +20,6 @@ public class Product {
     public double overallScore;
 
     public Product() {
-        ingredients=new ArrayList<Ingredient>();
     }
     public Product(int pid, String comp, String img, String ing, String pn, int p, String upd) {
         this.productId = pid;
