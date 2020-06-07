@@ -1,10 +1,11 @@
 package team6.skku_fooding.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Review {
     public int reviewId;
-    public int userId;
+    public String userId;
     public int productId;
     public int categoryId;
     public String writtenDate;
@@ -15,7 +16,7 @@ public class Review {
     public List<String> b64Imgs;
 
     public Review() {}
-    public Review(int rid, int uid, int pid, String wDate, String mDate, String desc, String tit, int score, List<String> imgs) {
+    public Review(int rid, String uid, int pid, String wDate, String mDate, String desc, String tit, int score, List<String> imgs) {
         this.reviewId = rid;
         this.userId = uid;
         this.productId = pid;
