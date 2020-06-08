@@ -8,21 +8,157 @@
     android:background="@android:color/white"
     tools:context=".activities.SearchActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
 
-        <TextView
+    <LinearLayout
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/sub_orange"
+        android:gravity="fill_horizontal"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/app_icon2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0px"
+            android:layout_marginBottom="0px"
+            android:layout_weight="0.1"
+            android:src="@drawable/app_icon" />
+
+        <EditText
+            android:id="@+id/search_string"
+            android:layout_width="190dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.5"
+            android:autofillHints=""
+            android:hint="Enter the string"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/button_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search Activity"
-            android:textColor="@android:color/black" />
+            android:layout_weight="0.2"
+            android:backgroundTint="@color/sub_yellow"
+            android:text="SEARCH"
+            android:textSize="16sp" />
+
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/banner2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="62dp"
+        app:layout_constraintEnd_toEndOf="@+id/_listView"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/banner"
+        app:layout_constraintTop_toBottomOf="@+id/banner"
+        >
+
+        <Button
+            android:id="@+id/button_search2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:backgroundTint="@color/sub_yellow"
+            android:text="ORDER: Recent"
+            android:layout_gravity="center"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/button_search3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.2"
+            android:backgroundTint="@color/sub_yellow"
+            android:text="FILTER: ON"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/_listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalscroll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/banner2"
+        app:layout_constraintTop_toBottomOf="@+id/banner2" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalscroll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/sub_yellow"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="home"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/recommendation"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="recommendation"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/delivery"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="delivery"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mypage"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="mypage"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

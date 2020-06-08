@@ -1,5 +1,6 @@
 package team6.skku_fooding.models;
 
+// Modification needed
 public enum Ingredient {
     MILK {},
     EGG {},
@@ -13,5 +14,9 @@ public enum Ingredient {
     PEACH {},
     TOMATO {},
     SULFUROUS {},
+    FLOUR{},
+    PORK{},
+    BEEF{},
+    SEAFOOD{},
     ;
 }
