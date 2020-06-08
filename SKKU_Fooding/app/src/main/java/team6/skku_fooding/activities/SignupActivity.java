@@ -50,6 +50,7 @@ public class SignupActivity extends AppCompatActivity {
     boolean is_duplicate;
     boolean is_sent = false;
     boolean is_verified=false;
+    boolean form_complete = false;
     boolean survey_complete = false;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -120,16 +121,33 @@ public class SignupActivity extends AppCompatActivity {
                 user_id = edit_signup_id.getText().toString();
                 pw = edit_signup_pw.getText().toString();
                 String pw_check = edit_pw_check.getText().toString();
+                nickname = edit_signup_name.getText().toString();
 
-                if(is_verified==true){
-                    Toast.makeText(SignupActivity.this, "This email is already verified.", Toast.LENGTH_SHORT).show();
+                // filled signup form
+                if(user_id.equals("")){
+                    Toast.makeText(SignupActivity.this, "Please enter your ID.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                //if(!user_id.equals(edit_signup_id.getText().toString()))
-                //    duplicate_checked=false;
-                if(user_id.equals("")){
-                    Toast.makeText(SignupActivity.this, "Please enter your ID.", Toast.LENGTH_SHORT).show();
+                else if(pw.equals(""))
+                {
+                    Toast.makeText(SignupActivity.this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                else if(pw_check.equals(""))
+                {
+                    Toast.makeText(SignupActivity.this, "Please enter your confirm password.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                else if (nickname.equals("")) {
+                    Toast.makeText(SignupActivity.this, "Please enter your nickname.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(is_verified==true){
+                    Toast.makeText(SignupActivity.this, "This email is already verified.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -182,7 +200,6 @@ public class SignupActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-
                 }
             }
 
@@ -193,6 +210,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user_id = edit_signup_id.getText().toString();
+
                 if(user_id.equals(""))
                 {
                     Toast.makeText(SignupActivity.this, "Please enter your ID.", Toast.LENGTH_SHORT).show();
@@ -230,6 +248,9 @@ public class SignupActivity extends AppCompatActivity {
                             edit_signup_id.setEnabled(false);
                             edit_signup_pw.setEnabled(false);
                             edit_pw_check.setEnabled(false);
+                            edit_signup_name.setEnabled(false);
+                            postFirebaseDatabase(true);
+                            form_complete = true;
                         }
                         else{
                             verify_tv.setText("Verification (Incomplete).");
@@ -245,8 +266,14 @@ public class SignupActivity extends AppCompatActivity {
         survey_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!form_complete)
+                {
+                    Toast.makeText(SignupActivity.this, "Signup form is not completely filled.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 survey_complete = true;
                 intent = new Intent(SignupActivity.this, SurveyActivity.class);
+                intent.putExtra("UID", UID);
                 startActivity(intent);
             }
         });
@@ -260,27 +287,13 @@ public class SignupActivity extends AppCompatActivity {
                 String pw_check = edit_pw_check.getText().toString();
                 nickname = edit_signup_name.getText().toString();
 
-                if(user_id.equals(""))
-                    Toast.makeText(SignupActivity.this, "Please enter your ID.", Toast.LENGTH_SHORT).show();
-
-                else if(pw.equals(""))
-                    Toast.makeText(SignupActivity.this, "Please enter your password.", Toast.LENGTH_SHORT).show();
-
-                else if(pw_check.equals(""))
-                    Toast.makeText(SignupActivity.this, "Please enter your confirm password.", Toast.LENGTH_SHORT).show();
-
-                else if (nickname.equals(""))
-                    Toast.makeText(SignupActivity.this, "Please enter your nickname.", Toast.LENGTH_SHORT).show();
-
-                else if (!is_verified)
-                    Toast.makeText(SignupActivity.this, "Email verification is incomplete.", Toast.LENGTH_SHORT).show();
-
+                if(!form_complete)
+                    Toast.makeText(SignupActivity.this, "Signup form is not completely filled.", Toast.LENGTH_SHORT).show();
                 else if (!survey_complete)
                     Toast.makeText(SignupActivity.this, "Preference survey is incomplete.", Toast.LENGTH_SHORT).show();
 
                 else
                 {
-                    postFirebaseDatabase(true);
                     Toast.makeText(SignupActivity.this, "Signed up successfully.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -300,7 +313,6 @@ public class SignupActivity extends AppCompatActivity {
         }
         childUpdates.put("/user/" + UID, postValues);
         dbReference.updateChildren(childUpdates);
-        verify_tv.setText("Sending verification email.");
     }
 
     public void clearET() {

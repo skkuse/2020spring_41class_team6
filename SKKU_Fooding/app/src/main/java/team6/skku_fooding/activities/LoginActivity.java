@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-
+    String UID;
     String user_id;
     String nickname;
     EditText edit_id;
@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         if (defaultValue != null) {
             Toast.makeText(LoginActivity.this, "Start Auto-Login", Toast.LENGTH_SHORT).show();
             intent = new Intent(LoginActivity.this, SearchActivity.class);
+            /* 앞으로의 activity에 필요한 intent 넘겨주기*/
+
             // get user's user_id & nickname from firebase database
             dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -116,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
                                         intent = new Intent(LoginActivity.this, SearchActivity.class);
+                                        /* 앞으로의 activity에 필요한 intent 넘겨주기*/
                                         // get user's user_id & nickname from firebase database
                                         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
