@@ -29,7 +29,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
     RadioButton radioButton;
     int checked;
     int idfinal;
-    int user_id;
+    String user_id;
     @Override
     public void onBackPressed(){
 
@@ -44,7 +44,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         reff_survey= FirebaseDatabase.getInstance().getReference();
 
         Intent intent = getIntent();
-        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
         int id = intent.getIntExtra(SurveyActivity_Spicy.ID_NUMBER,0);
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -83,7 +83,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
                 }
                 //이시점에서 category_id==idfinal 생성 완료
                 user_id=temp;
-                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 Integer.toString(user_id)
+                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 user_id
                 reff_survey.child("user").child("IPli1mXAUUYm3npYJ48B43Pp7tQ2").child("category_id").setValue(idfinal);
                 startSurvey();
             }
