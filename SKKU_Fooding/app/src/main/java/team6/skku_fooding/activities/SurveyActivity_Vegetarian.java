@@ -32,7 +32,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         setContentView(R.layout.activity_survey__vegetarian);
         Intent intent = getIntent();
         int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
-        //테스트용 
+        //테스트용
         //int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
        // TextView textView = (TextView) findViewById(R.id.test_survey);
         //textView.setText("" + id);
