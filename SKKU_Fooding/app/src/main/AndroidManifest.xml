@@ -68,8 +68,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomThemeSurvey" />
         <activity
+
             android:name=".activities.DeliveryActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomThemeDelivery"/>
+            android:theme="@style/AppTheme.CustomThemeDelivery">
+
+        </activity>
     </application>
 </manifest>

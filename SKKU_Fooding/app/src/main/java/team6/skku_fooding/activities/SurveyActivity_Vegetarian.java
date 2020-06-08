@@ -21,15 +21,19 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
     }
     String filtering;
     public static final String FILTER_STRING = "filtering_william.FILTER_STRING";
+    public static final String USER_ID = "survey_william.USER_ID";
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
+    int user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__vegetarian);
         Intent intent = getIntent();
-        int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
+        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        //테스트용
+        //int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
        // TextView textView = (TextView) findViewById(R.id.test_survey);
         //textView.setText("" + id);
         DisplayMetrics dm = new DisplayMetrics();
@@ -44,6 +48,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user_id=temp;
                 startSurvey();
             }
         });
@@ -83,6 +88,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
             filtering="pork,beef,shellfish";
         }
         intent.putExtra(FILTER_STRING,filtering);
+        intent.putExtra(USER_ID,user_id);
         startActivity(intent);
         finish();
     }

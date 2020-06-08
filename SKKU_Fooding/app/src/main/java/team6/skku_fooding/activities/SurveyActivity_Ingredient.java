@@ -9,17 +9,27 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import team6.skku_fooding.models.Survey;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import team6.skku_fooding.R;
 
 public class SurveyActivity_Ingredient extends AppCompatActivity {
     public static final String ID_NUMBER2 = "categoryid_william.ID_NUMBER";
+    public static final String USER_ID = "survey_william.USER_ID";
+    private DatabaseReference reff_survey;
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
     int idfinal;
+    int user_id;
     @Override
     public void onBackPressed(){
 
@@ -31,7 +41,10 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         setContentView(R.layout.activity_survey__ingredient);
         radioGroup = findViewById(R.id.ingredient_group);
 
+        reff_survey= FirebaseDatabase.getInstance().getReference();
+
         Intent intent = getIntent();
+        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
         int id = intent.getIntExtra(SurveyActivity_Spicy.ID_NUMBER,0);
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -68,6 +81,10 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
                 else if(checked==4){
                     idfinal = id +5;
                 }
+                //이시점에서 category_id==idfinal 생성 완료
+                user_id=temp;
+                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 Integer.toString(user_id)
+                reff_survey.child("user").child("IPli1mXAUUYm3npYJ48B43Pp7tQ2").child("category_id").setValue(idfinal);
                 startSurvey();
             }
         });
@@ -87,6 +104,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity_Ingredient.this,SurveyActivity_Vegetarian.class);
         intent.putExtra(ID_NUMBER2,idfinal);
+        intent.putExtra(USER_ID,user_id);
         startActivity(intent);
         finish();
     }
