@@ -156,7 +156,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
                 //이시점에서 filtering_final == filtering_list 생성 완료,
                 Log.d("sakfjlaskf",""+filtering_final);
                 //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 temp
-                reff_survey.child("user").child("IPli1mXAUUYm3npYJ48B43Pp7tQ2").child("filter").setValue(filtering_final);
+                reff_survey.child("user").child(temp).child("filter").setValue(filtering_final);
                 startSurvey();
             }
         });
