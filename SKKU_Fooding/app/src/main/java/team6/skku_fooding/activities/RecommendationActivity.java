@@ -2,16 +2,21 @@ package team6.skku_fooding.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import team6.skku_fooding.R;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import team6.skku_fooding.R;
+
 import com.google.firebase.database.*;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,14 +30,14 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public class Review {
 
-        Float rate;
+        Double rate;
         Integer product_id;
 
         public Review() {
 
         }
 
-        public Float getRate() {
+        public Double getRate() {
             return rate;
         }
 
@@ -42,14 +47,14 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public class dub {
-        Float rate;
+        Double rate;
         Integer count;
 
         public dub(){
 
         }
 
-        public Float getRate() {
+        public Double getRate() {
             return rate;
         }
 
@@ -60,7 +65,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public class Product {
         Integer product_id;
-        Float avgrate;
+        Double avgrate;
 
         public Product() {
 
@@ -70,7 +75,7 @@ public class RecommendationActivity extends AppCompatActivity {
             return product_id;
         }
 
-        public Float getAvgrate() {
+        public Double getAvgrate() {
             return avgrate;
         }
     }
@@ -80,8 +85,9 @@ public class RecommendationActivity extends AppCompatActivity {
         String name;
         String image;
         String ingredient;
-        Float rate;
+        Double rate;
         String company;
+        Integer price;
 
     }
 
@@ -101,13 +107,23 @@ public class RecommendationActivity extends AppCompatActivity {
         getcid();
 
         Button button = (Button)findViewById(R.id.change);
+        Button setrate = (Button)findViewById(R.id.criteria);
+
+        setrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show();
+
+
+            }
+        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
 
                 intent.putExtra("name","R");
 
@@ -120,13 +136,71 @@ public class RecommendationActivity extends AppCompatActivity {
 
     }
 
+    public void show() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Change rate criteria");
+        alert.setMessage("Input your rate criteria");
+
+
+        final EditText criteria = new EditText(this);
+        alert.setView(criteria);
+
+        alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String str_cri = criteria.getText().toString();
+                Double cri = 0.0;
+                boolean flag = true;
+                try {
+                    cri = Double.parseDouble(str_cri);
+                }
+                catch(Exception e) {
+                    errshow();
+                    flag = false;
+
+                }
+                if(cri > 5.0 || cri < 0.0) {
+                    errshow();
+                    flag = false;
+                }
+                if(flag) {
+                    DatabaseReference d = FirebaseDatabase.getInstance().getReference();
+                    d.child("user").child("dummy").child("criteria").setValue(cri);
+                    Intent in1 = new Intent(getApplicationContext(), RecommendationActivity.class);
+                    startActivity(in1);
+                }
+
+
+            }
+        });
+
+
+        alert.show();
+    }
+
+    public void errshow() {
+        Toast erring = Toast.makeText(this.getApplicationContext(), "소수로 입력해주세요 ex) 3.5", Toast.LENGTH_SHORT);
+        erring.show();
+    }
+
     public void getcid() {
 
         dbref.child("user").child("dummy").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer category_id = dataSnapshot.child("category_id").getValue(Integer.class);
-                Float criteria = dataSnapshot.child("criteria").getValue(Float.class);
+
+                /* 강제종료 등의 이유로 survey가 skip되었을 때
+                if (category_id == null) {
+                    Intent gosurvey = new Intent(getApplicationContext(), SurveyActivity.class);
+                    gosurvey.putExtra("name", "R");
+                    startActivity(gosurvey);
+                }
+
+                 */
+
+
+                Double criteria = dataSnapshot.child("criteria").getValue(Double.class);
                 String filter = dataSnapshot.child("filter").getValue(String.class);
                 Log.d("value", "category_id" + category_id);
                 getreview(category_id, criteria, filter);
@@ -144,13 +218,13 @@ public class RecommendationActivity extends AppCompatActivity {
 
     }
 
-    public void getreview(Integer cid, final Float criteria, final String filter) {
+    public void getreview(Integer cid, final Double criteria, final String filter) {
         dbref.child("review").orderByChild("category_id").equalTo(cid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot shot : dataSnapshot.getChildren()) {
                     Review review1 = new Review();
-                    review1.rate = shot.child("rate").getValue(Float.class);
+                    review1.rate = shot.child("rate").getValue(Double.class);
                     review1.product_id = shot.child("product_id").getValue(Integer.class);
                     rlist.add(review1);
 
@@ -204,7 +278,7 @@ public class RecommendationActivity extends AppCompatActivity {
     public void getProduct(List<Product> productList, final String filter) {
 
         for (final Product p : productList) {
-            final float r = p.avgrate;
+            final Double r = p.avgrate;
             dbref.child("product").orderByChild("product_id").equalTo(p.product_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -216,8 +290,9 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.image = shot.child("image").getValue(String.class);
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
+                            i.price = shot.child("price").getValue(Integer.class);
                             i.rate = r;
-                            Log.d("list", "image : " + i.image + " name : " + i.name + " company : " + i.company + " rate : " + i.rate);
+
                             //리스트뷰 추가 시점
                         }
                     }
