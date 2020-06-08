@@ -12,9 +12,10 @@ public class User {
     public String pw;
     public String nickname;
     public String UID;
-    public List<Pair<Product, Integer>> shopping_cart;
+    public List<Pair<Product, Integer>> shopping_cart; // discuss with Algi
     public List<Order> order_list;
-    public List<Survey> survey_list;
+    public int category_id;
+    public List<String> filter_list;
 
     public User() {}
 
@@ -25,10 +26,8 @@ public class User {
         this.UID=UID;
         this.shopping_cart=new ArrayList<Pair<Product, Integer>>();
         this.order_list=new ArrayList<Order>();
-        this.survey_list=new ArrayList<Survey>();
-        /*
-            Firebase에 value가 null이면 안들어가므로 초기값으로 뭘 넣어둘지 상의해야함!!
-         */
+        this.filter_list = new ArrayList<String>();
+        // shopping cart, order_list, category_id, filter_list는 각 activity에서 child 추가
     }
 
     public Map<String, Object> toMap() {
@@ -39,7 +38,40 @@ public class User {
         result.put("UID", UID);
         result.put("shopping_cart", shopping_cart);
         result.put("order_list", order_list);
-        result.put("survey_list", survey_list);
+        result.put("category_id", category_id);
+        result.put("filter_list", filter_list);
         return result;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public String getPw() {
+        return pw;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public List<Pair<Product, Integer>> getShopping_cart() {
+        return shopping_cart;
+    }
+
+    public List<Order> getOrder_list() {
+        return order_list;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public List<String> getFilter_list() {
+        return filter_list;
     }
 }
