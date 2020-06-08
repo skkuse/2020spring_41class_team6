@@ -25,13 +25,13 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
-    int user_id;
+    String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__vegetarian);
         Intent intent = getIntent();
-        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
         //테스트용
         //int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
        // TextView textView = (TextView) findViewById(R.id.test_survey);
