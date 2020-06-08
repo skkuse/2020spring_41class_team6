@@ -20,7 +20,7 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
     RadioButton radioButton;
     int checked;
     int id;
-    int user_id;
+    String user_id;
     @Override
     public void onBackPressed(){
 
@@ -40,7 +40,7 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
         Intent intent = getIntent();
-        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
         Button buttonStartSurvey = findViewById(R.id.sweet_next_btn);
         saveID();
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
