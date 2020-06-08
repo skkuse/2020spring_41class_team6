@@ -20,7 +20,7 @@ public class SurveyActivity_Salty extends AppCompatActivity {
     RadioButton radioButton;
     int checked;
     int id;
-    int user_id;
+    String user_id;
     @Override
     public void onBackPressed(){
 
@@ -33,7 +33,7 @@ public class SurveyActivity_Salty extends AppCompatActivity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         Intent intent = getIntent();
-        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
         int width= dm.widthPixels;
         int height = dm.heightPixels;
 
