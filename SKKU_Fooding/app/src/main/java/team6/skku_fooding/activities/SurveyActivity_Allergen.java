@@ -54,7 +54,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
         Button buttonfinishSurvey = findViewById(R.id.allergen_next_btn);
         Intent intent = getIntent();
         String filtering = intent.getStringExtra(SurveyActivity_Vegetarian.FILTER_STRING);
-        int temp = intent.getIntExtra(SurveyActivity.USER_ID,0);
+        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
         filtering_final=filtering;
         //병서씨한테서 recommendationactivitiy string 받아오기
         //String get_from_recommendation = intent.getStringExtra(RecommandationActivity.name);
@@ -155,7 +155,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
                 }
                 //이시점에서 filtering_final == filtering_list 생성 완료,
                 Log.d("sakfjlaskf",""+filtering_final);
-                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 Integer.toString(temp)
+                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 temp
                 reff_survey.child("user").child("IPli1mXAUUYm3npYJ48B43Pp7tQ2").child("filter").setValue(filtering_final);
                 startSurvey();
             }
@@ -167,6 +167,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
        //     Intent intent =new Intent(SurveyActivity_Allergen.this,RecommendationActivity.class);
        //     startActivity(intent);
        // }
+
       // 테스트용 Intent intent =new Intent(SurveyActivity_Allergen.this,DeliveryActivity.class);
         //startActivity(intent);
         finish();
