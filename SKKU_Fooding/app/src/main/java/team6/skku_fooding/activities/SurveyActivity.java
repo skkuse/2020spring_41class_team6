@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
-import team6.skku_fooding.models.Survey;
 
 public class SurveyActivity extends AppCompatActivity {
     public static final String USER_ID = "survey_william.USER_ID";
