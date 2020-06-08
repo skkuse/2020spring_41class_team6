@@ -10,8 +10,8 @@
 
     <View
         android:id="@+id/view"
-        android:layout_width="411dp"
-        android:layout_height="89dp"
+        android:layout_width="413dp"
+        android:layout_height="162dp"
         android:layout_marginTop="4dp"
         android:background="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +67,21 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/order_product_delivery"
+        android:layout_width="394dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Hello"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_date_delivery" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
