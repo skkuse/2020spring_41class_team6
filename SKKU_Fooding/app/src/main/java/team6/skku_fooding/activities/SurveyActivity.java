@@ -3,6 +3,7 @@ package team6.skku_fooding.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -14,12 +15,14 @@ import team6.skku_fooding.R;
 
 public class SurveyActivity extends AppCompatActivity {
     public static final String USER_ID = "survey_william.USER_ID";
+
     Intent intent;
     Button next_button;
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
     String user_id;
+
     @Override
     public void onBackPressed(){
 
@@ -29,7 +32,10 @@ public class SurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         //주원씨한테서 user_id 받아오기
-        //String temp = intent.getIntExtra(SignupActivity.UID);
+        Intent intent = getIntent();
+        String temp = intent.getStringExtra(SignupActivity.UID_pass);
+
+        Log.d("sakfjlaskf",""+ temp);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         radioGroup = findViewById(R.id.radio_group);
@@ -48,15 +54,15 @@ public class SurveyActivity extends AppCompatActivity {
             int radioId = radioGroup.getCheckedRadioButtonId();
             radioButton=findViewById(radioId);
             if(checked==0){
-               // user_id=temp; // 주원씨 한테서 잘 받아오면 해제
+               user_id=temp; // 주원씨 한테서 잘 받아오면 해제
                 startSurvey();
             }
             if(checked==1){
-               // user_id=temp;
+               user_id=temp;
                 startSurvey2();
             }
             if(checked==2){
-              //  user_id=temp;
+              user_id=temp;
                 startSurvey3();
             }
         });

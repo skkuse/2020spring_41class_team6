@@ -84,7 +84,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
                 //이시점에서 category_id==idfinal 생성 완료
                 user_id=temp;
                 //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 user_id
-                reff_survey.child("user").child("IPli1mXAUUYm3npYJ48B43Pp7tQ2").child("category_id").setValue(idfinal);
+                reff_survey.child("user").child(user_id).child("category_id").setValue(idfinal);
                 startSurvey();
             }
         });

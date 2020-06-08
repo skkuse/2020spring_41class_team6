@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import team6.skku_fooding.R;
 import com.google.firebase.database.*;
 
 import android.util.Log;
