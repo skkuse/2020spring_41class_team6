@@ -20,7 +20,7 @@ public class SurveyActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
-    int user_id=5858585;
+    String user_id;
     @Override
     public void onBackPressed(){
 
@@ -30,7 +30,7 @@ public class SurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         //주원씨한테서 user_id 받아오기
-        //int temp = intent.getIntExtra(SignupActivity.name);
+        //String temp = intent.getIntExtra(SignupActivity.UID);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         radioGroup = findViewById(R.id.radio_group);
