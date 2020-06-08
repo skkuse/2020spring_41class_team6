@@ -34,6 +34,7 @@ public class CustomListAdapter_delivery extends ArrayAdapter<custom_list_item_de
         String order_id = getItem(position).getOrder_id();
         String order_date = getItem(position).getDate();
         String order_status = getItem(position).getStatus();
+        String order_product_name = getItem(position).getProduct_name();
 
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -41,10 +42,12 @@ public class CustomListAdapter_delivery extends ArrayAdapter<custom_list_item_de
         TextView txId =(TextView) convertView.findViewById(R.id.order_id_delivery);
         TextView txDate = (TextView)convertView.findViewById(R.id.order_date_delivery);
         TextView txStatus = (TextView)convertView.findViewById(R.id.order_status_delivery);
+        TextView txProductname = (TextView)convertView.findViewById(R.id.order_product_delivery);
 
         txId.setText(order_id);
         txDate.setText(order_date);
         txStatus.setText(order_status);
+        txProductname.setText(order_product_name);
         return convertView;
 
     }
