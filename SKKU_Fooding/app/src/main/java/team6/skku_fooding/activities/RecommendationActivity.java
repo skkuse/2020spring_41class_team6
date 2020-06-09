@@ -1,5 +1,6 @@
 package team6.skku_fooding.activities;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -165,7 +166,7 @@ public class RecommendationActivity extends AppCompatActivity {
                 }
                 if(flag) {
                     DatabaseReference d = FirebaseDatabase.getInstance().getReference();
-                    d.child("user").child("dummy").child("criteria").setValue(cri);
+                    d.child("user").child("3mOXMr3hU6XYJ7l2aVAIwQBdLDp1").child("criteria").setValue(cri);
                     Intent in1 = new Intent(getApplicationContext(), RecommendationActivity.class);
                     startActivity(in1);
                 }
@@ -185,7 +186,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public void getcid() {
 
-        dbref.child("user").child("dummy").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbref.child("user").child("3mOXMr3hU6XYJ7l2aVAIwQBdLDp1").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer category_id = dataSnapshot.child("category_id").getValue(Integer.class);
