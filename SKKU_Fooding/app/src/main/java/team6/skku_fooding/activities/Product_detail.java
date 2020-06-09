@@ -23,30 +23,37 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class Product_detail extends AppCompatActivity {
 TextView company,name,ingredient,price,uploadeddate;
 TextView specificavg,generalavg;
 ImageView image;
-//ImageView image;
-int specificaverage;
-int generalaverage;
+TextView amountindicator;
+double specificaverage;
+double generalaverage;
 int countspecific;
 int countgeneral;
 
-DatabaseReference reff;
-    String productid;
-    String userid;
-    int categoryid;
-    ArrayList<Review> rews = new ArrayList<>();
-/*
+    DatabaseReference reff;
+    DatabaseReference reff1;
+
+    ArrayList<Review> rewsspecific = new ArrayList<>();
+    ArrayList<Review> rewsgeneral = new ArrayList<>();
+    String finallastversion;
+    String[]forthefirstamount;
+    String[]forthefirstamountsecondsplit;
+    String productprice;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.productdetail);
         FirebaseApp.initializeApp(this);
+        amountindicator=(TextView)findViewById(R.id.showamount);
+
+
 
         //The previous intent need to give below info
         //then manually written numbers in if statement need to be changed according to that
@@ -71,6 +78,7 @@ DatabaseReference reff;
                 String ing=dataSnapshot.child("ingredient").getValue().toString();
                 String nm=dataSnapshot.child("name").getValue().toString();
                 String prc=dataSnapshot.child("price").getValue().toString();
+                productprice=prc;
                 String up_date=dataSnapshot.child("uploaded_date").getValue().toString();
                 byte[]imageBytes = Base64.decode(img, Base64.DEFAULT);
                 Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
@@ -88,6 +96,37 @@ DatabaseReference reff;
             }
         });
 
+
+        reff1= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+
+
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                finallastversion=dataSnapshot.child("shopping_cart").getValue().toString();
+                forthefirstamount=finallastversion.split("-",0);
+                for(String values1:forthefirstamount){
+                    forthefirstamountsecondsplit=values1.split(":",0);
+
+                      if(forthefirstamountsecondsplit[0].equals("200")){
+
+                          amountindicator.setText(forthefirstamountsecondsplit[1].toString());
+                      }
+
+                }
+
+
+
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
       reviews();
 
 
@@ -95,6 +134,12 @@ DatabaseReference reff;
 
 
     public void reviews(){
+        ArrayList<String>userid;
+        ArrayList<String>modifieddate;
+        ArrayList<String>title;
+        ArrayList<String>score;
+        ArrayList<String>description;
+
         System.out.println("baslingic");
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference reviewsRef = rootRef.child("review");
@@ -105,37 +150,44 @@ DatabaseReference reff;
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println("girdik");
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Review forproductreview=new Review();
+                    Review forproductreviewspecific=new Review();
+                    Review forproductreviewgeneral=new Review();
                     //Reviews going tobe set here and then add to list
                     int ratespecific=0;
                     int rategeneral=0;
                     if(ds.child("categoryId").exists()) {
-                        if (Integer.parseInt(ds.child("categoryId").getValue().toString()) == 0 && Integer.parseInt(ds.child("productId").getValue().toString()) == 250) {
+                        if (Integer.parseInt(ds.child("categoryId").getValue().toString()) == 0 && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
                             System.out.println("varmis");
-                            forproductreview.reviewId = Integer.parseInt(ds.child("reviewId").getValue().toString());
-                            System.out.println(Integer.parseInt(ds.child("reviewId").getValue().toString()));
-                            forproductreview.score = Integer.parseInt(ds.child("rate").getValue().toString());
-                            forproductreview.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
-                            forproductreview.title = ds.child("title").getValue().toString();
-                            forproductreview.description = ds.child("description").getValue().toString();
+                            forproductreviewspecific.userId ="RId: "+ds.child("reviewId").getValue().toString();
+                            forproductreviewspecific.score = "Score: "+ds.child("rate").getValue().toString();
+                            forproductreviewspecific.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
+                            forproductreviewspecific.title = "Title: "+ds.child("title").getValue().toString();
+                            forproductreviewspecific.description = ds.child("description").getValue().toString();
 
                             ratespecific = Integer.parseInt(ds.child("rate").getValue().toString());
                             specificaverage = specificaverage + ratespecific;
-                            rews.add(forproductreview);
+                            rewsspecific.add(forproductreviewspecific);
 
-                            System.out.println(rews);
+                            System.out.println(rewsspecific);
                             countspecific++;
                         }
-                        if (Integer.parseInt(ds.child("productId").getValue().toString()) == 250) {
+                        if (Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
+                            forproductreviewgeneral.userId = ds.child("reviewId").getValue().toString();
+
+                            forproductreviewgeneral.score = ds.child("rate").getValue().toString();
+                            forproductreviewgeneral.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
+                            forproductreviewgeneral.title = ds.child("title").getValue().toString();
+                            forproductreviewgeneral.description = ds.child("description").getValue().toString();
                             rategeneral = Integer.parseInt(ds.child("rate").getValue().toString());
                             generalaverage = generalaverage + rategeneral;
+                            rewsgeneral.add(forproductreviewgeneral);
                             countgeneral++;
                         }
                     }
 
                     System.out.println("bakbakalim");
                 }
-                calculations(rews);
+                calculations(rewsspecific,rewsgeneral);
             }
 
             @Override
@@ -158,11 +210,11 @@ DatabaseReference reff;
     }
 
     public void remove(View view){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("dummy");
+        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
         String shoppingcart;
         String finalcart;
         String productnum;
-        productnum="270";
+        productnum="200";
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -179,10 +231,12 @@ DatabaseReference reff;
 
                 }
 
-
+                finallastversion=lastversion;
                 reff.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
                 CharSequence text = " Removed from Shoppingcart";
+                amountindicator=(TextView)findViewById(R.id.showamount);
+                amountindicator.setText("0");
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -203,10 +257,11 @@ DatabaseReference reff;
 
     }
 
+
     public void shoppingcartadd(View view){
 
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("dummy");
-        //reff.child("shopping_cart").setValue("none");
+        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -215,7 +270,7 @@ DatabaseReference reff;
                 String lastversion="";
                 int howmanyproduct=0;
                 Boolean already=false;
-                String productnum="270";
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -224,28 +279,31 @@ DatabaseReference reff;
                 for(String cart:firstdivide) {
 
                     if (!(shoppingcart.equals("none"))) {
-                        System.out.println("nnnnnnn");
                         seconddivide = cart.split(":", 0);
                         System.out.println(seconddivide[0]);
+
                         if (seconddivide[0].equals(productnum)) {
-                            System.out.println("kkkkk");
+
                             already = true;
                             howmanyproduct=Integer.parseInt(seconddivide[1]) + 1;
-                            lastversion = lastversion + seconddivide[0] + ":" + howmanyproduct + "-";
+                            lastversion = lastversion + seconddivide[0] + ":" + howmanyproduct +":"+seconddivide[2]+ "-";
 
                         } else {
-                            lastversion = lastversion + seconddivide[0] + ":" + seconddivide[1] + "-";
+                            lastversion = lastversion + seconddivide[0] + ":" + seconddivide[1]+":" +seconddivide[2]+ "-";
                         }
 
                     }
                 }
                 if(already==false){
-                    lastversion = lastversion + productnum + ":" + 1+"-";
+                    lastversion = lastversion + productnum + ":" + 1+":"+productprice+"-";
                     howmanyproduct=1;
                 }
-
+                finallastversion=lastversion;
                 reff.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
+
+                amountindicator.setText(Integer.toString(howmanyproduct));
+
                 CharSequence text = howmanyproduct+" Number of Product are in Shoppingcart";
                 int duration = Toast.LENGTH_SHORT;
 
@@ -265,7 +323,7 @@ DatabaseReference reff;
     }
 
     public void shoppingcartdelete(View view){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("dummy");
+        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -274,7 +332,7 @@ DatabaseReference reff;
                 String lastversion="";
                 int howmanyproduct=0;
                 Boolean already=false;
-                String productnum="270";
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -293,11 +351,11 @@ DatabaseReference reff;
                             System.out.println("offfff");
                             if(!(Integer.parseInt(seconddivide[1]) - 1==0)) {
                                 howmanyproduct = Integer.parseInt(seconddivide[1]) - 1;
-                                lastversion = lastversion + seconddivide[0] + ":" + howmanyproduct + "-";
+                                lastversion = lastversion + seconddivide[0] + ":" + howmanyproduct + ":"+seconddivide[2]+ "-";
                             }
 
                         } else {
-                            lastversion = lastversion + seconddivide[0] + ":" + seconddivide[1] + "-";
+                            lastversion = lastversion + seconddivide[0] + ":" + seconddivide[1] +":"+seconddivide[2]+ "-";
                         }
 
                     }
@@ -306,9 +364,13 @@ DatabaseReference reff;
                 if(lastversion==""){
                     lastversion="none";
                 }
+                finallastversion=lastversion;
                 reff.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
+
+                amountindicator.setText(Integer.toString(howmanyproduct));
                 CharSequence text = howmanyproduct+" Number of Product are in Shoppingcart";
+
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -328,37 +390,88 @@ DatabaseReference reff;
 
     }
     public void seeshoppingcart(View view){
-        Intent gocart=new Intent(Product_detail.this,ShoppingCart.class);
+
+
+        Intent gocart=new Intent(this,ShoppingCart.class);
+        gocart.putExtra("shoppingcartvalues",finallastversion);
+
+        System.out.println(finallastversion);
         startActivity(gocart);
 
     }
 
-    public void calculations(ArrayList<Review>reviewlist){
-        System.out.println(specificaverage);
-        System.out.println(generalaverage);
-        System.out.println(countgeneral);
-        System.out.println(countspecific);
+    public void calculations(ArrayList<Review>reviewlistspecific,ArrayList<Review>rewsgeneral){
+        ArrayList<String>useridspefic=new ArrayList<String>();
+        ArrayList<String>modifieddatespecific=new ArrayList<String>();
+        ArrayList<String>scorespecific=new ArrayList<String>();
+        ArrayList<String>titlespecific=new ArrayList<String>();
+        ArrayList<String>descriptionspecific=new ArrayList<String>();
+
+        ArrayList<String>useridgeneral=new ArrayList<String>();
+        ArrayList<String>modifieddategeneral=new ArrayList<String>();
+        ArrayList<String>scoregeneral=new ArrayList<String>();
+        ArrayList<String>titlegeneral=new ArrayList<String>();
+        ArrayList<String>descriptiongeneral=new ArrayList<String>();
+
+
         specificavg=findViewById(R.id.s);
         generalavg=findViewById(R.id.g);
-        generalavg.setText(String.valueOf(generalaverage/countgeneral));
-        specificavg.setText(String.valueOf(specificaverage/countspecific));
+        System.out.println(generalaverage);
+        System.out.println(specificaverage);
+        System.out.println(countgeneral);
+        System.out.println(countspecific);
+
+        if(countgeneral!=0) {
+            double countgen=(generalaverage / countgeneral);
+            String result = String.format("%.2f", countgen);
+            generalavg.setText(result);
+        }
+        if(countspecific!=0) {
+            double countspec=(specificaverage / countspecific);
+            String result = String.format("%.2f", countspec);
+            specificavg.setText(result);
+        }
+
         generalaverage=0;
         specificaverage=0;
         countgeneral=0;
         countspecific=0;
         System.out.println("yazdirma");
-        System.out.println(reviewlist);
-        System.out.println(reviewlist.get(0).productId);
-        System.out.println(reviewlist.get(0).reviewId);
+        System.out.println(reviewlistspecific);
+        System.out.println(rewsgeneral);
+
 
         ListView mListView=(ListView) findViewById(R.id.listview);
+        for(Review a:reviewlistspecific){
+            useridspefic.add(a.userId);
+            modifieddatespecific.add(a.modifiedDate.toString());
+            scorespecific.add(a.score);
+            titlespecific.add(a.title);
+            descriptionspecific.add(a.description);
 
-        ReviewListAdapter adapter = new ReviewListAdapter(this,reviewlist);
-        mListView.setAdapter(adapter);
+        }
+        ListView m2ListView=(ListView) findViewById(R.id.listview2);
+        for(Review b:rewsgeneral){
+            useridgeneral.add(b.userId);
+            modifieddategeneral.add(b.modifiedDate.toString());
+            scoregeneral.add(b.score);
+            titlegeneral.add(b.title);
+            descriptiongeneral.add(b.description);
+
+        }
+
+        ReviewListAdapter adapter1 = new ReviewListAdapter(this,useridspefic,titlespecific,modifieddatespecific,scorespecific,descriptionspecific);
+        mListView.setAdapter(adapter1);
+        ReviewListAdapter adapter2 = new ReviewListAdapter(this,useridgeneral,titlegeneral,modifieddategeneral,scoregeneral,descriptiongeneral);
+        m2ListView.setAdapter(adapter2);
         System.out.println("ppppppp");
-        rews.clear();
+        rewsspecific.clear();
+        rewsgeneral.clear();
     }
 
-*/
+
 
 }
+
+
+
