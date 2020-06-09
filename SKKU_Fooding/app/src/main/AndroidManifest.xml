@@ -15,10 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".activities.UserPrefActivity"></activity>
         <activity
             android:name=".activities.StartActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait" />
@@ -41,14 +46,7 @@
         <activity
             android:name=".activities.MyPageActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
-
         <activity
             android:name=".activities.SurveyActivity"
             android:screenOrientation="portrait"
