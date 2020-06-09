@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MyPageActivity">
+
+    <ImageView
+        android:id="@+id/mpImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/baseline_face_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mpUserIdTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Retrieving User ID from Database..."
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/mpUserNicknameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mpImageView"
+        app:layout_constraintTop_toTopOf="@+id/mpImageView"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/mpUserNicknameTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Retrieving User Nickname from Database..."
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/mpImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/mpImageView"
+        app:layout_constraintTop_toBottomOf="@+id/mpUserIdTextView"
+        tools:ignore="HardcodedText" />
+
+    <LinearLayout
+        android:id="@+id/mpLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mpUserNicknameTextView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <Button
+            android:id="@+id/mpReopenSurveyButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="Reopen Survey" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mpLogoutButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:foregroundGravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:fabCustomSize="56dp"
+        app:srcCompat="@drawable/baseline_exit_to_app_black_48" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
