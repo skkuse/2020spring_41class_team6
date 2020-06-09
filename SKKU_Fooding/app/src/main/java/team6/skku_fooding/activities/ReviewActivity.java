@@ -209,36 +209,38 @@ public class ReviewActivity extends AppCompatActivity {
                         w = (int)(1500.0 * scale);
                         b = Bitmap.createScaledBitmap(b, w, h, true);
                     }
+                    ImageView iv = new ImageView(ReviewActivity.this);
+                    iv.setImageBitmap(b);
+                    iv.setLayoutParams(new LinearLayout.LayoutParams(800,800, 1f));
+                    iv.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            AlertDialog.Builder bu = new AlertDialog.Builder(ReviewActivity.this);
+                            bu.setMessage("Delete photo?")
+                                    .setTitle("Delete")
+                                    .setNegativeButton(
+                                            "No",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override public void onClick(DialogInterface dialogInterface, int i) {}})
+                                    .setPositiveButton(
+                                            "Yes",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override public void onClick(DialogInterface dialogInterface, int i) {
+                                                    int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
+                                                    ReviewActivity.this.b64Imgs.remove(idx);
+                                                    ReviewActivity.this.lnrImages.removeView(v);
+                                                }});
+                            AlertDialog dia = bu.create();
+                            dia.show();
+                        }
+                    });
+                    iv.setClickable(true);
+                    lnrImages.addView(iv);
+                    cur.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    cur.close();
                 }
-                ImageView iv = new ImageView(ReviewActivity.this);
-                iv.setImageBitmap(b);
-                iv.setLayoutParams(new LinearLayout.LayoutParams(800,800, 1f));
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        AlertDialog.Builder bu = new AlertDialog.Builder(ReviewActivity.this);
-                        bu.setMessage("Delete photo?")
-                                .setTitle("Delete")
-                                .setNegativeButton(
-                                        "No",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override public void onClick(DialogInterface dialogInterface, int i) {}})
-                                .setPositiveButton(
-                                        "Yes",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override public void onClick(DialogInterface dialogInterface, int i) {
-                                                int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
-                                                ReviewActivity.this.b64Imgs.remove(idx);
-                                                ReviewActivity.this.lnrImages.removeView(v);
-                                            }});
-                        AlertDialog dia = bu.create();
-                        dia.show();
-                    }
-                });
-                iv.setClickable(true);
-                lnrImages.addView(iv);
-                cur.close();
             } else if (data.getClipData() != null) {
                 ClipData mcd = data.getClipData();
                 Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_SHORT).show();
