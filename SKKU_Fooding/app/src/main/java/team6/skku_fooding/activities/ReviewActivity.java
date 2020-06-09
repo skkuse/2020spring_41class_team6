@@ -80,17 +80,20 @@ public class ReviewActivity extends AppCompatActivity {
 
         // This is mock-up data.
         // It will overwrite if query is successfully done.
-        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)
-                .compress(Bitmap.CompressFormat.PNG,100, bs);
-
-        p = new Product(
-                100, "Dongwon",
-                Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT),
-                "seafood",
-                "Fishcake(Square, 12 pieces)",
-                12000,
-                (new Date()).toString());
+        new Thread(new Runnable() {
+            public void run() {
+                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)
+                        .compress(Bitmap.CompressFormat.PNG,100, bs);
+                p = new Product(
+                        100, "Dongwon",
+                        Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT),
+                        "seafood",
+                        "Fishcake(Square, 12 pieces)",
+                        12000,
+                        (new Date()).toString());
+            }
+        }).start();
 
         if (productId != -1) {
             productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
@@ -171,6 +174,7 @@ public class ReviewActivity extends AppCompatActivity {
                 Toast.makeText(ReviewActivity.this, "Review uploading...", Toast.LENGTH_LONG).show();
             }
         });
+        this.setStar(findViewById(R.id.fiveStarView));
     }
 
     @Override protected void onActivityResult(int reqCode, int resCode, Intent data) {
