@@ -80,17 +80,20 @@ public class ReviewActivity extends AppCompatActivity {
 
         // This is mock-up data.
         // It will overwrite if query is successfully done.
-        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)
-                .compress(Bitmap.CompressFormat.PNG,100, bs);
-
-        p = new Product(
-                100, "Dongwon",
-                Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT),
-                "seafood",
-                "Fishcake(Square, 12 pieces)",
-                12000,
-                (new Date()).toString());
+        new Thread(new Runnable() {
+            public void run() {
+                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)
+                        .compress(Bitmap.CompressFormat.PNG,100, bs);
+                p = new Product(
+                        100, "Dongwon",
+                        Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT),
+                        "seafood",
+                        "Fishcake(Square, 12 pieces)",
+                        12000,
+                        (new Date()).toString());
+            }
+        }).start();
 
         if (productId != -1) {
             productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
@@ -171,6 +174,7 @@ public class ReviewActivity extends AppCompatActivity {
                 Toast.makeText(ReviewActivity.this, "Review uploading...", Toast.LENGTH_LONG).show();
             }
         });
+        this.setStar(findViewById(R.id.fiveStarView));
     }
 
     @Override protected void onActivityResult(int reqCode, int resCode, Intent data) {
@@ -205,36 +209,38 @@ public class ReviewActivity extends AppCompatActivity {
                         w = (int)(1500.0 * scale);
                         b = Bitmap.createScaledBitmap(b, w, h, true);
                     }
+                    ImageView iv = new ImageView(ReviewActivity.this);
+                    iv.setImageBitmap(b);
+                    iv.setLayoutParams(new LinearLayout.LayoutParams(800,800, 1f));
+                    iv.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            AlertDialog.Builder bu = new AlertDialog.Builder(ReviewActivity.this);
+                            bu.setMessage("Delete photo?")
+                                    .setTitle("Delete")
+                                    .setNegativeButton(
+                                            "No",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override public void onClick(DialogInterface dialogInterface, int i) {}})
+                                    .setPositiveButton(
+                                            "Yes",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override public void onClick(DialogInterface dialogInterface, int i) {
+                                                    int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
+                                                    ReviewActivity.this.b64Imgs.remove(idx);
+                                                    ReviewActivity.this.lnrImages.removeView(v);
+                                                }});
+                            AlertDialog dia = bu.create();
+                            dia.show();
+                        }
+                    });
+                    iv.setClickable(true);
+                    lnrImages.addView(iv);
+                    cur.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    cur.close();
                 }
-                ImageView iv = new ImageView(ReviewActivity.this);
-                iv.setImageBitmap(b);
-                iv.setLayoutParams(new LinearLayout.LayoutParams(800,800, 1f));
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        AlertDialog.Builder bu = new AlertDialog.Builder(ReviewActivity.this);
-                        bu.setMessage("Delete photo?")
-                                .setTitle("Delete")
-                                .setNegativeButton(
-                                        "No",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override public void onClick(DialogInterface dialogInterface, int i) {}})
-                                .setPositiveButton(
-                                        "Yes",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override public void onClick(DialogInterface dialogInterface, int i) {
-                                                int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
-                                                ReviewActivity.this.b64Imgs.remove(idx);
-                                                ReviewActivity.this.lnrImages.removeView(v);
-                                            }});
-                        AlertDialog dia = bu.create();
-                        dia.show();
-                    }
-                });
-                iv.setClickable(true);
-                lnrImages.addView(iv);
-                cur.close();
             } else if (data.getClipData() != null) {
                 ClipData mcd = data.getClipData();
                 Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_SHORT).show();
@@ -280,6 +286,8 @@ public class ReviewActivity extends AppCompatActivity {
                                             "Yes",
                                             new DialogInterface.OnClickListener() {
                                                 @Override public void onClick(DialogInterface dialogInterface, int i) {
+                                                    int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
+                                                    ReviewActivity.this.b64Imgs.remove(idx);
                                                     ReviewActivity.this.lnrImages.removeView(v);
                                                 }});
                             AlertDialog dia = bu.create();
