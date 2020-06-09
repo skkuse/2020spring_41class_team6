@@ -44,7 +44,7 @@ public class CustomListAdapter_delivery extends ArrayAdapter<custom_list_item_de
         TextView txStatus = (TextView)convertView.findViewById(R.id.order_status_delivery);
         TextView txProductname = (TextView)convertView.findViewById(R.id.order_product_delivery);
 
-        txId.setText(order_id);
+        txId.setText("Order ID: "+order_id);
         txDate.setText(order_date);
         txStatus.setText(order_status);
         txProductname.setText(order_product_name);

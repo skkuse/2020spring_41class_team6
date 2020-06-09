@@ -1,46 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DeliveryActivity"
-    android:background="@android:color/white"
-    >
+    android:background="@android:color/white" >
 
     <LinearLayout
-        android:id="@+id/layoutToolbar_Delivery"
-        android:layout_width="411dp"
-        android:layout_height="73dp"
-        android:background="@color/main_orange"
-        android:gravity="center_vertical"
+        android:id="@+id/app_bar"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:background="@color/sub_orange"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/order_textview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delivery Status"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/app_bar_icon"
+            android:src="@drawable/app_icon"
+            android:layout_width="170px"
+            android:layout_height="170px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="15px" />
+
+        <ImageView
+            android:id="@+id/app_bar_title"
+            android:src="@drawable/app_title"
+            android:layout_width="520px"
+            android:layout_height="150px"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
-    <ListView
-
-        android:id="@+id/list_view_delivery"
+    <TextView
+        android:id="@+id/order_textview"
         android:layout_width="match_parent"
-        android:layout_height="627dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="5dp"
+        android:text=" Order List"
+        android:textSize="21dp"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        app:layout_constraintBottom_toTopOf="@+id/linear_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/linear_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/border_solid"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutToolbar_Delivery" />
+        app:layout_constraintTop_toBottomOf="@+id/order_textview">
 
+    <ListView
+        android:id="@+id/list_view_delivery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#D5D5D5"
+        android:dividerHeight="2dp"/>
 
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,16 +2,32 @@ package team6.skku_fooding.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
 import team6.skku_fooding.R;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+
 import com.google.firebase.database.*;
 
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,14 +41,14 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public class Review {
 
-        Float rate;
+        Double rate;
         Integer product_id;
 
         public Review() {
 
         }
 
-        public Float getRate() {
+        public Double getRate() {
             return rate;
         }
 
@@ -42,14 +58,14 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public class dub {
-        Float rate;
+        Double rate;
         Integer count;
 
         public dub(){
 
         }
 
-        public Float getRate() {
+        public Double getRate() {
             return rate;
         }
 
@@ -60,7 +76,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public class Product {
         Integer product_id;
-        Float avgrate;
+        Double avgrate;
 
         public Product() {
 
@@ -70,7 +86,7 @@ public class RecommendationActivity extends AppCompatActivity {
             return product_id;
         }
 
-        public Float getAvgrate() {
+        public Double getAvgrate() {
             return avgrate;
         }
     }
@@ -80,15 +96,19 @@ public class RecommendationActivity extends AppCompatActivity {
         String name;
         String image;
         String ingredient;
-        Float rate;
+        Double rate;
         String company;
+        String price;
 
     }
 
     private DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
     ArrayList<Review> rlist = new ArrayList<Review>();
 
-
+    // For listview
+    ListView listview;
+    ListViewAdapter adapter;
+    SharedPreferences loginPref;
 
 
 
@@ -98,16 +118,34 @@ public class RecommendationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
+
+        // Listview
+        adapter = new ListViewAdapter() ;
+        listview = (ListView) findViewById(R.id._listView);
+        listview.setAdapter(adapter);
+
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+
         getcid();
 
         Button button = (Button)findViewById(R.id.change);
+        Button setrate = (Button)findViewById(R.id.criteria);
+
+        setrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show();
+
+
+            }
+        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
 
                 intent.putExtra("name","R");
 
@@ -120,13 +158,71 @@ public class RecommendationActivity extends AppCompatActivity {
 
     }
 
-    public void getcid() {
+    public void show() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        dbref.child("user").child("dummy").addListenerForSingleValueEvent(new ValueEventListener() {
+        alert.setTitle("Change rate criteria");
+        alert.setMessage("Input your rate criteria");
+
+
+        final EditText criteria = new EditText(this);
+        alert.setView(criteria);
+
+        alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String str_cri = criteria.getText().toString();
+                Double cri = 0.0;
+                boolean flag = true;
+                try {
+                    cri = Double.parseDouble(str_cri);
+                }
+                catch(Exception e) {
+                    errshow();
+                    flag = false;
+
+                }
+                if(cri > 5.0 || cri < 0.0) {
+                    errshow();
+                    flag = false;
+                }
+                if(flag) {
+                    DatabaseReference d = FirebaseDatabase.getInstance().getReference();
+                    d.child("user").child("dummy").child("criteria").setValue(cri);
+                    Intent in1 = new Intent(getApplicationContext(), RecommendationActivity.class);
+                    startActivity(in1);
+                }
+
+
+            }
+        });
+
+
+        alert.show();
+    }
+
+    public void errshow() {
+        Toast erring = Toast.makeText(this.getApplicationContext(), "소수로 입력해주세요 ex) 3.5", Toast.LENGTH_SHORT);
+        erring.show();
+    }
+
+    public void getcid() {
+        String UID=loginPref.getString("UID",null);
+        dbref.child("user").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer category_id = dataSnapshot.child("category_id").getValue(Integer.class);
-                Float criteria = dataSnapshot.child("criteria").getValue(Float.class);
+
+                /* 강제종료 등의 이유로 survey가 skip되었을 때
+                if (category_id == null) {
+                    Intent gosurvey = new Intent(getApplicationContext(), SurveyActivity.class);
+                    gosurvey.putExtra("name", "R");
+                    startActivity(gosurvey);
+                }
+
+                 */
+
+
+                Double criteria = dataSnapshot.child("criteria").getValue(Double.class);
                 String filter = dataSnapshot.child("filter").getValue(String.class);
                 Log.d("value", "category_id" + category_id);
                 getreview(category_id, criteria, filter);
@@ -144,16 +240,17 @@ public class RecommendationActivity extends AppCompatActivity {
 
     }
 
-    public void getreview(Integer cid, final Float criteria, final String filter) {
+    public void getreview(Integer cid, final Double criteria, final String filter) {
         dbref.child("review").orderByChild("category_id").equalTo(cid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot shot : dataSnapshot.getChildren()) {
                     Review review1 = new Review();
-                    review1.rate = shot.child("rate").getValue(Float.class);
+                    review1.rate = shot.child("rate").getValue(Double.class);
                     review1.product_id = shot.child("product_id").getValue(Integer.class);
                     rlist.add(review1);
 
+                    adapter.addItem(null, "aaa","aaa","aaa");
 
                 }
                 Map<Integer, dub> map = new HashMap<Integer, dub>();
@@ -202,9 +299,11 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public void getProduct(List<Product> productList, final String filter) {
-
+        Log.d("Test", "1");
+        Log.d("Test", "product"+productList.size());
         for (final Product p : productList) {
-            final float r = p.avgrate;
+            Log.d("Test", "2");
+            final Double r = p.avgrate;
             dbref.child("product").orderByChild("product_id").equalTo(p.product_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -216,11 +315,20 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.image = shot.child("image").getValue(String.class);
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
+                            i.price = shot.child("price").getValue(String.class);
                             i.rate = r;
-                            Log.d("list", "image : " + i.image + " name : " + i.name + " company : " + i.company + " rate : " + i.rate);
+
+                            Bitmap decodedImage;
+
+                            byte[]imageBytes = Base64.decode(i.image, Base64.DEFAULT);
+                            decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
+
                             //리스트뷰 추가 시점
+                            adapter.addItem(decodedImage,i.name,i.price,i.ingredient);
                         }
                     }
+                    adapter.notifyDataSetChanged();
 
 
                 }
@@ -247,3 +355,131 @@ public class RecommendationActivity extends AppCompatActivity {
         return true;
     }
 }
+/*
+class ListViewItem {
+    private Bitmap iconDrawable;
+    private String titleStr;
+    private String descStr;
+    private String ingredient;
+
+    public void setIcon(Bitmap icon) {
+        iconDrawable = icon;
+    }
+
+    public void setTitle(String title) {
+        titleStr = title;
+    }
+
+    public void setDesc(String desc) {
+        descStr = desc;
+    }
+
+    public void setIngredient(String ing){ingredient=ing;}
+
+    public Bitmap getIcon() {
+        return this.iconDrawable;
+    }
+
+    public String getTitle() {
+        return this.titleStr;
+    }
+
+    public String getDesc() {
+        return this.descStr;
+    }
+
+    public String getIngredient(){return this.ingredient;}
+}
+
+class ListViewAdapter extends BaseAdapter {
+    public ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+
+    public ListViewAdapter() {
+
+    }
+
+    @Override
+    public int getCount() {
+        return listViewItemList.size() ;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.activity_search_layout, parent, false);
+        };
+
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
+        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+
+        ListViewItem listViewItem = listViewItemList.get(position);
+
+        titleTextView.setText(listViewItem.getTitle());
+        descTextView.setText(listViewItem.getDesc());
+        iconImageView.setImageBitmap(listViewItem.getIcon());
+
+        iconImageView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("image",listViewItemList.get(position).getTitle());
+            }
+        });
+        titleTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("title",listViewItemList.get(position).getTitle());
+            }
+        });
+        descTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("desc",listViewItemList.get(position).getTitle());
+            }
+        });
+
+        return convertView;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position ;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return listViewItemList.get(position) ;
+    }
+
+    public void addItem(Bitmap icon, String title, String desc, String ingredient) {
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setTitle(title);
+        item.setDesc(desc);
+        item.setIngredient(ingredient);
+
+        listViewItemList.add(item);
+    }
+
+    public void addItemIndex(Integer index, Bitmap icon, String title, String desc, String ingredient){
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setTitle(title);
+        item.setDesc(desc);
+        item.setIngredient(ingredient);
+
+        listViewItemList.add(index, item);
+    }
+    public void addListViewItem(ListViewItem item){
+        listViewItemList.add(item);
+    }
+}*/
