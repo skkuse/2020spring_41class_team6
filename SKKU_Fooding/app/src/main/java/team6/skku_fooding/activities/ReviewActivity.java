@@ -164,9 +164,11 @@ public class ReviewActivity extends AppCompatActivity {
 
                     @Override public void onComplete(@Nullable DatabaseError de, boolean b, @Nullable DataSnapshot ds) {
                         Log.d("ReviewActivity", "postTransaction:onComplete:" + de);
+                        Toast.makeText(ReviewActivity.this, "Review successfully uploaded!", Toast.LENGTH_SHORT).show();
                         ReviewActivity.this.finish();
                     }
                 });
+                Toast.makeText(ReviewActivity.this, "Review uploading...", Toast.LENGTH_LONG).show();
             }
         });
     }
