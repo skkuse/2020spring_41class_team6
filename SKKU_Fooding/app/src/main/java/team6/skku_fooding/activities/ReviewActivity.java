@@ -167,7 +167,7 @@ public class ReviewActivity extends AppCompatActivity {
         if (reqCode == 1 && resCode == RESULT_OK && data != null) {
             // This is from addUserImageButton.
             if (data.getData() != null) {
-                Toast.makeText(ReviewActivity.this, "A Image selected.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReviewActivity.this, "A Image selected.", Toast.LENGTH_SHORT).show();
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
                 Uri imagesPath = data.getData();
                 Cursor cur = getContentResolver()
@@ -206,7 +206,7 @@ public class ReviewActivity extends AppCompatActivity {
                 cur.close();
             } else if (data.getClipData() != null) {
                 ClipData mcd = data.getClipData();
-                Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_SHORT).show();
                 for (int i = 0; i < mcd.getItemCount(); i++) {
                     ClipData.Item it = mcd.getItemAt(i);
                     Bitmap b = null;
@@ -241,58 +241,58 @@ public class ReviewActivity extends AppCompatActivity {
                     lnrImages.addView(iv);
                 }
             }
-            else Toast.makeText(ReviewActivity.this, "No Images selected.", Toast.LENGTH_LONG).show();
+            else Toast.makeText(ReviewActivity.this, "No Images selected.", Toast.LENGTH_SHORT).show();
         }
     }
     public void setStar(View v) {
         switch (v.getId()) {
             case R.id.oneStarView:
                 userScore = 1;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
                 break;
             case R.id.twoStarView:
                 userScore = 2;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
                 break;
             case R.id.threeStarView:
                 userScore = 3;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
                 break;
             case R.id.fourStarView:
                 userScore = 4;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
                 break;
             case R.id.fiveStarView:
                 userScore = 5;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_on);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_on);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
                 break;
             default:
                 userScore = 0;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(android.R.drawable.star_big_off);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(android.R.drawable.star_big_off);
+                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
         }
     }
     private void refreshProductRelatedViews() {
@@ -300,6 +300,6 @@ public class ReviewActivity extends AppCompatActivity {
         ((ImageView)findViewById(R.id.productImageView)).setImageBitmap(
                 BitmapFactory.decodeByteArray(ib, 0, ib.length)
         );
-        ((TextView)findViewById(R.id.productTextView)).setText("Write review about " + p.name + ".");
+        ((TextView)findViewById(R.id.productTextView)).setText(p.name);
     }
 }

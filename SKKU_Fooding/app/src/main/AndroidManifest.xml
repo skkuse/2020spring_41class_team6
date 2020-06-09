@@ -28,14 +28,12 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait" />
-	<activity
-            android:name=".activities.RecommendationActivity"
-            android:screenOrientation="portrait" />
-	<activity
-            android:name=".activities.OrderActivity"
-            android:screenOrientation="portrait" />
-
-
+        <activity
+                android:name=".activities.RecommendationActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".activities.OrderActivity"
+                android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SignupActivity"
             android:screenOrientation="portrait" />
