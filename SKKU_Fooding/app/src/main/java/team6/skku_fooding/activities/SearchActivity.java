@@ -3,6 +3,7 @@ package team6.skku_fooding.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -198,6 +199,8 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("recommendation","I'm here");
+                Intent intent = new Intent(SearchActivity.this, RecommendationActivity.class);
+                startActivity(intent);
             }
         });
         delivery.setOnClickListener(new View.OnClickListener() {
