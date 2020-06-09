@@ -41,7 +41,7 @@ DatabaseReference reff;
     String userid;
     int categoryid;
     ArrayList<Review> rews = new ArrayList<>();
-
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -359,6 +359,6 @@ DatabaseReference reff;
         rews.clear();
     }
 
-
+*/
 
 }

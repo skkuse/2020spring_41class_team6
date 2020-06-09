@@ -7,16 +7,27 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.google.firebase.database.*;
 
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -88,14 +99,17 @@ public class RecommendationActivity extends AppCompatActivity {
         String ingredient;
         Double rate;
         String company;
-        Integer price;
+        String price;
 
     }
 
     private DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
     ArrayList<Review> rlist = new ArrayList<Review>();
 
-
+    // For listview
+    ListView listview;
+    ListViewAdapter adapter;
+    SharedPreferences loginPref;
 
 
 
@@ -105,6 +119,14 @@ public class RecommendationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
+
+        // Listview
+        adapter = new ListViewAdapter() ;
+        listview = (ListView) findViewById(R.id._listView);
+        listview.setAdapter(adapter);
+
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+
         getcid();
 
         Button button = (Button)findViewById(R.id.change);
@@ -185,8 +207,8 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public void getcid() {
-
-        dbref.child("user").child("3mOXMr3hU6XYJ7l2aVAIwQBdLDp1").addListenerForSingleValueEvent(new ValueEventListener() {
+        String UID=loginPref.getString("UID",null);
+        dbref.child("user").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer category_id = dataSnapshot.child("category_id").getValue(Integer.class);
@@ -229,6 +251,7 @@ public class RecommendationActivity extends AppCompatActivity {
                     review1.product_id = shot.child("product_id").getValue(Integer.class);
                     rlist.add(review1);
 
+                    adapter.addItem(null, "aaa","aaa","aaa");
 
                 }
                 Map<Integer, dub> map = new HashMap<Integer, dub>();
@@ -277,8 +300,10 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public void getProduct(List<Product> productList, final String filter) {
-
+        Log.d("Test", "1");
+        Log.d("Test", "product"+productList.size());
         for (final Product p : productList) {
+            Log.d("Test", "2");
             final Double r = p.avgrate;
             dbref.child("product").orderByChild("product_id").equalTo(p.product_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -291,12 +316,20 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.image = shot.child("image").getValue(String.class);
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
-                            i.price = shot.child("price").getValue(Integer.class);
+                            i.price = shot.child("price").getValue(String.class);
                             i.rate = r;
 
+                            Bitmap decodedImage;
+
+                            byte[]imageBytes = Base64.decode(i.image, Base64.DEFAULT);
+                            decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
+
                             //리스트뷰 추가 시점
+                            adapter.addItem(decodedImage,i.name,i.price,i.ingredient);
                         }
                     }
+                    adapter.notifyDataSetChanged();
 
 
                 }
@@ -323,3 +356,131 @@ public class RecommendationActivity extends AppCompatActivity {
         return true;
     }
 }
+/*
+class ListViewItem {
+    private Bitmap iconDrawable;
+    private String titleStr;
+    private String descStr;
+    private String ingredient;
+
+    public void setIcon(Bitmap icon) {
+        iconDrawable = icon;
+    }
+
+    public void setTitle(String title) {
+        titleStr = title;
+    }
+
+    public void setDesc(String desc) {
+        descStr = desc;
+    }
+
+    public void setIngredient(String ing){ingredient=ing;}
+
+    public Bitmap getIcon() {
+        return this.iconDrawable;
+    }
+
+    public String getTitle() {
+        return this.titleStr;
+    }
+
+    public String getDesc() {
+        return this.descStr;
+    }
+
+    public String getIngredient(){return this.ingredient;}
+}
+
+class ListViewAdapter extends BaseAdapter {
+    public ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+
+    public ListViewAdapter() {
+
+    }
+
+    @Override
+    public int getCount() {
+        return listViewItemList.size() ;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.activity_search_layout, parent, false);
+        };
+
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
+        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+
+        ListViewItem listViewItem = listViewItemList.get(position);
+
+        titleTextView.setText(listViewItem.getTitle());
+        descTextView.setText(listViewItem.getDesc());
+        iconImageView.setImageBitmap(listViewItem.getIcon());
+
+        iconImageView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("image",listViewItemList.get(position).getTitle());
+            }
+        });
+        titleTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("title",listViewItemList.get(position).getTitle());
+            }
+        });
+        descTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // To Product List
+                Log.d("desc",listViewItemList.get(position).getTitle());
+            }
+        });
+
+        return convertView;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position ;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return listViewItemList.get(position) ;
+    }
+
+    public void addItem(Bitmap icon, String title, String desc, String ingredient) {
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setTitle(title);
+        item.setDesc(desc);
+        item.setIngredient(ingredient);
+
+        listViewItemList.add(item);
+    }
+
+    public void addItemIndex(Integer index, Bitmap icon, String title, String desc, String ingredient){
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setTitle(title);
+        item.setDesc(desc);
+        item.setIngredient(ingredient);
+
+        listViewItemList.add(index, item);
+    }
+    public void addListViewItem(ListViewItem item){
+        listViewItemList.add(item);
+    }
+}*/

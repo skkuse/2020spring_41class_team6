@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="team6.skku_fooding">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="LockedOrientationActivity">
-
         <activity
             android:name=".activities.StartActivity"
             android:screenOrientation="portrait">
@@ -28,14 +27,12 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait" />
-	<activity
+        <activity
             android:name=".activities.RecommendationActivity"
             android:screenOrientation="portrait" />
-	<activity
+        <activity
             android:name=".activities.OrderActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activities.SignupActivity"
             android:screenOrientation="portrait" />
@@ -44,7 +41,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ReviewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.MyPageActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".activities.SurveyActivity"
             android:screenOrientation="portrait"
@@ -78,4 +80,5 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomThemeDelivery" />
     </application>
+
 </manifest>

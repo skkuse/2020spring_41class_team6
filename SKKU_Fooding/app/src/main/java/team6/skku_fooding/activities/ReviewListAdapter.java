@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class ReviewListAdapter extends ArrayAdapter<Review> {
 
 
@@ -54,4 +54,4 @@ public class ReviewListAdapter extends ArrayAdapter<Review> {
 
         return  convertView;
     }
-}
+}*/
