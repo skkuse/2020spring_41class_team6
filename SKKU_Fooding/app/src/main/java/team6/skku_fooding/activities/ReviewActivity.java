@@ -224,6 +224,8 @@ public class ReviewActivity extends AppCompatActivity {
                                         "Yes",
                                         new DialogInterface.OnClickListener() {
                                             @Override public void onClick(DialogInterface dialogInterface, int i) {
+                                                int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
+                                                ReviewActivity.this.b64Imgs.remove(idx);
                                                 ReviewActivity.this.lnrImages.removeView(v);
                                             }});
                         AlertDialog dia = bu.create();
