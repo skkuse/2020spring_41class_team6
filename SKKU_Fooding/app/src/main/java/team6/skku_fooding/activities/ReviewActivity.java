@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,6 +55,7 @@ public class ReviewActivity extends AppCompatActivity {
     private DatabaseReference userRef;
     private DatabaseReference reviewRef;
     private DatabaseReference productRef;
+    private SharedPreferences loginPref;
     public int reviewId;
     public int categoryId;
     public int productId;
@@ -72,7 +74,9 @@ public class ReviewActivity extends AppCompatActivity {
         reviewRef = db.getReference("review");
         productRef = db.getReference("product");
         productId = getIntent().getIntExtra("product_id", -1);
+        loginPref = this.getSharedPreferences("user_SP", this.MODE_PRIVATE);
         b64Imgs = new ArrayList<>();
+
 
         // This is mock-up data.
         // It will overwrite if query is successfully done.
@@ -110,6 +114,11 @@ public class ReviewActivity extends AppCompatActivity {
         }
         reviewId = -1; // Initialize later with transaction.
         // TODO: categoryId is missing...
+        /*
+        * Two ways to determine Category Id:
+        * 1. get category id from sharedpreference
+        * 2. query from firebase with user_id key
+        * */
 
         lnrImages = (LinearLayout)findViewById(R.id.reviewImageLinearLayout);
         ((Button)findViewById(R.id.addUserImageButton)).setOnClickListener(new View.OnClickListener() {
@@ -127,7 +136,7 @@ public class ReviewActivity extends AppCompatActivity {
                 b64Imgs = new ArrayList<>();
                 for (int i = 0; i < lnrImages.getChildCount(); i++) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    ((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap().compress(Bitmap.CompressFormat.WEBP, 60, baos);
                     b64Imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                 }
                 reviewRef.runTransaction(new Transaction.Handler() {
@@ -176,6 +185,24 @@ public class ReviewActivity extends AppCompatActivity {
                 Bitmap b = null;
                 try {
                     b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    int w = b.getWidth();
+                    int h = b.getHeight();
+                    double scale = (double)w / h;
+                    if (w > 1500) {
+                        if (w > h) {
+                            w = 1500;
+                            h = (int)(1500.0 / scale);
+                        } else {
+                            h = 1500;
+                            w = (int)(1500.0 * scale);
+                        }
+                        b = Bitmap.createScaledBitmap(b, w, h, true);
+                    }
+                    else if (h > 1500) {
+                        h = 1500;
+                        w = (int)(1500.0 * scale);
+                        b = Bitmap.createScaledBitmap(b, w, h, true);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -212,6 +239,24 @@ public class ReviewActivity extends AppCompatActivity {
                     Bitmap b = null;
                     try {
                         b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), it.getUri());
+                        int w = b.getWidth();
+                        int h = b.getHeight();
+                        double scale = (double)w / h;
+                        if (w > 1500) {
+                            if (w > h) {
+                                w = 1500;
+                                h = (int)(1500.0 / scale);
+                            } else {
+                                h = 1500;
+                                w = (int)(1500.0 * scale);
+                            }
+                            b = Bitmap.createScaledBitmap(b, w, h, true);
+                        }
+                        else if (h > 1500) {
+                            h = 1500;
+                            w = (int)(1500.0 * scale);
+                            b = Bitmap.createScaledBitmap(b, w, h, true);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
