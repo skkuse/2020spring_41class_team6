@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
@@ -77,11 +78,13 @@ public class OrderActivity extends AppCompatActivity {
         et2 = (EditText) findViewById(R.id.comment);
 
 
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        String UID=loginPref.getString("UID",null);
 
 
-
-
-
+        Intent intent=getIntent();
+        String getting_item=intent.getStringExtra("sending_item");
 
         /*
         Intent intent = getIntent();
@@ -97,11 +100,11 @@ public class OrderActivity extends AppCompatActivity {
 
          */
         Type = "Normal";
-        pid = 200;
-        count = 3;
-        uid = "9yxJe7BjmAfW0t39O4i5tbUfm4m1"; //임시 데이터셋
+        pid=200;
+        count = 3;  // More intent would be come
+        uid = UID;
 
-
+        /*
         DatabaseReference mydb = FirebaseDatabase.getInstance().getReference();
         if(Type == "Normal") {
             mydb.child("product").orderByChild("product_id").equalTo(pid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,8 +147,8 @@ public class OrderActivity extends AppCompatActivity {
 
             //parsingall(parse); //Algi에게 intent로 shopping_cart 정보를 받아온 것을 parsing
         }
-
-
+*/
+    parsingall(getting_item);
     }
     //문자열 파싱 후 db호출
     public void parsingall(String parse) {

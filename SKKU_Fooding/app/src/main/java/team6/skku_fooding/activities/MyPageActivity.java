@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import team6.skku_fooding.R;
 
@@ -38,7 +41,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         SharedPreferences loginPref = this.getSharedPreferences("user_SP", MODE_PRIVATE);
 
-        this.uid = loginPref.getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
+        this.uid = loginPref.getString("UID", null);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         if (loginPref.getString("user_id", null) == null) {
@@ -94,5 +97,41 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
         */
+
+        // Bottom menu bar
+        TextView home=(TextView)findViewById(R.id.home);
+        TextView recommendation=(TextView)findViewById(R.id.recommendation);
+        TextView delivery=(TextView)findViewById(R.id.delivery);
+        TextView mypage=(TextView)findViewById(R.id.mypage);
+
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Log.d("mypage","I'm here");
+                Intent intent = new Intent(MyPageActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("recommendation","I'm here");
+                Intent intent = new Intent(MyPageActivity.this, RecommendationActivity.class);
+                startActivity(intent);
+            }
+        });
+        delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("delivery","I'm here");
+                Intent intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
+                startActivity(intent);
+            }
+        });
+        mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 }

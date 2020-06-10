@@ -18,17 +18,22 @@ import android.widget.Toast;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import team6.skku_fooding.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import team6.skku_fooding.R;
-
 public class ShoppingAdapter extends ArrayAdapter<String> {
-
+    TextView changeprepage;
     ArrayList<String>images;
     ArrayList<String>names;
     ArrayList<String>amount;
     ArrayList<String>prices;
+    ArrayList<String>productids;
+    DatabaseReference reff;
+
     Context c;
     LayoutInflater inflater;
     ArrayList<Integer> clicked;
@@ -36,11 +41,14 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
     ArrayList<String>selectednames=new ArrayList<String>();
     ArrayList<String>selectedamount=new ArrayList<String>();;
     ArrayList<String>selectedprices=new ArrayList<String>();;
+    ArrayList<String>selectedproductids=new ArrayList<String>();;
+    String shoppingcart;
 
 
 
 
-    public ShoppingAdapter( Context context, ArrayList<String>images,ArrayList<String>names,ArrayList<String>amount,ArrayList<Integer> clicked,ArrayList<String>prices){
+    public ShoppingAdapter( Context context, ArrayList<String>images,ArrayList<String>names,ArrayList<String>amount,
+                            ArrayList<Integer> clicked,ArrayList<String>prices,ArrayList<String>productids,String shoppingcart){
 
         super(context,0,names);
         this.c=context;
@@ -49,6 +57,8 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
         this.images=images;
         this.clicked=clicked;
         this.prices=prices;
+        this.productids=productids;
+        this.shoppingcart=shoppingcart;
 
 
 
@@ -79,6 +89,9 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
 
     public ArrayList<String> selectedamountlist(){
         return selectedamount;
+    }
+    public ArrayList<String> selectedproductidlist(){
+        return selectedproductids;
     }
     public ArrayList<String> selectedpriceslist(){
         return selectedprices;
@@ -122,6 +135,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
                     System.out.println(prices.get(position));
                     System.out.println(names.get(position));
                     selectedamount.add(amount.get(position).toString());
+                    selectedproductids.add(productids.get(position).toString());
                     selectedprices.add(prices.get(position).toString());
                     selectednames.add(names.get(position).toString());
 
@@ -133,6 +147,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
 
                     selectedamount.remove(amount.get(position));
                     selectedprices.remove(prices.get(position));
+                    selectedproductids.remove(productids.get(position).toString());
                     selectednames.remove(names.get(position));
                 }
                 ShoppingAdapter.this.notifyDataSetChanged();
@@ -146,15 +161,21 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View arg0) {
 
+
+                selectednames.remove(names.get(position));
+                selectedamount.remove(amount.get(position));
+                selectedprices.remove(prices.get(position));
+                selectedproductids.remove(productids.get(position));
                 images.remove(position);
                 names.remove(position);
                 amount.remove(position);
                 clicked.remove(position);
+                String removeproduct=productids.get(position);
                 prices.remove(position);
-                selectedamount.remove(amount.get(position));
-                selectednames.remove(names.get(position));
-                selectedprices.remove(prices.get(position));
+                productids.remove(position);
                 ShoppingAdapter.this.notifyDataSetChanged();
+                refresh(removeproduct);
+
 
             }
         });
@@ -173,4 +194,21 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
 
         return  convertView;
     }
+
+    public void refresh(String removeproduct){
+        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+        String [] firstdivide;
+        String lastversion="";
+
+        firstdivide=shoppingcart.split("-",0);
+        for(String cart:firstdivide) {
+            if(!(cart.startsWith(removeproduct))){
+                lastversion=lastversion+cart+"-";
+            }
+
+        }
+        reff.child("shopping_cart").setValue(lastversion);
+
+    }
+
 }

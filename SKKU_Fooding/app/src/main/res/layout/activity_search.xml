@@ -124,7 +124,8 @@
                 android:focusable="true"
                 android:text="home"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                />
 
             <TextView
                 android:id="@+id/recommendation"
