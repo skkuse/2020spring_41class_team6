@@ -67,7 +67,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity_Vegetarian.this,SurveyActivity_Allergen.class);
         if(checked==0){
-            filtering=" ";
+            filtering="none";
         }
         else if(checked==1){
             filtering="pork,beef,egg,milk,fish,poultry,shellfish";
