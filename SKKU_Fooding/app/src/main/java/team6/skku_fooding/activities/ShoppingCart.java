@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -56,8 +57,13 @@ public class ShoppingCart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
+
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        String UID=loginPref.getString("UID",null);
+
         reff = FirebaseDatabase.getInstance().getReference().child("product");
-        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
         //Put shoppingcart array adapter here
         Intent myIntent = getIntent();
 
@@ -128,6 +134,9 @@ public class ShoppingCart extends AppCompatActivity {
         public void orderall(View view){
             reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
         //Before the below statement shoppingcart will be given with intent
+            Intent intent= new Intent(ShoppingCart.this,OrderActivity.class);
+            intent.putExtra("sending_item",shoppingcart);
+            startActivity(intent);
             reff.child("shopping_cart").setValue("none");
 
 
@@ -166,6 +175,9 @@ public class ShoppingCart extends AppCompatActivity {
             System.out.println(createintent);
             System.out.println("999999999999999");
             //need to give createintent
+            Intent intent= new Intent(ShoppingCart.this,OrderActivity.class);
+            intent.putExtra("sending_item",createintent);
+            startActivity(intent);
     }
 
 

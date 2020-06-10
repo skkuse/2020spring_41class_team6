@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -278,7 +279,11 @@ String categoryId;
                 }
                 finallastversion=lastversion;
                 reff1.child("shopping_cart").setValue(lastversion);
-//Order gonna have sending item with intent
+                //Order gonna have sending item with intent
+                Intent intent=new Intent(Product_detail.this, OrderActivity.class);
+                intent.putExtra("sending_item",sendingitem);
+                startActivity(intent);
+
             }
 
             @Override
