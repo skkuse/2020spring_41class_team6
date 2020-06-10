@@ -156,25 +156,26 @@
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/productTextView"
+        app:layout_constraintBottom_toTopOf="@+id/reviewDetailText"/>
 
     <EditText
         android:id="@+id/reviewDetailText"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="10dp"
-        android:padding="5dp"
         android:background="@drawable/border_round"
-        android:textSize="50px"
-        android:textColor="@android:color/black"
-        android:hint="  Write your review here."
-        android:textColorHint="@android:color/darker_gray"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="  Write your review here."
         android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        android:textSize="50px"
         app:layout_constraintBottom_toTopOf="@+id/photo_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -196,29 +197,34 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewImageScrollView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
     <HorizontalScrollView
         android:id="@+id/reviewImageScrollView"
-        android:layout_width="0dp"
-        android:layout_height="190dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:minHeight="150dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/border_round"
         android:clickable="true"
         android:focusable="auto"
-        android:background="@drawable/border_round"
-        app:layout_constraintTop_toBottomOf="@id/photo_textview"
         app:layout_constraintBottom_toTopOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photo_textview">
 
         <LinearLayout
             android:id="@+id/reviewImageLinearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="auto"
-            android:orientation="horizontal"
-            android:weightSum="3" />
+            android:orientation="horizontal"/>
     </HorizontalScrollView>
 
     <Button
