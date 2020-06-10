@@ -100,7 +100,7 @@ public class RecommendationActivity extends AppCompatActivity {
         Double rate;
         String company;
         String price;
-        Integer product_id;
+        String product_id;
 
     }
 
@@ -351,7 +351,7 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
                             i.price = shot.child("price").getValue(String.class);
-                            i.product_id=Integer.parseInt(shot.child("product_id").getValue(String.class));
+                            i.product_id=shot.child("product_id").getValue(String.class);
                             i.rate = r;
 
                             Bitmap decodedImage;

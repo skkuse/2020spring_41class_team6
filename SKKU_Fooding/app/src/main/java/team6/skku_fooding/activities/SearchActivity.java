@@ -94,7 +94,7 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
-                Integer product_id=Integer.parseInt(currentObject.get("product_id").toString());
+                String product_id=currentObject.get("product_id").toString();
 
                 String imageString;
                 Bitmap decodedImage;
@@ -274,7 +274,7 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
-                Integer product_id=Integer.parseInt(currentObject.get("product_id").toString());
+                String product_id=currentObject.get("product_id").toString();
 
                 String imageString;
                 Bitmap decodedImage;
@@ -368,7 +368,7 @@ class ListViewItem {
     private String titleStr;
     private String descStr;
     private String ingredient;
-    private Integer product_id;
+    private String product_id;
 
     public void setIcon(Bitmap icon) {
         iconDrawable = icon;
@@ -384,7 +384,7 @@ class ListViewItem {
 
     public void setIngredient(String ing){ingredient=ing;}
 
-    public void setProductId(Integer pid){product_id=pid;}
+    public void setProductId(String pid){product_id=pid;}
 
     public Bitmap getIcon() {
         return this.iconDrawable;
@@ -400,7 +400,7 @@ class ListViewItem {
 
     public String getIngredient(){return this.ingredient;}
 
-    public Integer getProductId(){return this.product_id;}
+    public String getProductId(){return this.product_id;}
 }
 
 class ListViewAdapter extends BaseAdapter {
@@ -480,7 +480,7 @@ class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-    public void addItem(Integer product_id, Bitmap icon, String title, String desc, String ingredient) {
+    public void addItem(String product_id, Bitmap icon, String title, String desc, String ingredient) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
@@ -492,7 +492,7 @@ class ListViewAdapter extends BaseAdapter {
         listViewItemList.add(item);
     }
 
-    public void addItemIndex(Integer product_id, Integer index, Bitmap icon, String title, String desc, String ingredient){
+    public void addItemIndex(String product_id, Integer index, Bitmap icon, String title, String desc, String ingredient){
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
