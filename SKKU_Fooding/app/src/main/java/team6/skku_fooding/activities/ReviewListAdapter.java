@@ -1,21 +1,22 @@
 package team6.skku_fooding.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import team6.skku_fooding.R;
 
 public class ReviewListAdapter extends ArrayAdapter<String> {
 
@@ -24,11 +25,12 @@ public class ReviewListAdapter extends ArrayAdapter<String> {
     ArrayList<String>modifieddate;
     ArrayList<String> score;
     ArrayList<String> description;
+    ArrayList<ArrayList<String>>images;
     Context c;
     LayoutInflater inflater;
 
 
-    public ReviewListAdapter( Context context, ArrayList<String>userid,ArrayList<String>title,ArrayList<String>modifieddate,ArrayList<String> score,ArrayList<String> description){
+    public ReviewListAdapter( Context context, ArrayList<String>userid,ArrayList<String>title,ArrayList<String>modifieddate,ArrayList<String> score,ArrayList<String> description,ArrayList<ArrayList<String>>images){
 
         super(context,0,userid);
         this.c=context;
@@ -37,6 +39,7 @@ public class ReviewListAdapter extends ArrayAdapter<String> {
         this.modifieddate=modifieddate;
         this.score=score;
         this.description=description;
+        this.images=images;
 
 
     }
@@ -57,6 +60,22 @@ public class ReviewListAdapter extends ArrayAdapter<String> {
         if(convertView==null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.reviewlist, parent, false);
         }
+      /*  Button pics=(Button)convertView.findViewById(R.id.pics);
+
+        pics.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                Intent intent = new Intent(getContext(), Imagepage.class);
+                intent.putParcelableArrayListExtra("imgarray",images.get(position));
+                getContext().startActivity(intent);
+
+            }
+
+
+
+        });*/
 
 
             holder.Userid = (TextView) convertView.findViewById(R.id.userid);
