@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import team6.skku_fooding.R;
-
 
 public class Product_detail extends AppCompatActivity {
 TextView company,name,ingredient,price,uploadeddate;
@@ -160,7 +158,7 @@ int countgeneral;
                     if(ds.child("categoryId").exists()) {
                         if (Integer.parseInt(ds.child("categoryId").getValue().toString()) == 0 && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
                             System.out.println("varmis");
-                            forproductreviewspecific.userId ="RId: "+ds.child("reviewId").getValue().toString();
+                            forproductreviewspecific.userId ="UId: "+ds.child("userId").getValue().toString();
                             forproductreviewspecific.score = "Score: "+ds.child("rate").getValue().toString();
                             forproductreviewspecific.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
                             forproductreviewspecific.title = "Title: "+ds.child("title").getValue().toString();
@@ -174,12 +172,13 @@ int countgeneral;
                             countspecific++;
                         }
                         if (Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
-                            forproductreviewgeneral.userId = ds.child("reviewId").getValue().toString();
 
-                            forproductreviewgeneral.score = ds.child("rate").getValue().toString();
+                            forproductreviewgeneral.userId = "UId: "+ds.child("userId").getValue().toString();
+                            forproductreviewgeneral.score = "Score: "+ds.child("rate").getValue().toString();
                             forproductreviewgeneral.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
-                            forproductreviewgeneral.title = ds.child("title").getValue().toString();
+                            forproductreviewgeneral.title = "Title: "+ds.child("title").getValue().toString();
                             forproductreviewgeneral.description = ds.child("description").getValue().toString();
+
                             rategeneral = Integer.parseInt(ds.child("rate").getValue().toString());
                             generalaverage = generalaverage + rategeneral;
                             rewsgeneral.add(forproductreviewgeneral);
@@ -187,7 +186,7 @@ int countgeneral;
                         }
                     }
 
-                    System.out.println("bakbakalim");
+
                 }
                 calculations(rewsspecific,rewsgeneral);
             }
