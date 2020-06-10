@@ -34,14 +34,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 
 import team6.skku_fooding.R;
 import team6.skku_fooding.models.Product;
@@ -56,7 +55,6 @@ public class ReviewActivity extends AppCompatActivity {
     private LinearLayout.LayoutParams lnrParams;
     private DatabaseReference reviewRef;
     private DatabaseReference productRef;
-    private ForkJoinPool wk;
     public int reviewId;
     public int categoryId;
     public int productId;
@@ -78,7 +76,6 @@ public class ReviewActivity extends AppCompatActivity {
         productRef = db.getReference("product");
         productId = getIntent().getIntExtra("product_id", -1);
         b64Imgs = new ArrayList<>();
-        wk = new ForkJoinPool(8);
 
         this.uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
                 .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
@@ -154,17 +151,11 @@ public class ReviewActivity extends AppCompatActivity {
                 ArrayList<Bitmap> arr = new ArrayList<>();
 
                 for (int i = 0; i < lnrImages.getChildCount(); i++) arr.add(((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap());
-                try {
-                    ReviewActivity.this.wk.submit(() ->
-                            arr.parallelStream()
-                                    .map(b -> {
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                        b.compress(Bitmap.CompressFormat.WEBP, 80, baos);
-                                        return baos;
-                                    }).forEachOrdered(baos -> b64Imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)))).get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                arr.parallelStream()
+                        .map(this::convertBitmapToBase64)
+                        .filter(Objects::nonNull)
+                        .sequential()
+                        .forEachOrdered(s -> b64Imgs.add(s));
                 reviewRef.runTransaction(new Transaction.Handler() {
                         @NonNull @Override public Transaction.Result doTransaction(@NonNull MutableData md) {
                             ArrayList<Review> ar = md.getValue(new GenericTypeIndicator<ArrayList<Review>>() {});
@@ -210,60 +201,29 @@ public class ReviewActivity extends AppCompatActivity {
             if (data.getData() != null) {
                 Toast.makeText(ReviewActivity.this, "A Image selected.", Toast.LENGTH_SHORT).show();
                     new Thread(() -> {
-                        try {
-                            ImageView iv = new ImageView(ReviewActivity.this);
-                            iv.setImageBitmap(ReviewActivity.this.resizeBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData())));
-                            iv.setLayoutParams(ReviewActivity.this.lnrParams);
-                            iv.setOnClickListener(ReviewActivity.this.openDeleteDialog);
-                            iv.setClickable(true);
-                            ReviewActivity.this.lnrImages.post(() -> ReviewActivity.this.lnrImages.addView(iv));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        ImageView iv = new ImageView(ReviewActivity.this);
+                        iv.setImageBitmap(ReviewActivity.this.convertURItoBitmap(data));
+                        iv.setLayoutParams(ReviewActivity.this.lnrParams);
+                        iv.setOnClickListener(ReviewActivity.this.openDeleteDialog);
+                        iv.setClickable(true);
+                        ReviewActivity.this.lnrImages.post(() -> ReviewActivity.this.lnrImages.addView(iv));
                     }).start();
             } else if (data.getClipData() != null) {
                 ClipData mcd = data.getClipData();
                 Toast.makeText(ReviewActivity.this, mcd.getItemCount() + " Images selected.", Toast.LENGTH_SHORT).show();
                 ArrayList<ClipData.Item> arr = new ArrayList<>();
                 for (int i = 0; i < mcd.getItemCount(); i++) arr.add(mcd.getItemAt(i));
-                try {
-                    ReviewActivity.this.wk.submit(() -> arr.parallelStream().map(it -> {
-                        Bitmap b = null;
-                        try {
-                            b = ReviewActivity.this.resizeBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), it.getUri()));
-                            int w = b.getWidth();
-                            int h = b.getHeight();
-                            double scale = (double)w / h;
-                            if (w > 800) {
-                                if (w > h) {
-                                    w = 800;
-                                    h = (int)(800.0 / scale);
-                                } else {
-                                    h = 800;
-                                    w = (int)(800.0 * scale);
-                                }
-                                b = Bitmap.createScaledBitmap(b, w, h, true);
-                            }
-                            else if (h > 800) {
-                                h = 800;
-                                w = (int)(800.0 * scale);
-                                b = Bitmap.createScaledBitmap(b, w, h, true);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return b;
-                    }).filter(Objects::nonNull).forEachOrdered(b -> {
-                        ImageView iv = new ImageView(ReviewActivity.this);
-                        iv.setImageBitmap(b);
-                        iv.setLayoutParams(ReviewActivity.this.lnrParams);
-                        iv.setOnClickListener(ReviewActivity.this.openDeleteDialog);
-                        iv.setClickable(true);
-                        ReviewActivity.this.lnrImages.post(() -> ReviewActivity.this.lnrImages.addView(iv));
-                    })).get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                arr.parallelStream()
+                        .map(this::convertURItoBitmap)
+                        .filter(Objects::nonNull)
+                        .forEachOrdered(b -> {
+                            ImageView iv = new ImageView(ReviewActivity.this);
+                            iv.setImageBitmap(b);
+                            iv.setLayoutParams(ReviewActivity.this.lnrParams);
+                            iv.setOnClickListener(ReviewActivity.this.openDeleteDialog);
+                            iv.setClickable(true);
+                            ReviewActivity.this.lnrImages.post(() -> ReviewActivity.this.lnrImages.addView(iv));
+                        });
             }
             else Toast.makeText(ReviewActivity.this, "No Images selected.", Toast.LENGTH_SHORT).show();
         }
@@ -331,25 +291,35 @@ public class ReviewActivity extends AppCompatActivity {
         b.compress(Bitmap.CompressFormat.WEBP, 80, bs);
         return Base64.encodeToString(bs.toByteArray(), Base64.DEFAULT);
     }
-    private Bitmap resizeBitmap(Bitmap b) {
-        int w = b.getWidth();
-        int h = b.getHeight();
-        double scale = (double)w / h;
-        if (w > 800) {
-            if (w > h) {
-                w = 800;
-                h = (int)(800.0 / scale);
-            } else {
+    private Bitmap convertURItoBitmap(Object it) {
+        Bitmap b;
+        try {
+            if (it instanceof ClipData.Item) b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), ((ClipData.Item)it).getUri());
+            else if (it instanceof Intent) b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), ((Intent)it).getData());
+            else throw new IllegalArgumentException();
+
+            int w = b.getWidth();
+            int h = b.getHeight();
+            double scale = (double) w / h;
+            if (w > 800) {
+                if (w > h) {
+                    w = 800;
+                    h = (int) (800.0 / scale);
+                } else {
+                    h = 800;
+                    w = (int) (800.0 * scale);
+                }
+                return Bitmap.createScaledBitmap(b, w, h, true);
+            } else if (h > 800) {
                 h = 800;
-                w = (int)(800.0 * scale);
+                w = (int) (800.0 * scale);
+                return Bitmap.createScaledBitmap(b, w, h, true);
             }
-            return Bitmap.createScaledBitmap(b, w, h, true);
+            return b;
         }
-        else if (h > 800) {
-            h = 800;
-            w = (int)(800.0 * scale);
-            return Bitmap.createScaledBitmap(b, w, h, true);
+        catch (IOException | IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
         }
-        return b;
     }
 }
