@@ -18,21 +18,39 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
-
-        <TextView
-            android:id="@+id/order_id_delivery"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:text="Order ID"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/order_id_delivery"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="Order ID"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/product_id_delivery"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="Order ID"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/linear_mid"
@@ -44,10 +62,10 @@
                 android:id="@+id/order_date_delivery"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginTop="4dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
+                android:layout_weight="1"
                 android:background="@drawable/box_round_orange"
                 android:gravity="center"
                 android:text="20.06.07"
@@ -75,6 +93,22 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/order_review_delivery"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/box_round_yellow"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="REVIEW"
+                />
         </LinearLayout>
 
         <TextView
