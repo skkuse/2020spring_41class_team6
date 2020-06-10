@@ -49,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     TextView mypage;
     Integer search_filter=0;
     String dummy_filter="pork,seafood";
+    Intent intent;
 
     private DatabaseReference dbReference;
     @Override
@@ -199,7 +200,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("recommendation","I'm here");
-                Intent intent = new Intent(SearchActivity.this, RecommendationActivity.class);
+                intent = new Intent(SearchActivity.this, RecommendationActivity.class);
                 startActivity(intent);
             }
         });
@@ -207,12 +208,16 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("delivery","I'm here");
+                intent = new Intent(SearchActivity.this, DeliveryActivity.class);
+                startActivity(intent);
             }
         });
         mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("mypage","I'm here");
+                intent = new Intent(SearchActivity.this, MyPageActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -401,17 +406,21 @@ class ListViewAdapter extends BaseAdapter {
         descTextView.setText(listViewItem.getDesc());
         iconImageView.setImageBitmap(listViewItem.getIcon());
 
+        View finalConvertView = convertView;
         iconImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 // To Product List
-                Log.d("image",listViewItemList.get(position).getTitle());
+                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
         titleTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 // To Product List
+                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
                 Log.d("title",listViewItemList.get(position).getTitle());
             }
         });
@@ -419,6 +428,7 @@ class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // To Product List
+                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
                 Log.d("desc",listViewItemList.get(position).getTitle());
             }
         });
