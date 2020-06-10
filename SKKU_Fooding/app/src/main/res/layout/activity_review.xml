@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".activities.ReviewActivity">
+
+    <LinearLayout
+        android:id="@+id/app_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:background="@color/sub_orange"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/app_bar_icon"
+            android:src="@drawable/app_icon"
+            android:layout_width="170px"
+            android:layout_height="170px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="15px" />
+
+        <ImageView
+            android:id="@+id/app_bar_title"
+            android:src="@drawable/app_title"
+            android:layout_width="520px"
+            android:layout_height="150px"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/productImageView"
@@ -13,25 +40,45 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
         app:srcCompat="@drawable/app_icon" />
+
+    <TextView
+        android:id="@+id/simpleTextView"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="Write review about"
+        android:textSize="70px"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/productImageView"
+        app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
     <TextView
         android:id="@+id/productTextView"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="70dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:gravity="center"
+        android:text="Product_name"
+        android:textColor="@android:color/black"
+        android:textSize="70px"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/productImageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/simpleTextView" />
 
     <ImageView
         android:id="@+id/oneStarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
@@ -39,12 +86,12 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/twoStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@drawable/star_white" />
 
     <ImageView
         android:id="@+id/twoStarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
@@ -52,12 +99,12 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintEnd_toStartOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@drawable/star_white" />
 
     <ImageView
         android:id="@+id/threeStarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:onClick="setStar"
@@ -65,12 +112,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@drawable/star_white" />
 
     <ImageView
         android:id="@+id/fourStarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
@@ -78,12 +125,12 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/threeStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@drawable/star_white" />
 
     <ImageView
         android:id="@+id/fiveStarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
@@ -91,79 +138,120 @@
         app:layout_constraintBottom_toTopOf="@+id/reviewTitleView"
         app:layout_constraintStart_toEndOf="@+id/fourStarView"
         app:layout_constraintTop_toBottomOf="@+id/productTextView"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@drawable/star_white" />
 
     <EditText
         android:id="@+id/reviewTitleView"
         android:layout_width="0dp"
-        android:layout_height="39dp"
+        android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
-        android:autofillHints="Title of review"
-        android:text=""
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/border_round"
+        android:textSize="60px"
+        android:textColor="@android:color/black"
+        android:hint="  Review title"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/productTextView"
+        app:layout_constraintBottom_toTopOf="@+id/reviewDetailText"/>
 
     <EditText
         android:id="@+id/reviewDetailText"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:autofillHints="Description of review"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/border_round"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="  Write your review here."
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/reviewImageScrollView"
+        android:padding="5dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        android:textSize="50px"
+        app:layout_constraintBottom_toTopOf="@+id/photo_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reviewTitleView" />
 
+    <TextView
+        android:id="@+id/photo_textview"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="10dp"
+        android:text="Photo"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/reviewDetailText"
+        app:layout_constraintBottom_toTopOf="@+id/reviewImageScrollView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <HorizontalScrollView
         android:id="@+id/reviewImageScrollView"
-        android:layout_width="0dp"
-        android:layout_height="185dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:minHeight="150dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/border_round"
         android:clickable="true"
         android:focusable="auto"
         app:layout_constraintBottom_toTopOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photo_textview">
 
         <LinearLayout
             android:id="@+id/reviewImageLinearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="auto"
-            android:orientation="horizontal"
-            android:weightSum="3" />
+            android:orientation="horizontal"/>
     </HorizontalScrollView>
 
     <Button
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
         android:id="@+id/addUserImageButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Add Image"
+        android:background="@color/main_orange"
+        android:text="Upload Photo"
+        android:textSize="16dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/sub_yellow"
+        android:text="Submit"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         String defaultValue = loginPref.getString("login", null);
         if (defaultValue != null) {
             Toast.makeText(LoginActivity.this, "Start Auto-Login", Toast.LENGTH_SHORT).show();
-            intent = new Intent(LoginActivity.this, SearchActivity.class);
+            intent = new Intent(LoginActivity.this, SearchActivity.class); //여기!!!!! 수정!!!!!
             /* 앞으로의 activity에 필요한 intent 넘겨주기*/
 
             // get user's user_id & nickname from firebase database
@@ -113,9 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         // Save login information in shared preferences
-                                        editor.putString("login", shakey);
-                                        editor.commit();
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        editor.putString("login", shakey);
+                                        editor.putString("UID", mAuth.getUid());
+                                        editor.commit();
+
                                         Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
                                         intent = new Intent(LoginActivity.this, SearchActivity.class);
                                         /* 앞으로의 activity에 필요한 intent 넘겨주기*/
