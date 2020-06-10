@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import team6.skku_fooding.R;
+
 public class ReviewListAdapter extends ArrayAdapter<String> {
 
     ArrayList<String>userid;
