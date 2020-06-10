@@ -72,10 +72,11 @@ public class SearchActivity extends AppCompatActivity {
         dbref= FirebaseDatabase.getInstance().getReference();
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
         String UID=loginPref.getString("UID",null);
-        dbref.child("user").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+        dbref.child("user").child(UID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 filter = dataSnapshot.child("filter").getValue(String.class);
+                Log.d("Test",filter);
             }
 
             @Override
@@ -105,10 +106,11 @@ public class SearchActivity extends AppCompatActivity {
                     decodedImage=null;
                 }
 
-                if(search_filter==0){
+                if((search_filter==0)&&(filter!=null)){
                     Integer flag=0;
                     String[] ingredients_parsed=ingredient.split(",");
                     for (String ing:ingredients_parsed){
+                        Log.d("Test_wrong",filter);
                         if(filter.toLowerCase().contains(ing)){
                             flag=1;
                             break;

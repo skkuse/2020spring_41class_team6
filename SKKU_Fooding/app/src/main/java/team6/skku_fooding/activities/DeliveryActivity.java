@@ -81,9 +81,44 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
 
         Log.d("ASDFASDFASDF", "" + temp + temp2 + temp3 + temp4);
 
+        // Bottom menu bar
+        TextView home=(TextView)findViewById(R.id.home);
+        TextView recommendation=(TextView)findViewById(R.id.recommendation);
+        TextView delivery=(TextView)findViewById(R.id.delivery);
+        TextView mypage=(TextView)findViewById(R.id.mypage);
 
-
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Connect to home
+                Intent intent = new Intent(DeliveryActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("recommendation","I'm here");
+                Intent intent = new Intent(DeliveryActivity.this, RecommendationActivity.class);
+                startActivity(intent);
+            }
+        });
+        delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("mypage","I'm here");
+                Intent intent = new Intent(DeliveryActivity.this, MyPageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
     @Override
     public void onListBtnClick(int position){
         String current_product_id = list.get(position).toString();

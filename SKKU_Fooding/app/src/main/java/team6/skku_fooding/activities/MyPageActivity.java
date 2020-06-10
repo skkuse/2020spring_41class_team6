@@ -38,7 +38,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         SharedPreferences loginPref = this.getSharedPreferences("user_SP", MODE_PRIVATE);
 
-        this.uid = loginPref.getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
+        this.uid = loginPref.getString("UID", null);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         if (loginPref.getString("user_id", null) == null) {
