@@ -85,9 +85,15 @@ public class OrderActivity extends AppCompatActivity {
 
         /*
         Intent intent = getIntent();
-        Integer count = intent.getIntExtra("count", 1);
-        String name = intent.getStringExtra("name");
-        String type = intent.getStringExtra("Type");
+        String Type = intent.getStringExtra("Type");
+        if(Type == "Normal") {
+            Integer count = intent.getIntExtra("count", 1);
+            String name = intent.getStringExtra("name");
+        }
+        else if (Type == "All") {
+            String parse = intent.getStringExtra("parse");
+        }
+
 
          */
         Type = "Normal";
@@ -118,7 +124,7 @@ public class OrderActivity extends AppCompatActivity {
         }
 
         else if(Type=="All") {
-
+            //intent로 값을 받아오면 이 부분은 지우고 밑의 parsingall(parse)를 주석해제하여 실행하면 된다. 임시 데이터셋 테스트용
             mydb.child("user").orderByChild("UID").equalTo(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,6 +141,8 @@ public class OrderActivity extends AppCompatActivity {
 
                 }
             });
+
+            //parsingall(parse); //Algi에게 intent로 shopping_cart 정보를 받아온 것을 parsing
         }
 
 
