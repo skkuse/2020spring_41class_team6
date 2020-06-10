@@ -200,11 +200,14 @@
 
     <HorizontalScrollView
         android:id="@+id/reviewImageScrollView"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:minHeight="150dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@drawable/border_round"
         android:clickable="true"
         android:focusable="auto"
@@ -216,12 +219,12 @@
 
         <LinearLayout
             android:id="@+id/reviewImageLinearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="auto"
-            android:orientation="horizontal"
-            android:weightSum="3" />
+            android:orientation="horizontal"/>
     </HorizontalScrollView>
 
     <Button
