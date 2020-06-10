@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+    <ImageView
+        android:id="@+id/imgshop"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:text="TextView"
+        android:lineSpacingExtra="30dp"
+        android:scaleType="fitXY"
+
+      />
+
+
+    <TextView
+        android:id="@+id/titleshop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="TextView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+    <TextView
+        android:id="@+id/amount"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="TextView"
+        />
+    <TextView
+        android:id="@+id/prices"
+        android:layout_marginLeft="10dp"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="TextView"
+        />
+
+    <Button
+        android:id="@+id/removebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:text="REMOVE"
+        android:textSize="10dp" />
+
+    <Button
+        android:id="@+id/selectbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="SELECT"
+        android:textSize="10dp" />
+
+
+
+</LinearLayout>

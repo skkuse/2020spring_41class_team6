@@ -31,10 +31,9 @@ public class SurveyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
-        //주원씨한테서 user_id 받아오기
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SignupActivity.UID_pass);
-
+        String temp =getIntent().getStringExtra(SignupActivity.UID_pass);
+        //String temp =getIntent().getStringExtra("UID");
         Log.d("sakfjlaskf",""+ temp);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -54,7 +53,7 @@ public class SurveyActivity extends AppCompatActivity {
             int radioId = radioGroup.getCheckedRadioButtonId();
             radioButton=findViewById(radioId);
             if(checked==0){
-               user_id=temp; // 주원씨 한테서 잘 받아오면 해제
+               user_id=temp;
                 startSurvey();
             }
             if(checked==1){

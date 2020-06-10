@@ -14,44 +14,66 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-/*
-public class ReviewListAdapter extends ArrayAdapter<Review> {
+
+import team6.skku_fooding.R;
+
+public class ReviewListAdapter extends ArrayAdapter<String> {
+
+    ArrayList<String>userid;
+    ArrayList<String>title;
+    ArrayList<String>modifieddate;
+    ArrayList<String> score;
+    ArrayList<String> description;
+    Context c;
+    LayoutInflater inflater;
 
 
+    public ReviewListAdapter( Context context, ArrayList<String>userid,ArrayList<String>title,ArrayList<String>modifieddate,ArrayList<String> score,ArrayList<String> description){
 
-    public ReviewListAdapter( Context context, ArrayList<Review>mReviewlist){
+        super(context,0,userid);
+        this.c=context;
+        this.userid=userid;
+        this.title=title;
+        this.modifieddate=modifieddate;
+        this.score=score;
+        this.description=description;
 
-        super(context,R.layout.reviewlist,mReviewlist);
 
     }
-
+    public class ViewHolder{
+        TextView Userid;
+        TextView title;
+        TextView  modifieddate;
+        TextView  score;
+        TextView  description;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        System.out.println("llllllllllllllllll");
 
-        Review review=getItem(position);
+
+        final ViewHolder holder=new ViewHolder();
 
         if(convertView==null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.reviewlist, parent, false);
         }
 
 
-            TextView userid = (TextView) convertView.findViewById(R.id.userid);
+            holder.Userid = (TextView) convertView.findViewById(R.id.userid);
 
-            TextView description = (TextView) convertView.findViewById(R.id.description);
-            TextView modifiedDate = (TextView) convertView.findViewById(R.id.modifieddate);
-            TextView title = (TextView) convertView.findViewById(R.id.title);
-            TextView score = (TextView) convertView.findViewById(R.id.score);
-            System.out.println(review.title);
-            userid.setText(review.reviewId);
+            holder.description = (TextView) convertView.findViewById(R.id.description);
+            holder.modifieddate = (TextView) convertView.findViewById(R.id.modifieddate);
+            holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.score = (TextView) convertView.findViewById(R.id.score);
 
-            description.setText(review.description);
-            modifiedDate.setText(review.modifiedDate.toString());
-            title.setText(review.title);
-            score.setText(review.score);
+            holder.Userid.setText(userid.get(position));
+
+            holder.description.setText(description.get(position));
+            holder.modifieddate.setText(modifieddate.get(position));
+            holder.title.setText(title.get(position));
+            holder.score.setText(score.get(position));
 
 
         return  convertView;
     }
-}*/
+}

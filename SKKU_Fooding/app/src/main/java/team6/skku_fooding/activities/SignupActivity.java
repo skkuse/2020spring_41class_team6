@@ -326,6 +326,7 @@ public class SignupActivity extends AppCompatActivity {
         UID="";
     }
 
+
     @Override
     public void onBackPressed() {
         Toast.makeText(SignupActivity.this, "Cancel Sign up", Toast.LENGTH_SHORT).show();

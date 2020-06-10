@@ -155,21 +155,18 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
                 }
                 //이시점에서 filtering_final == filtering_list 생성 완료,
                 Log.d("sakfjlaskf",""+filtering_final);
-                //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 temp
                 reff_survey.child("user").child(temp).child("filter").setValue(filtering_final);
                 startSurvey();
             }
         });
     }
     private void startSurvey(){
-        //recommendation에서 갱신할 경우, intent 받아오고 그게 'r'일때
-        //if(get_from_recommendation=='r'){
+        //recommendation에서 갱신할 경우, intent 받아오고 그게 'R'일때
+        //if(get_from_recommendation=="R"){
        //     Intent intent =new Intent(SurveyActivity_Allergen.this,RecommendationActivity.class);
        //     startActivity(intent);
        // }
 
-      // 테스트용 Intent intent =new Intent(SurveyActivity_Allergen.this,DeliveryActivity.class);
-        //startActivity(intent);
         finish();
     }
 }
