@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import team6.skku_fooding.R;
+
 public class ShoppingAdapter extends ArrayAdapter<String> {
 
     ArrayList<String>images;

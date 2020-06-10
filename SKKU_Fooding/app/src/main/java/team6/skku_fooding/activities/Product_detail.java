@@ -24,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import team6.skku_fooding.R;
+
 
 public class Product_detail extends AppCompatActivity {
 TextView company,name,ingredient,price,uploadeddate;

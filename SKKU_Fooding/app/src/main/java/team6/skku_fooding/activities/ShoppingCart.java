@@ -30,6 +30,8 @@ import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import team6.skku_fooding.R;
+
 
 public class ShoppingCart extends AppCompatActivity {
     DatabaseReference reff;
