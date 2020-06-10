@@ -31,11 +31,15 @@ TextView company,name,ingredient,price,uploadeddate;
 TextView specificavg,generalavg;
 ImageView image;
 TextView amountindicator;
+
 int counterfortext;
 double specificaverage;
 double generalaverage;
 int countspecific;
 int countgeneral;
+
+String categoryId;
+
 
     DatabaseReference reff;
     DatabaseReference reff1;
@@ -58,12 +62,9 @@ int countgeneral;
         setContentView(R.layout.productdetail);
         FirebaseApp.initializeApp(this);
         amountindicator=(TextView)findViewById(R.id.showamount);
+        //HERE BELOW
         reff= FirebaseDatabase.getInstance().getReference().child("product").child("200");
         reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
-        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
-
-
-
 
         //The previous intent need to give below info
         //then manually written numbers in if statement need to be changed according to that
@@ -79,7 +80,7 @@ int countgeneral;
         ingredient=findViewById(R.id.ingredient);
         price= findViewById(R.id.price);
         uploadeddate=findViewById(R.id.uploaded_date);
-        reff= FirebaseDatabase.getInstance().getReference().child("product").child("200");
+
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -116,7 +117,7 @@ int countgeneral;
                 forthefirstamount=finallastversion.split("-",0);
                 for(String values1:forthefirstamount){
                     forthefirstamountsecondsplit=values1.split(":",0);
-
+                    //HERE BELOW
                       if(forthefirstamountsecondsplit[0].equals("200")){
 
                           amountindicator.setText(forthefirstamountsecondsplit[1].toString());
@@ -141,8 +142,20 @@ int countgeneral;
         });
         counterfortext=0;
 
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                categoryId=dataSnapshot.child("category_id").getValue().toString();
+                System.out.println(categoryId);
+                reviews();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-      reviews();
+            }
+        });
+
+
 
 
     }
@@ -159,6 +172,7 @@ int countgeneral;
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    System.out.println( "qqqqqqqqqqqqq");
                     Review forproductreviewspecific=new Review();
                     Review forproductreviewgeneral=new Review();
                     //Reviews going tobe set here and then add to list
@@ -167,7 +181,9 @@ int countgeneral;
                     int imagecount=0;
                     boolean imgsnotfinished=true;
                     if(ds.child("categoryId").exists()) {
-                        if (Integer.parseInt(ds.child("categoryId").getValue().toString()) == 0 && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
+                      System.out.println(  ds.child("categoryId").getValue().toString());
+                        //HERE BELOW
+                        if (Integer.parseInt(ds.child("categoryId").getValue().toString())==Integer.parseInt(categoryId) && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewspecific.userId ="UId: "+ds.child("userId").getValue().toString();
                             forproductreviewspecific.score = "Score: "+ds.child("rate").getValue().toString();
@@ -193,6 +209,7 @@ int countgeneral;
                             countspecific++;
                         }
                         imagecount=0;
+                        //HERE BELOW
                         if (Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewgeneral.userId = "UId: "+ds.child("userId").getValue().toString();
@@ -236,7 +253,7 @@ int countgeneral;
     public void order(View view){
 
 
-        reff1.addValueEventListener(new ValueEventListener() {
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -244,6 +261,7 @@ int countgeneral;
                 String lastversion="";
                 firstdivide = dataSnapshot.child("shopping_cart").getValue().toString().split("-",0);
                 for (String cart1 : firstdivide) {
+                    //HERE BELOW
                     if(!(cart1.startsWith("200"))){
                         lastversion=lastversion+cart1+"-";
                     }else{
@@ -269,7 +287,7 @@ int countgeneral;
     }
 
     public void remove(View view){
-
+        //HERE BELOW
         String productnum;
         productnum="200";
         reff1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -327,6 +345,8 @@ int countgeneral;
                 String lastversion="";
                 int howmanyproduct=0;
                 Boolean already=false;
+
+                //HERE BELOW
                 String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
@@ -389,6 +409,7 @@ int countgeneral;
                 String lastversion="";
                 int howmanyproduct=0;
                 Boolean already=false;
+                //HERE BELOW
                 String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
@@ -540,7 +561,7 @@ int countgeneral;
         mListView.setAdapter(adapter1);
         ReviewListAdapter adapter2 = new ReviewListAdapter(this,useridgeneral,titlegeneral,modifieddategeneral,scoregeneral,descriptiongeneral,imggeneral);
         m2ListView.setAdapter(adapter2);
-        System.out.println("ppppppp");
+        
         rewsspecific.clear();
         rewsgeneral.clear();
     }
