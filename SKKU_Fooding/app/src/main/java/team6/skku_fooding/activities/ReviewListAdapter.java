@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
+import team6.skku_fooding.R;
 import java.util.ArrayList;
 import java.util.List;
 

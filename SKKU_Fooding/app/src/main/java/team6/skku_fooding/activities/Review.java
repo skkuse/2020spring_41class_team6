@@ -1,4 +1,5 @@
 package team6.skku_fooding.activities;
+import java.util.ArrayList;
 import java.util.Date;
 public class Review {
 
@@ -11,8 +12,9 @@ public class Review {
         public String description;
         public String title;
         public String score;
+    public ArrayList<String> images;
 
-        public Review() {}
+    public Review() {}
         public Review(int reviewId) {
             // TODO: Retrieve Data from Database and make object.
         }

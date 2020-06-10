@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -48,10 +50,12 @@ public class SearchActivity extends AppCompatActivity {
     TextView delivery;
     TextView mypage;
     Integer search_filter=0;
-    String dummy_filter="pork,seafood";
+    String filter;
     Intent intent;
+    SharedPreferences loginPref;
 
     private DatabaseReference dbReference;
+    private DatabaseReference dbref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,22 @@ public class SearchActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
 
+
+        // Firebase user data load
+        dbref= FirebaseDatabase.getInstance().getReference();
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        String UID=loginPref.getString("UID",null);
+        dbref.child("user").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                filter = dataSnapshot.child("filter").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }});
+
         // Firebase data load
         dbReference= FirebaseDatabase.getInstance().getReference().child("product");
         Query query=dbReference.orderByChild("uploaded_date");
@@ -73,6 +93,7 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
+                Integer product_id=Integer.parseInt(currentObject.get("product_id").toString());
 
                 String imageString;
                 Bitmap decodedImage;
@@ -88,16 +109,16 @@ public class SearchActivity extends AppCompatActivity {
                     Integer flag=0;
                     String[] ingredients_parsed=ingredient.split(",");
                     for (String ing:ingredients_parsed){
-                        if(dummy_filter.toLowerCase().contains(ing)){
+                        if(filter.toLowerCase().contains(ing)){
                             flag=1;
                             break;
                         }
                     }
                     if(flag==0)
-                        adapter.addItem(decodedImage, name, price, ingredient);
+                        adapter.addItem(product_id, decodedImage, name, price, ingredient);
                 }
                 else{
-                    adapter.addItem(decodedImage, name, price, ingredient);
+                    adapter.addItem(product_id, decodedImage, name, price, ingredient);
                 }
             }
 
@@ -251,6 +272,7 @@ public class SearchActivity extends AppCompatActivity {
                 String name=currentObject.get("name").toString();
                 String price=currentObject.get("price").toString();
                 String ingredient=currentObject.get("ingredient").toString();
+                Integer product_id=Integer.parseInt(currentObject.get("product_id").toString());
 
                 String imageString;
                 Bitmap decodedImage;
@@ -267,16 +289,16 @@ public class SearchActivity extends AppCompatActivity {
                         Integer flag=0;
                         String[] ingredients_parsed=ingredient.split(",");
                         for (String ing:ingredients_parsed){
-                            if(dummy_filter.toLowerCase().contains(ingredient)){
+                            if(filter.toLowerCase().contains(ingredient)){
                                 flag=1;
                                 break;
                             }
                         }
                         if(flag==0)
-                            adapter.addItemIndex(0,decodedImage, name, price, ingredient);
+                            adapter.addItemIndex(product_id,0,decodedImage, name, price, ingredient);
                     }
                     else{
-                        adapter.addItemIndex(0,decodedImage, name, price, ingredient);
+                        adapter.addItemIndex(product_id,0,decodedImage, name, price, ingredient);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -285,16 +307,16 @@ public class SearchActivity extends AppCompatActivity {
                         Integer flag=0;
                         String[] ingredients_parsed=ingredient.split(",");
                         for (String ing:ingredients_parsed){
-                            if(dummy_filter.toLowerCase().contains(ingredient)){
+                            if(filter.toLowerCase().contains(ingredient)){
                                 flag=1;
                                 break;
                             }
                         }
                         if(flag==0)
-                            adapter.addItem(decodedImage, name, price, ingredient);
+                            adapter.addItem(product_id,decodedImage, name, price, ingredient);
                     }
                     else{
-                        adapter.addItem(decodedImage, name, price, ingredient);
+                        adapter.addItem(product_id,decodedImage, name, price, ingredient);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -321,7 +343,7 @@ public class SearchActivity extends AppCompatActivity {
                     Integer flag=0;
                     String[] ingredients_parsed=adapter.listViewItemList.get(i).getIngredient().split(",");
                     for (String ing:ingredients_parsed){
-                        if(dummy_filter.toLowerCase().contains(ing)){
+                        if(filter.toLowerCase().contains(ing)){
                             flag=1;
                             break;
                         }
@@ -344,6 +366,7 @@ class ListViewItem {
     private String titleStr;
     private String descStr;
     private String ingredient;
+    private Integer product_id;
 
     public void setIcon(Bitmap icon) {
         iconDrawable = icon;
@@ -359,6 +382,8 @@ class ListViewItem {
 
     public void setIngredient(String ing){ingredient=ing;}
 
+    public void setProductId(Integer pid){product_id=pid;}
+
     public Bitmap getIcon() {
         return this.iconDrawable;
     }
@@ -372,6 +397,8 @@ class ListViewItem {
     }
 
     public String getIngredient(){return this.ingredient;}
+
+    public Integer getProductId(){return this.product_id;}
 }
 
 class ListViewAdapter extends BaseAdapter {
@@ -413,6 +440,7 @@ class ListViewAdapter extends BaseAdapter {
                 // To Product List
                 Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("product_id",listViewItem.getProductId());
                 context.startActivity(intent);
             }
         });
@@ -421,7 +449,9 @@ class ListViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 // To Product List
                 Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
-                Log.d("title",listViewItemList.get(position).getTitle());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("product_id",listViewItem.getProductId());
+                context.startActivity(intent);
             }
         });
         descTextView.setOnClickListener(new View.OnClickListener(){
@@ -429,7 +459,9 @@ class ListViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 // To Product List
                 Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
-                Log.d("desc",listViewItemList.get(position).getTitle());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("product_id",listViewItem.getProductId());
+                context.startActivity(intent);
             }
         });
 
@@ -446,24 +478,26 @@ class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-    public void addItem(Bitmap icon, String title, String desc, String ingredient) {
+    public void addItem(Integer product_id, Bitmap icon, String title, String desc, String ingredient) {
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setDesc(desc);
         item.setIngredient(ingredient);
+        item.setProductId(product_id);
 
         listViewItemList.add(item);
     }
 
-    public void addItemIndex(Integer index, Bitmap icon, String title, String desc, String ingredient){
+    public void addItemIndex(Integer product_id, Integer index, Bitmap icon, String title, String desc, String ingredient){
         ListViewItem item = new ListViewItem();
 
         item.setIcon(icon);
         item.setTitle(title);
         item.setDesc(desc);
         item.setIngredient(ingredient);
+        item.setProductId(product_id);
 
         listViewItemList.add(index, item);
     }
