@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ShoppingCart extends AppCompatActivity {
     DatabaseReference reff;
+    DatabaseReference reff1;
     String shoppingcart;
     String[]firstdivide;
     String[]seconddivide;
@@ -55,12 +56,26 @@ public class ShoppingCart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
         reff = FirebaseDatabase.getInstance().getReference().child("product");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
         //Put shoppingcart array adapter here
         Intent myIntent = getIntent();
 
         shoppingcart = myIntent.getStringExtra("shoppingcartvalues");
         System.out.println("ooffffffffffff");
         System.out.println(shoppingcart);
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

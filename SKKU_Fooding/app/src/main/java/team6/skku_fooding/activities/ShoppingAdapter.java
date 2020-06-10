@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingAdapter extends ArrayAdapter<String> {
-
+    TextView changeprepage;
     ArrayList<String>images;
     ArrayList<String>names;
     ArrayList<String>amount;
@@ -175,6 +175,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
                 ShoppingAdapter.this.notifyDataSetChanged();
                 refresh(removeproduct);
 
+
             }
         });
 
@@ -208,4 +209,5 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
         reff.child("shopping_cart").setValue(lastversion);
 
     }
+
 }

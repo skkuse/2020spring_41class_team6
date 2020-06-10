@@ -30,6 +30,7 @@ TextView company,name,ingredient,price,uploadeddate;
 TextView specificavg,generalavg;
 ImageView image;
 TextView amountindicator;
+int counterfortext;
 double specificaverage;
 double generalaverage;
 int countspecific;
@@ -37,6 +38,7 @@ int countgeneral;
 
     DatabaseReference reff;
     DatabaseReference reff1;
+
     String sendingitem;
     ArrayList<Review> rewsspecific = new ArrayList<>();
     ArrayList<Review> rewsgeneral = new ArrayList<>();
@@ -55,6 +57,9 @@ int countgeneral;
         setContentView(R.layout.productdetail);
         FirebaseApp.initializeApp(this);
         amountindicator=(TextView)findViewById(R.id.showamount);
+        reff= FirebaseDatabase.getInstance().getReference().child("product").child("200");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
 
 
 
@@ -101,8 +106,6 @@ int countgeneral;
         });
 
 
-        reff1= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
-
 
         reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -116,6 +119,12 @@ int countgeneral;
                       if(forthefirstamountsecondsplit[0].equals("200")){
 
                           amountindicator.setText(forthefirstamountsecondsplit[1].toString());
+                          counterfortext++;
+                          System.out.println("cccccccccccc");
+                          System.out.println(counterfortext);
+                      }
+                      if(counterfortext==0){
+                          amountindicator.setText("0");
                       }
 
                 }
@@ -129,6 +138,7 @@ int countgeneral;
 
             }
         });
+        counterfortext=0;
 
 
       reviews();
@@ -224,8 +234,8 @@ int countgeneral;
 
     public void order(View view){
 
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
-        reff.addValueEventListener(new ValueEventListener() {
+
+        reff1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -242,7 +252,7 @@ int countgeneral;
 
                 }
                 finallastversion=lastversion;
-                reff.child("shopping_cart").setValue(lastversion);
+                reff1.child("shopping_cart").setValue(lastversion);
 //Order gonna have sending item with intent
             }
 
@@ -258,10 +268,10 @@ int countgeneral;
     }
 
     public void remove(View view){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+
         String productnum;
         productnum="200";
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String [] firstdivide;
@@ -278,7 +288,7 @@ int countgeneral;
                 }
 
                 finallastversion=lastversion;
-                reff.child("shopping_cart").setValue(lastversion);
+                reff1.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
                 CharSequence text = " Removed from Shoppingcart";
                 amountindicator=(TextView)findViewById(R.id.showamount);
@@ -306,9 +316,9 @@ int countgeneral;
 
     public void shoppingcartadd(View view){
 
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
 
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String[]firstdivide;
@@ -345,7 +355,7 @@ int countgeneral;
                     howmanyproduct=1;
                 }
                 finallastversion=lastversion;
-                reff.child("shopping_cart").setValue(lastversion);
+                reff1.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
 
                 amountindicator.setText(Integer.toString(howmanyproduct));
@@ -369,8 +379,8 @@ int countgeneral;
     }
 
     public void shoppingcartdelete(View view){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String[]firstdivide;
@@ -411,7 +421,7 @@ int countgeneral;
                     lastversion="none";
                 }
                 finallastversion=lastversion;
-                reff.child("shopping_cart").setValue(lastversion);
+                reff1.child("shopping_cart").setValue(lastversion);
                 Context context = getApplicationContext();
 
                 amountindicator.setText(Integer.toString(howmanyproduct));
@@ -436,9 +446,9 @@ int countgeneral;
 
     }
     public void seeshoppingcart(View view){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
 
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
