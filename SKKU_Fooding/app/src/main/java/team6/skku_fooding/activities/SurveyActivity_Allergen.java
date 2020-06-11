@@ -153,6 +153,9 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
                 if(fish_check==1){
                     filtering_final=filtering_final+","+"fish";
                 }
+                if(nuts_check==1){
+                    filtering_final=filtering_final+","+"nuts";
+                }
                 //이시점에서 filtering_final == filtering_list 생성 완료,
                 Log.d("sakfjlaskf",""+filtering_final);
                 reff_survey.child("user").child(temp).child("filter").setValue(filtering_final);
