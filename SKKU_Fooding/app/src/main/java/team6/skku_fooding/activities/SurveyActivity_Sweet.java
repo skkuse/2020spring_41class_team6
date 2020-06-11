@@ -39,7 +39,7 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
         */
-         
+
         Intent intent = getIntent();
         String temp = intent.getStringExtra("UID");
         Button buttonStartSurvey = findViewById(R.id.sweet_next_btn);
