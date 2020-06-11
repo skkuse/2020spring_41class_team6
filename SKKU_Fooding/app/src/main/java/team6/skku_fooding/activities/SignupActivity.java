@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
-    public static final String UID_pass = "sign_up_activity_william.UID";
     String user_id;
     String pw;
     String nickname;
@@ -273,7 +272,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 survey_complete = true;
                 intent = new Intent(SignupActivity.this, SurveyActivity.class);
-                intent.putExtra(UID_pass, UID);
+                intent.putExtra("UID", UID);
                 startActivity(intent);
             }
         });

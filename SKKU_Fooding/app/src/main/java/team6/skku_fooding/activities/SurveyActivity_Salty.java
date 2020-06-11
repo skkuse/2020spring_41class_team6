@@ -15,12 +15,11 @@ import team6.skku_fooding.R;
 
 public class SurveyActivity_Salty extends AppCompatActivity {
     public static final String ID_NUMBER = "categoryid_william.ID_NUMBER";
-    public static final String USER_ID = "survey_william.USER_ID";
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
     int id;
-    String user_id;
+    String UID;
     @Override
     public void onBackPressed(){
 
@@ -33,7 +32,7 @@ public class SurveyActivity_Salty extends AppCompatActivity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
+        String temp = intent.getStringExtra("UID");
         int width= dm.widthPixels;
         int height = dm.heightPixels;
 
@@ -43,7 +42,7 @@ public class SurveyActivity_Salty extends AppCompatActivity {
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_id=temp;
+                UID=temp;
                 startSurvey();
             }
         });
@@ -71,7 +70,7 @@ public class SurveyActivity_Salty extends AppCompatActivity {
             id=90;
         }
         intent.putExtra(ID_NUMBER,id);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }

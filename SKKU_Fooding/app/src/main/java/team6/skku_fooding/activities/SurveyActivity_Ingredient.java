@@ -4,6 +4,7 @@ package team6.skku_fooding.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -23,13 +24,12 @@ import team6.skku_fooding.R;
 
 public class SurveyActivity_Ingredient extends AppCompatActivity {
     public static final String ID_NUMBER2 = "categoryid_william.ID_NUMBER";
-    public static final String USER_ID = "survey_william.USER_ID";
     private DatabaseReference reff_survey;
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
     int idfinal;
-    String user_id;
+    String UID;
     @Override
     public void onBackPressed(){
 
@@ -44,7 +44,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         reff_survey= FirebaseDatabase.getInstance().getReference();
 
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
+        String temp = intent.getStringExtra("UID");
         int id = intent.getIntExtra(SurveyActivity_Spicy.ID_NUMBER,0);
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -82,9 +82,11 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
                     idfinal = id +5;
                 }
                 //이시점에서 category_id==idfinal 생성 완료
-                user_id=temp;
+                UID=temp;
                 //주원씨 signactivity에서 uid 잘 받오면 "IPli1mXAUUYm3npYJ48B43Pp7tQ2" 대신 user_id
-                reff_survey.child("user").child(user_id).child("category_id").setValue(idfinal);
+                Log.d("UID 잘받았나 보자",""+UID);
+                reff_survey.child("user").child(UID).child("category_id").setValue(idfinal);
+
                 startSurvey();
             }
         });
@@ -104,7 +106,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity_Ingredient.this,SurveyActivity_Vegetarian.class);
         intent.putExtra(ID_NUMBER2,idfinal);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }
