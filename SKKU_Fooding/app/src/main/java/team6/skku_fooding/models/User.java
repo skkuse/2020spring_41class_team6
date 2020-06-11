@@ -12,10 +12,9 @@ public class User {
     public String pw;
     public String nickname;
     public String UID;
-    public List<Pair<Product, Integer>> shopping_cart; // discuss with Algi
-    public List<Order> order_list;
+    public String shopping_cart;
     public int category_id;
-    public List<String> filter_list;
+    public String filter;
 
     public User() {}
 
@@ -24,10 +23,8 @@ public class User {
         this.pw=pw;
         this.nickname=nickname;
         this.UID=UID;
-        this.shopping_cart=new ArrayList<Pair<Product, Integer>>();
-        this.order_list=new ArrayList<Order>();
-        this.filter_list = new ArrayList<String>();
-        // shopping cart, order_list, category_id, filter_list는 각 activity에서 child 추가
+        this.shopping_cart= "@"; // initial value : discuss with Algi
+        // category_id, filter_list는 SurveyActivity에서 child 추가
     }
 
     public Map<String, Object> toMap() {
@@ -37,9 +34,6 @@ public class User {
         result.put("nickname", nickname);
         result.put("UID", UID);
         result.put("shopping_cart", shopping_cart);
-        result.put("order_list", order_list);
-        result.put("category_id", category_id);
-        result.put("filter_list", filter_list);
         return result;
     }
 
@@ -59,19 +53,15 @@ public class User {
         return UID;
     }
 
-    public List<Pair<Product, Integer>> getShopping_cart() {
+    public String getShopping_cart() {
         return shopping_cart;
-    }
-
-    public List<Order> getOrder_list() {
-        return order_list;
     }
 
     public int getCategory_id() {
         return category_id;
     }
 
-    public List<String> getFilter_list() {
-        return filter_list;
+    public String getFilter() {
+        return filter;
     }
 }

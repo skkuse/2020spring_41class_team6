@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,14 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
 
 public class SurveyActivity extends AppCompatActivity {
-    public static final String USER_ID = "survey_william.USER_ID";
+
 
     Intent intent;
     Button next_button;
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
-    String user_id;
+    String UID;
 
     @Override
     public void onBackPressed(){
@@ -31,10 +32,11 @@ public class SurveyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
-        //주원씨한테서 user_id 받아오기
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SignupActivity.UID_pass);
-
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        String temp=loginPref.getString("UID",null);
+        //String temp =getIntent().getStringExtra("UID");
         Log.d("sakfjlaskf",""+ temp);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -54,15 +56,15 @@ public class SurveyActivity extends AppCompatActivity {
             int radioId = radioGroup.getCheckedRadioButtonId();
             radioButton=findViewById(radioId);
             if(checked==0){
-               user_id=temp; // 주원씨 한테서 잘 받아오면 해제
+               UID=temp;
                 startSurvey();
             }
             if(checked==1){
-               user_id=temp;
+               UID=temp;
                 startSurvey2();
             }
             if(checked==2){
-              user_id=temp;
+              UID=temp;
                 startSurvey3();
             }
         });
@@ -73,20 +75,20 @@ public class SurveyActivity extends AppCompatActivity {
     }
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Spicy.class);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }
 
     private void startSurvey2(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Sweet.class);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }
     private void startSurvey3(){
         Intent intent =new Intent(SurveyActivity.this,SurveyActivity_Salty.class);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }

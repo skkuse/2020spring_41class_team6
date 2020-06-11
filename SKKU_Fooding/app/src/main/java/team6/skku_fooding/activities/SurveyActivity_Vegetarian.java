@@ -3,6 +3,7 @@ package team6.skku_fooding.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.health.UidHealthStats;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -21,17 +22,16 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
     }
     String filtering;
     public static final String FILTER_STRING = "filtering_william.FILTER_STRING";
-    public static final String USER_ID = "survey_william.USER_ID";
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
-    String user_id;
+    String UID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__vegetarian);
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
+        String temp = intent.getStringExtra("UID");
         //테스트용
         //int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
        // TextView textView = (TextView) findViewById(R.id.test_survey);
@@ -48,7 +48,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_id=temp;
+                UID =temp;
                 startSurvey();
             }
         });
@@ -67,7 +67,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
     private void startSurvey(){
         Intent intent =new Intent(SurveyActivity_Vegetarian.this,SurveyActivity_Allergen.class);
         if(checked==0){
-            filtering=" ";
+            filtering="none";
         }
         else if(checked==1){
             filtering="pork,beef,egg,milk,fish,poultry,shellfish";
@@ -88,7 +88,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
             filtering="pork,beef,shellfish";
         }
         intent.putExtra(FILTER_STRING,filtering);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }

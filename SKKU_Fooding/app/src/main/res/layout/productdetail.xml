@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Product_detail">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="125dp"
+            android:layout_height="84dp"
+            android:layout_marginRight="70dp"/>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:text="Hello World!" />
+
+        <TextView
+            android:id="@+id/ingredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/uploaded_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="TextView" />
+
+</LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/first"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/addcart"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+
+                android:onClick="shoppingcartadd"
+                android:text="+" />
+            <TextView
+                android:id="@+id/showamount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20dp"></TextView>
+            <Button
+                android:id="@+id/deletecart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:onClick="shoppingcartdelete"
+                android:layout_marginRight="20dp"
+                android:text="-" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/ordernow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="order"
+            android:text="Ordernow"
+
+            android:layout_marginLeft="20dp"
+            android:textSize="10dp" />
+        <Button
+            android:id="@+id/removeitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/listview"
+
+            android:textSize="10dp"
+            android:onClick="remove"
+
+            android:text="Remove" />
+        <Button
+            android:id="@+id/viewshoppincart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:onClick="seeshoppingcart"
+            android:text="ViewShoppingcart"
+            android:textSize="10dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Preference Reviews"
+            />
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:text="SpecificAvgRate"
+            android:layout_marginRight="20dp"
+            />
+        <TextView
+            android:id="@+id/s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="TextView"
+            />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="514dp"
+
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="All Reviews"
+        />
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:text="GeneralAvgRate:"
+            android:layout_marginRight="20dp"
+            />
+    <TextView
+        android:id="@+id/g"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="TextView"
+        />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/listview2"
+        android:layout_width="match_parent"
+        android:layout_height="514dp"
+        android:layout_weight="1"
+        /></LinearLayout>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

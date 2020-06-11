@@ -78,4 +78,66 @@
         android:dividerHeight="2dp"/>
 
     </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalscroll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/sub_yellow"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="home"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/recommendation"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="recommendation"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/delivery"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="delivery"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mypage"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="mypage"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

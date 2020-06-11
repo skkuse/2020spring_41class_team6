@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,6 +53,7 @@ public class OrderActivity extends AppCompatActivity {
     String Type;
     Integer totalprice = 0;
     Integer pcount = 0;
+    boolean flag = false;
 
 
     public class pair {
@@ -77,11 +79,13 @@ public class OrderActivity extends AppCompatActivity {
         et2 = (EditText) findViewById(R.id.comment);
 
 
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        uid=loginPref.getString("UID",null);
 
 
-
-
-
+        Intent intent=getIntent();
+        String getting_item=intent.getStringExtra("sending_item");
 
         /*
         Intent intent = getIntent();
@@ -93,15 +97,13 @@ public class OrderActivity extends AppCompatActivity {
         else if (Type == "All") {
             String parse = intent.getStringExtra("parse");
         }
-
-
          */
-        Type = "Normal";
-        pid = 200;
-        count = 3;
-        uid = "9yxJe7BjmAfW0t39O4i5tbUfm4m1"; //임시 데이터셋
+        //Type = "Normal";
+        //pid=200;
+        //count = 3;  // More intent would be come
+        //uid = UID;
 
-
+        /*
         DatabaseReference mydb = FirebaseDatabase.getInstance().getReference();
         if(Type == "Normal") {
             mydb.child("product").orderByChild("product_id").equalTo(pid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -113,16 +115,12 @@ public class OrderActivity extends AppCompatActivity {
                         String name = d.child("name").getValue(String.class);
                         tv.setText(name + " " + count + "개를 구입합니다.\n" + "총 " + price * count + "원 입니다.");
                     }
-
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
         }
-
         else if(Type=="All") {
             //intent로 값을 받아오면 이 부분은 지우고 밑의 parsingall(parse)를 주석해제하여 실행하면 된다. 임시 데이터셋 테스트용
             mydb.child("user").orderByChild("UID").equalTo(uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -132,20 +130,16 @@ public class OrderActivity extends AppCompatActivity {
                         String cart = d.child("shopping_cart").getValue(String.class);
                         Log.d("check", "cart : " + cart);
                         parsingall(cart);
-
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
-
             //parsingall(parse); //Algi에게 intent로 shopping_cart 정보를 받아온 것을 parsing
         }
-
-
+*/
+        parsingall(getting_item);
     }
     //문자열 파싱 후 db호출
     public void parsingall(String parse) {
@@ -208,13 +202,12 @@ public class OrderActivity extends AppCompatActivity {
                 setdb(key, pcount);
                 pcount += 1;
 
-
-
             }
         }
-
-
-
+        if(flag) {
+            Intent intent = new Intent(OrderActivity.this, SearchActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void setdb(final Integer ppid, final Integer ncount) {
@@ -227,6 +220,7 @@ public class OrderActivity extends AppCompatActivity {
             Toast erring1 = Toast.makeText(this.getApplicationContext(), "주소와 카드번호를 제대로 입력해주세요", Toast.LENGTH_SHORT);
             erring1.show();
         } else {
+            flag = true;
 
             dbref.child("order").orderByChild("order_id").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -288,6 +282,3 @@ public class OrderActivity extends AppCompatActivity {
 
 
 }
-
-
-
