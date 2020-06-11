@@ -6,12 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,6 +28,9 @@ public class MyPageActivity extends AppCompatActivity {
     private String uid;
     private TextView userIDTextView;
     private TextView userNicknameTextView;
+    Button mpLogoutButton;
+    private FirebaseAuth mAuth;
+    SharedPreferences loginPref;
     // private Button userPrefButton;
 
     @Override
@@ -35,11 +40,12 @@ public class MyPageActivity extends AppCompatActivity {
 
         this.userIDTextView = findViewById(R.id.mpUserIdTextView);
         this.userNicknameTextView = findViewById(R.id.mpUserNicknameTextView);
+        mpLogoutButton = findViewById(R.id.mpLogoutButton);
         // this.mpLinear = findViewById(R.id.mpLinearLayout);
         // private LinearLayout mpLinear;
         // this.userPrefButton = findViewById(R.id.mpUserPrefButton);
-
-        SharedPreferences loginPref = this.getSharedPreferences("user_SP", MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
+        loginPref = getSharedPreferences("user_SP", MODE_PRIVATE);
 
         this.uid = loginPref.getString("UID", null);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -97,6 +103,17 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
         */
+        mpLogoutButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent intent = new Intent(MyPageActivity.this, LoginActivity.class);
+                startActivity(intent);
+                SharedPreferences.Editor editor = loginPref.edit();
+                editor.clear();
+                editor.commit();
+            }
+        });
 
         // Bottom menu bar
         TextView home=(TextView)findViewById(R.id.home);

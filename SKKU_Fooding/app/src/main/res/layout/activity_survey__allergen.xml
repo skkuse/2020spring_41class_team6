@@ -18,13 +18,13 @@
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ALLERGEN"
             android:textAlignment="center"
-            android:textSize="@android:dimen/notification_large_icon_height"
-           />
+            android:textSize="40dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,60 +32,84 @@
             android:layout_above="@id/radio_group"
             android:text="Any allergies?"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
+
         <CheckBox
             android:id="@+id/allergen_milk"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Milk"/>
+
         <CheckBox
             android:id="@+id/allergen_egg"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Egg"/>
+
         <CheckBox
             android:id="@+id/allergen_flour"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Flour"/>
+
         <CheckBox
             android:id="@+id/allergen_nuts"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Nuts"/>
+
         <CheckBox
             android:id="@+id/allergen_shellfish"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Shellfish"/>
+
         <CheckBox
             android:id="@+id/allergen_fish"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:background="@drawable/custom_selector"
+            android:buttonTint="@color/sub_yellow"
+            android:gravity="center"
+            android:textSize="25dp"
             android:text="Fish"/>
-
 
         <Button
             android:id="@+id/allergen_next_btn"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/radio_group"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="center_horizontal|center"
-            android:text="COMPLETE"
-            android:outlineAmbientShadowColor="@color/sub_orange"/>
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:text="Complete"
+            android:textSize="15dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:enterFadeDuration="@android:integer/config_shortAnimTime" android:exitFadeDuration="@android:integer/config_shortAnimTime">
+    <item
+        android:state_checked="true"
+        android:left="-8dp"
+        android:right="-8dp"
+        android:top="-8dp">
+        <shape>
+            <solid android:color="@android:color/white" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/main_orange" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+
+    <item
+        android:state_checked="false">
+        <shape>
+            <solid android:color="@android:color/white" />
+            <stroke
+                android:width="3dp"
+                android:color="@android:color/darker_gray" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</selector>
