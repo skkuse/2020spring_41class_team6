@@ -2,12 +2,10 @@ package team6.skku_fooding.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import team6.skku_fooding.R;
-
 
 public class Product_detail extends AppCompatActivity {
 TextView company,name,ingredient,price,uploadeddate;
@@ -43,8 +39,7 @@ int countgeneral;
 Bitmap deneme;
 
 String categoryId;
-String UID;
-String product_id;
+
 
     DatabaseReference reff;
     DatabaseReference reff1;
@@ -57,8 +52,7 @@ String product_id;
     String[]forthefirstamountsecondsplit;
     String productprice;
 
-    ArrayList<Bitmap>imagesgeneral;
-    ArrayList<Bitmap>imagesspecific;
+
 
 
     @Override
@@ -68,18 +62,8 @@ String product_id;
         FirebaseApp.initializeApp(this);
         amountindicator=(TextView)findViewById(R.id.showamount);
         //HERE BELOW
-
-        SharedPreferences loginPref;
-        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        UID=loginPref.getString("UID",null);
-
-        Intent intent=getIntent();
-        product_id=intent.getStringExtra("product_id");
-
-        reff= FirebaseDatabase.getInstance().getReference().child("product").child(product_id);
-        Log.d("Test",UID);
-        reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
-
+        reff= FirebaseDatabase.getInstance().getReference().child("product").child("200");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
 
         //The previous intent need to give below info
         //then manually written numbers in if statement need to be changed according to that
@@ -135,7 +119,7 @@ String product_id;
                 for(String values1:forthefirstamount){
                     forthefirstamountsecondsplit=values1.split(":",0);
                     //HERE BELOW
-                      if(forthefirstamountsecondsplit[0].equals(product_id)){
+                      if(forthefirstamountsecondsplit[0].equals("200")){
 
                           amountindicator.setText(forthefirstamountsecondsplit[1].toString());
                           counterfortext++;
@@ -183,7 +167,6 @@ String product_id;
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference reviewsRef = rootRef.child("review");
 
-
         reviewsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -192,6 +175,8 @@ String product_id;
                     System.out.println( "qqqqqqqqqqqqq");
                     Review forproductreviewspecific=new Review();
                     Review forproductreviewgeneral=new Review();
+                    ArrayList<Bitmap>imagesspecific=new ArrayList<Bitmap>();
+                    ArrayList<Bitmap>imagesgeneral=new ArrayList<Bitmap>();;
                     //Reviews going tobe set here and then add to list
                     int ratespecific=0;
                     int rategeneral=0;
@@ -200,26 +185,28 @@ String product_id;
                     if(ds.child("categoryId").exists()) {
                       System.out.println(  ds.child("categoryId").getValue().toString());
                         //HERE BELOW
-                        Log.d("203",product_id);
-                        if (Integer.parseInt(ds.child("categoryId").getValue().toString())==Integer.parseInt(categoryId) && Integer.parseInt(ds.child("productId").getValue().toString()) == Integer.parseInt(product_id)) {
+                        if (Integer.parseInt(ds.child("categoryId").getValue().toString())==Integer.parseInt(categoryId) && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewspecific.userId ="UId: "+ds.child("userId").getValue().toString();
                             forproductreviewspecific.score = "Score: "+ds.child("rate").getValue().toString();
                             forproductreviewspecific.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
                             forproductreviewspecific.title = "Title: "+ds.child("title").getValue().toString();
                             forproductreviewspecific.description = ds.child("description").getValue().toString();
-                          /* while(imgsnotfinished){
-                               if(Integer.parseInt(ds.child("b64Imgs").getValue().toString())==imagecount){
+                          while(imgsnotfinished){
+                               if(ds.child("b64Imgs").child(Integer.toString(imagecount)).exists()){
                                    byte[]imageBytes = Base64.decode(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString(), Base64.DEFAULT);
                                    Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                                    imagesspecific.add(decodedImage);
                                    imagecount++;
                                }else{
+                                   System.out.println(imagesspecific);
                                    forproductreviewspecific.images=imagesspecific;
+
                                    imgsnotfinished=false;
                                }
                            }
-{                           }*/
+
+
 
                             ratespecific = Integer.parseInt(ds.child("rate").getValue().toString());
                             specificaverage = specificaverage + ratespecific;
@@ -229,31 +216,40 @@ String product_id;
                             countspecific++;
                         }
                         imagecount=0;
+                        imgsnotfinished=true;
                         //HERE BELOW
-                        if (Integer.parseInt(ds.child("productId").getValue().toString()) == Integer.parseInt(product_id)) {
+                        if (Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewgeneral.userId = "UId: "+ds.child("userId").getValue().toString();
                             forproductreviewgeneral.score = "Score: "+ds.child("rate").getValue().toString();
                             forproductreviewgeneral.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
                             forproductreviewgeneral.title = "Title: "+ds.child("title").getValue().toString();
                             forproductreviewgeneral.description = ds.child("description").getValue().toString();
-                           /* while(imgsnotfinished){
-                                byte[]imageBytes = Base64.decode(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString(), Base64.DEFAULT);
-                                Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                                if(Integer.parseInt(ds.child("b64Imgs").getValue().toString())==imagecount){
+                            while(imgsnotfinished){
+                                System.out.println("gggggggggg");
+
+                                if(ds.child("b64Imgs").child(Integer.toString(imagecount)).exists()) {
+                                    System.out.println("111111111");
+                                    byte[] imageBytes = Base64.decode(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString(), Base64.DEFAULT);
+                                    Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                                     imagesgeneral.add(decodedImage);
                                     imagecount++;
-                                }else{
+                                }else {
+                                    System.out.println(imagesgeneral);
                                     forproductreviewgeneral.images = imagesgeneral;
-                                    imgsnotfinished=false;
+
+                                    imgsnotfinished = false;
+                                    System.out.println("ciiiiiktiiiimmm");
                                 }
-                            }*/
+                            }
 
                             rategeneral = Integer.parseInt(ds.child("rate").getValue().toString());
                             generalaverage = generalaverage + rategeneral;
                             rewsgeneral.add(forproductreviewgeneral);
                             countgeneral++;
+
                         }
+
                     }
 
 
@@ -284,7 +280,7 @@ String product_id;
                 firstdivide = dataSnapshot.child("shopping_cart").getValue().toString().split("-",0);
                 for (String cart1 : firstdivide) {
                     //HERE BELOW
-                    if(!(cart1.startsWith(product_id))){
+                    if(!(cart1.startsWith("200"))){
                         lastversion=lastversion+cart1+"-";
                     }else{
                         sendingitem=cart1;
@@ -311,7 +307,7 @@ String product_id;
     public void remove(View view){
         //HERE BELOW
         String productnum;
-        productnum=product_id;
+        productnum="200";
         reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -369,7 +365,7 @@ String product_id;
                 Boolean already=false;
 
                 //HERE BELOW
-                String productnum=product_id;
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -432,7 +428,7 @@ String product_id;
                 int howmanyproduct=0;
                 Boolean already=false;
                 //HERE BELOW
-                String productnum=product_id;
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -565,7 +561,7 @@ String product_id;
             scorespecific.add(a.score);
             titlespecific.add(a.title);
             descriptionspecific.add(a.description);
-           // imgspecific.add(a.images);
+            imgspecific.add(a.images);
 
         }
         ListView m2ListView=(ListView) findViewById(R.id.listview2);
@@ -575,13 +571,15 @@ String product_id;
             scoregeneral.add(b.score);
             titlegeneral.add(b.title);
             descriptiongeneral.add(b.description);
-          //  imgspecific.add(b.images);
+            imggeneral.add(b.images);
 
         }
         /*ArrayList<Bitmap>aa=new ArrayList<Bitmap>();
         aa.add(deneme);
         imgspecific.add(aa);
         imggeneral.add(aa);*/
+System.out.println(imgspecific);
+        System.out.println(imggeneral);
 
         ReviewListAdapter adapter1 = new ReviewListAdapter(this,useridspefic,titlespecific,
                 modifieddatespecific,scorespecific,descriptionspecific,imgspecific);
