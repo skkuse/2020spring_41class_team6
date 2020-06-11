@@ -27,14 +27,18 @@ public class SurveyActivity_Spicy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__spicy);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
         Intent intent = getIntent();
         String temp = intent.getStringExtra("UID");
+        /*
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
         int width= dm.widthPixels;
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
+        */
+
         Button buttonStartSurvey = findViewById(R.id.spicy_next_btn);
         saveID();
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {

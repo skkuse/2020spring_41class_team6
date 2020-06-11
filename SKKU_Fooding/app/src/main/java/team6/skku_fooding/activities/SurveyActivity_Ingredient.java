@@ -46,7 +46,7 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         Intent intent = getIntent();
         String temp = intent.getStringExtra("UID");
         int id = intent.getIntExtra(SurveyActivity_Spicy.ID_NUMBER,0);
-
+        /*
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -54,6 +54,8 @@ public class SurveyActivity_Ingredient extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
+         */
+
         Button buttonStartSurvey = findViewById(R.id.ingredient_next_btn);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
