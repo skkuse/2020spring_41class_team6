@@ -1,7 +1,6 @@
 package team6.skku_fooding.activities;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -25,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import team6.skku_fooding.R;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -57,13 +55,8 @@ public class ShoppingCart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
-
-        SharedPreferences loginPref;
-        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        String UID=loginPref.getString("UID",null);
-
         reff = FirebaseDatabase.getInstance().getReference().child("product");
-        reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
         //Put shoppingcart array adapter here
         Intent myIntent = getIntent();
 
@@ -86,11 +79,11 @@ public class ShoppingCart extends AppCompatActivity {
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!(shoppingcart.equals(""))&&!(shoppingcart.equals("none"))) {
+                if(!(shoppingcart.equals("none"))&&!(shoppingcart.equals(""))&&!(shoppingcart.equals("@"))) {
 
                     firstdivide = shoppingcart.split("-");
                     for (String cart1 : firstdivide) {
-                        System.out.println("ooooyyyyyy");
+
                         seconddivide = cart1.split(":");
                         productids.add(seconddivide[0]);
                         productnames.add(dataSnapshot.child(seconddivide[0]).child("name").getValue().toString());
@@ -132,19 +125,16 @@ public class ShoppingCart extends AppCompatActivity {
         }
 
         public void orderall(View view){
-            reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+
         //Before the below statement shoppingcart will be given with intent
-            Intent intent= new Intent(ShoppingCart.this,OrderActivity.class);
-            intent.putExtra("sending_item",shoppingcart);
-            startActivity(intent);
-            reff.child("shopping_cart").setValue("none");
+            reff1.child("shopping_cart").setValue("none");
 
 
 
         }
         public void orderselected(View view){
             String createintent="";
-            reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+
             String[]firstdivide;
             String[]secdivide;
             String lastversion="";
@@ -168,16 +158,16 @@ public class ShoppingCart extends AppCompatActivity {
 
 
 
-            reff.child("shopping_cart").setValue(lastversion);
+            reff1.child("shopping_cart").setValue(lastversion);
+
             for(int i=0; i<selectedproductids.size();i++){
                 createintent=createintent+selectedproductids.get(i)+":"+selectedamount.get(i)+":"+selectedprices.get(i)+"-";
             }
+            System.out.println(selectedproductids);
+            System.out.println("999999999999999");
             System.out.println(createintent);
             System.out.println("999999999999999");
             //need to give createintent
-            Intent intent= new Intent(ShoppingCart.this,OrderActivity.class);
-            intent.putExtra("sending_item",createintent);
-            startActivity(intent);
     }
 
 

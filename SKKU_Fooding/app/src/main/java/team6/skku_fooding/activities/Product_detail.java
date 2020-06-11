@@ -361,7 +361,7 @@ String categoryId;
                 System.out.println(firstdivide);
                 for(String cart:firstdivide) {
 
-                    if (!(shoppingcart.equals("none"))&&!(shoppingcart.equals(""))) {
+                    if (!(shoppingcart.equals("none"))&&!(shoppingcart.equals(""))&&!(shoppingcart.equals("@"))) {
                         seconddivide = cart.split(":", 0);
                         System.out.println(seconddivide[0]);
 
@@ -424,7 +424,7 @@ String categoryId;
                 System.out.println(firstdivide);
                 for(String cart:firstdivide) {
 
-                    if (!(shoppingcart.equals("none"))&&!(shoppingcart.equals(""))){
+                    if (!(shoppingcart.equals("none"))&&!(shoppingcart.equals(""))&&!(shoppingcart.equals("@"))){
 
                         System.out.println("bbbbbbbbb");
                         seconddivide = cart.split(":", 0);
