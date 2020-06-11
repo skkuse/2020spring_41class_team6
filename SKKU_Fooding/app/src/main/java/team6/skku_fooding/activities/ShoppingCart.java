@@ -121,7 +121,7 @@ public class ShoppingCart extends AppCompatActivity {
 
 
 
-            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart);
+            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart,UID);
             lv.setAdapter(adapter);
 
             selectednames=adapter.selectednameslist();
