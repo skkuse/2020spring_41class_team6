@@ -36,6 +36,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         //int id = intent.getIntExtra(SurveyActivity_Ingredient.ID_NUMBER2,0);
        // TextView textView = (TextView) findViewById(R.id.test_survey);
         //textView.setText("" + id);
+        /*
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -43,6 +44,8 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
+        */
+
         Button buttonStartSurvey = findViewById(R.id.vegan_next_btn);
         saveID();
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
