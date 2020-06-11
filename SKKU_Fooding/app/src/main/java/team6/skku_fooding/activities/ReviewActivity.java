@@ -34,7 +34,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,11 +85,7 @@ public class ReviewActivity extends AppCompatActivity {
                 .setMessage("Delete photo?")
                 .setTitle("Delete")
                 .setNegativeButton("No", (dialogInterface, i) -> {})
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            int idx = ReviewActivity.this.lnrImages.indexOfChild(v);
-                            ReviewActivity.this.b64Imgs.remove(idx);
-                            ReviewActivity.this.lnrImages.removeView(v);
-                        })
+                .setPositiveButton("Yes", (dialogInterface, i) -> ReviewActivity.this.lnrImages.removeView(v))
                 .create()
                 .show();
 
@@ -149,6 +144,28 @@ public class ReviewActivity extends AppCompatActivity {
                 ReviewActivity.this.title = ((TextView)findViewById(R.id.reviewTitleView)).getText().toString();
                 ReviewActivity.this.description = ((TextView)findViewById(R.id.reviewDetailText)).getText().toString();
                 ArrayList<Bitmap> arr = new ArrayList<>();
+
+                if (ReviewActivity.this.lnrImages.getChildCount() > 5) {
+                    Toast.makeText(ReviewActivity.this, "You can't upload more than 5 images. Please delete some images.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (ReviewActivity.this.title.length() < 1) {
+                    Toast.makeText(ReviewActivity.this, "You can't upload review without title.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (ReviewActivity.this.title.length() > 50) {
+                    Toast.makeText(ReviewActivity.this, "Title should no more than 50 letters.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (ReviewActivity.this.description.length() < 1) {
+                    Toast.makeText(ReviewActivity.this, "You can't upload review without description.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (ReviewActivity.this.description.length() > 500) {
+                    Toast.makeText(ReviewActivity.this, "Title should no more than 500 letters.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
 
                 for (int i = 0; i < lnrImages.getChildCount(); i++) arr.add(((BitmapDrawable)((ImageView)lnrImages.getChildAt(i)).getDrawable()).getBitmap());
                 arr.parallelStream()
