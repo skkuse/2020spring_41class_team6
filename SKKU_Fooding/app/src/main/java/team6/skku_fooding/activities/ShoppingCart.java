@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -30,6 +31,8 @@ import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import team6.skku_fooding.R;
+
 
 public class ShoppingCart extends AppCompatActivity {
     DatabaseReference reff;
@@ -37,6 +40,7 @@ public class ShoppingCart extends AppCompatActivity {
     String shoppingcart;
     String[]firstdivide;
     String[]seconddivide;
+    String UID;
 
     final ArrayList<Integer>clicked=new ArrayList<Integer>();
     final ArrayList<String>images=new ArrayList<String>();
@@ -55,8 +59,13 @@ public class ShoppingCart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
+
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        UID=loginPref.getString("UID",null);
+
         reff = FirebaseDatabase.getInstance().getReference().child("product");
-        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
         //Put shoppingcart array adapter here
         Intent myIntent = getIntent();
 
@@ -114,7 +123,7 @@ public class ShoppingCart extends AppCompatActivity {
 
 
 
-            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart);
+            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart,UID);
             lv.setAdapter(adapter);
 
             selectednames=adapter.selectednameslist();
@@ -127,50 +136,68 @@ public class ShoppingCart extends AppCompatActivity {
         public void orderall(View view){
 
         //Before the below statement shoppingcart will be given with intent
+
+            Intent intent = new Intent(ShoppingCart.this, OrderActivity.class);
+            intent.putExtra("sending_item", shoppingcart);
+            startActivity(intent);
             reff1.child("shopping_cart").setValue("none");
 
 
 
+
         }
-        public void orderselected(View view){
-            String createintent="";
+        public void orderselected(View view) {
+            if(!(selectedproductids.size()==0)) {
+            DatabaseReference reff2 = FirebaseDatabase.getInstance().getReference().child("user").child(UID);
 
-            String[]firstdivide;
-            String[]secdivide;
-            String lastversion="";
+            String createintent = "";
 
-            firstdivide = shoppingcart.split("-",0);
+            String[] firstdivide;
+            String[] secdivide;
+            String lastversion = "";
+
+            firstdivide = shoppingcart.split("-", 0);
             System.out.println(selectedproductids);
             for (String cart1 : firstdivide) {
                 System.out.println(cart1);
-                secdivide=cart1.split(":",0);
-                if(!(selectedproductids.contains(secdivide[0]))){{
-                    lastversion=lastversion+cart1+"-";
-                }
+                secdivide = cart1.split(":", 0);
+                if (!(selectedproductids.contains(secdivide[0]))) {
+                    {
+                        lastversion = lastversion + cart1 + "-";
+                    }
                 }
 
 
             }
-            if(selectedproductids.size()==0){
-                lastversion=shoppingcart;
-            }
+
+            reff2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    shoppingcart = dataSnapshot.child("shopping_cart").getValue().toString();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
 
+            reff2.child("shopping_cart").setValue(lastversion);
 
-
-            reff1.child("shopping_cart").setValue(lastversion);
-
-            for(int i=0; i<selectedproductids.size();i++){
-                createintent=createintent+selectedproductids.get(i)+":"+selectedamount.get(i)+":"+selectedprices.get(i)+"-";
+            for (int i = 0; i < selectedproductids.size(); i++) {
+                createintent = createintent + selectedproductids.get(i) + ":" + selectedamount.get(i) + ":" + selectedprices.get(i) + "-";
             }
             System.out.println(selectedproductids);
             System.out.println("999999999999999");
             System.out.println(createintent);
             System.out.println("999999999999999");
+            Intent intent = new Intent(ShoppingCart.this, OrderActivity.class);
+            intent.putExtra("sending_item", createintent);
+            startActivity(intent);
+
             //need to give createintent
+        }
     }
-
-
-
-
-    }
+}

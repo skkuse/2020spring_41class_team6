@@ -80,7 +80,7 @@ public class OrderActivity extends AppCompatActivity {
 
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        String UID=loginPref.getString("UID",null);
+        uid=loginPref.getString("UID",null);
 
 
         Intent intent=getIntent();
@@ -99,10 +99,10 @@ public class OrderActivity extends AppCompatActivity {
 
 
          */
-        Type = "Normal";
-        pid=200;
-        count = 3;  // More intent would be come
-        uid = UID;
+        //Type = "Normal";
+        //pid=200;
+        //count = 3;  // More intent would be come
+        //uid = UID;
 
         /*
         DatabaseReference mydb = FirebaseDatabase.getInstance().getReference();
@@ -211,13 +211,10 @@ public class OrderActivity extends AppCompatActivity {
                 setdb(key, pcount);
                 pcount += 1;
 
-
-
             }
         }
-
-
-
+        Intent intent=new Intent(OrderActivity.this, SearchActivity.class);
+        startActivity(intent);
     }
 
     public void setdb(final Integer ppid, final Integer ncount) {
