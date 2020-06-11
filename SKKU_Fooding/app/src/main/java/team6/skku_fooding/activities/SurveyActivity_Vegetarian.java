@@ -84,7 +84,7 @@ public class SurveyActivity_Vegetarian extends AppCompatActivity {
         else if(checked==5){
             filtering="pork,beef,poultry,shellfish";
         }
-        else if(checked==5){
+        else if(checked==6){
             filtering="pork,beef,shellfish";
         }
         intent.putExtra(FILTER_STRING,filtering);
