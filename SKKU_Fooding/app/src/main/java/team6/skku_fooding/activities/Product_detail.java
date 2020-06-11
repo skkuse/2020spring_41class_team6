@@ -2,13 +2,10 @@ package team6.skku_fooding.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import team6.skku_fooding.R;
 import java.util.ArrayList;
 
 
@@ -40,6 +36,7 @@ double specificaverage;
 double generalaverage;
 int countspecific;
 int countgeneral;
+Bitmap deneme;
 
 String categoryId;
 
@@ -54,10 +51,9 @@ String categoryId;
     String[]forthefirstamount;
     String[]forthefirstamountsecondsplit;
     String productprice;
-    String product_id;
 
-    ArrayList<String>imagesgeneral;
-    ArrayList<String>imagesspecific;
+    ArrayList<Bitmap>imagesgeneral;
+    ArrayList<Bitmap>imagesspecific;
 
 
     @Override
@@ -66,20 +62,17 @@ String categoryId;
         setContentView(R.layout.productdetail);
         FirebaseApp.initializeApp(this);
         amountindicator=(TextView)findViewById(R.id.showamount);
-
-        SharedPreferences loginPref;
-        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        String UID=loginPref.getString("UID",null);
-
-        Intent myIntent = getIntent(); // gets the previously created intent
-        product_id = myIntent.getStringExtra("product_id");
-
         //HERE BELOW
-        reff= FirebaseDatabase.getInstance().getReference().child("product").child(product_id);
-        reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
+        reff= FirebaseDatabase.getInstance().getReference().child("product").child("200");
+        reff1=FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
 
         //The previous intent need to give below info
         //then manually written numbers in if statement need to be changed according to that
+        //Intent myIntent = getIntent(); // gets the previously created intent
+        //productid = myIntent.getStringExtra("productid");
+        //userid= myIntent.getStringExtra("userid");
+        //categoryid= Integer.parseInt(myIntent.getStringExtra("categoryid"));
+
 
         company=findViewById(R.id.company);
         image=findViewById(R.id.image);
@@ -98,8 +91,10 @@ String categoryId;
                 String prc=dataSnapshot.child("price").getValue().toString();
                 productprice=prc;
                 String up_date=dataSnapshot.child("uploaded_date").getValue().toString();
+
                 byte[]imageBytes = Base64.decode(img, Base64.DEFAULT);
                 Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                deneme=decodedImage;
                 image.setImageBitmap(decodedImage);
                 company.setText(comp);
                 name.setText(nm);
@@ -125,7 +120,7 @@ String categoryId;
                 for(String values1:forthefirstamount){
                     forthefirstamountsecondsplit=values1.split(":",0);
                     //HERE BELOW
-                      if(forthefirstamountsecondsplit[0].equals(product_id)){
+                      if(forthefirstamountsecondsplit[0].equals("200")){
 
                           amountindicator.setText(forthefirstamountsecondsplit[1].toString());
                           counterfortext++;
@@ -190,16 +185,18 @@ String categoryId;
                     if(ds.child("categoryId").exists()) {
                       System.out.println(  ds.child("categoryId").getValue().toString());
                         //HERE BELOW
-                        if (Integer.parseInt(ds.child("categoryId").getValue().toString())==Integer.parseInt(categoryId) && Integer.parseInt(ds.child("productId").getValue().toString()) == Integer.parseInt(product_id)) {
+                        if (Integer.parseInt(ds.child("categoryId").getValue().toString())==Integer.parseInt(categoryId) && Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewspecific.userId ="UId: "+ds.child("userId").getValue().toString();
                             forproductreviewspecific.score = "Score: "+ds.child("rate").getValue().toString();
                             forproductreviewspecific.modifiedDate =  (ds.child("modifiedDate").getValue()).toString();
                             forproductreviewspecific.title = "Title: "+ds.child("title").getValue().toString();
                             forproductreviewspecific.description = ds.child("description").getValue().toString();
-                        /*   while(imgsnotfinished){
+                          /* while(imgsnotfinished){
                                if(Integer.parseInt(ds.child("b64Imgs").getValue().toString())==imagecount){
-                                   imagesspecific.add(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString());
+                                   byte[]imageBytes = Base64.decode(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString(), Base64.DEFAULT);
+                                   Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                   imagesspecific.add(decodedImage);
                                    imagecount++;
                                }else{
                                    forproductreviewspecific.images=imagesspecific;
@@ -217,7 +214,7 @@ String categoryId;
                         }
                         imagecount=0;
                         //HERE BELOW
-                        if (ds.child("productId").getValue().toString() == product_id) {
+                        if (Integer.parseInt(ds.child("productId").getValue().toString()) == 200) {
 
                             forproductreviewgeneral.userId = "UId: "+ds.child("userId").getValue().toString();
                             forproductreviewgeneral.score = "Score: "+ds.child("rate").getValue().toString();
@@ -225,8 +222,10 @@ String categoryId;
                             forproductreviewgeneral.title = "Title: "+ds.child("title").getValue().toString();
                             forproductreviewgeneral.description = ds.child("description").getValue().toString();
                            /* while(imgsnotfinished){
+                                byte[]imageBytes = Base64.decode(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString(), Base64.DEFAULT);
+                                Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                                 if(Integer.parseInt(ds.child("b64Imgs").getValue().toString())==imagecount){
-                                    imagesgeneral.add(ds.child("b64Imgs").child(Integer.toString(imagecount)).getValue().toString());
+                                    imagesgeneral.add(decodedImage);
                                     imagecount++;
                                 }else{
                                     forproductreviewgeneral.images = imagesgeneral;
@@ -269,7 +268,7 @@ String categoryId;
                 firstdivide = dataSnapshot.child("shopping_cart").getValue().toString().split("-",0);
                 for (String cart1 : firstdivide) {
                     //HERE BELOW
-                    if(!(cart1.startsWith(product_id))){
+                    if(!(cart1.startsWith("200"))){
                         lastversion=lastversion+cart1+"-";
                     }else{
                         sendingitem=cart1;
@@ -279,11 +278,7 @@ String categoryId;
                 }
                 finallastversion=lastversion;
                 reff1.child("shopping_cart").setValue(lastversion);
-                //Order gonna have sending item with intent
-                Intent intent=new Intent(Product_detail.this, OrderActivity.class);
-                intent.putExtra("sending_item",sendingitem);
-                startActivity(intent);
-
+//Order gonna have sending item with intent
             }
 
             @Override
@@ -300,7 +295,7 @@ String categoryId;
     public void remove(View view){
         //HERE BELOW
         String productnum;
-        productnum=product_id;
+        productnum="200";
         reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -358,7 +353,7 @@ String categoryId;
                 Boolean already=false;
 
                 //HERE BELOW
-                String productnum=product_id;
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -421,7 +416,7 @@ String categoryId;
                 int howmanyproduct=0;
                 Boolean already=false;
                 //HERE BELOW
-                String productnum=product_id;
+                String productnum="200";
 
                 String shoppingcart=dataSnapshot.child("shopping_cart").getValue().toString();
 
@@ -509,14 +504,14 @@ String categoryId;
         ArrayList<String>scorespecific=new ArrayList<String>();
         ArrayList<String>titlespecific=new ArrayList<String>();
         ArrayList<String>descriptionspecific=new ArrayList<String>();
-        ArrayList<ArrayList<String>>imgspecific=new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<Bitmap>>imgspecific=new ArrayList<ArrayList<Bitmap>>();
 
         ArrayList<String>useridgeneral=new ArrayList<String>();
         ArrayList<String>modifieddategeneral=new ArrayList<String>();
         ArrayList<String>scoregeneral=new ArrayList<String>();
         ArrayList<String>titlegeneral=new ArrayList<String>();
         ArrayList<String>descriptiongeneral=new ArrayList<String>();
-        ArrayList<ArrayList<String>>imggeneral=new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<Bitmap>>imggeneral=new ArrayList<ArrayList<Bitmap>>();
 
 
         specificavg=findViewById(R.id.s);
@@ -554,7 +549,7 @@ String categoryId;
             scorespecific.add(a.score);
             titlespecific.add(a.title);
             descriptionspecific.add(a.description);
-            imgspecific.add(a.images);
+           // imgspecific.add(a.images);
 
         }
         ListView m2ListView=(ListView) findViewById(R.id.listview2);
@@ -564,15 +559,21 @@ String categoryId;
             scoregeneral.add(b.score);
             titlegeneral.add(b.title);
             descriptiongeneral.add(b.description);
-            imgspecific.add(b.images);
+          //  imgspecific.add(b.images);
 
         }
+        /*ArrayList<Bitmap>aa=new ArrayList<Bitmap>();
+        aa.add(deneme);
+        imgspecific.add(aa);
+        imggeneral.add(aa);*/
 
-        ReviewListAdapter adapter1 = new ReviewListAdapter(this,useridspefic,titlespecific,modifieddatespecific,scorespecific,descriptionspecific,imgspecific);
+        ReviewListAdapter adapter1 = new ReviewListAdapter(this,useridspefic,titlespecific,
+                modifieddatespecific,scorespecific,descriptionspecific,imgspecific);
         mListView.setAdapter(adapter1);
-        ReviewListAdapter adapter2 = new ReviewListAdapter(this,useridgeneral,titlegeneral,modifieddategeneral,scoregeneral,descriptiongeneral,imggeneral);
+        ReviewListAdapter adapter2 = new ReviewListAdapter(this,useridgeneral,titlegeneral,modifieddategeneral,
+                scoregeneral,descriptiongeneral,imggeneral);
         m2ListView.setAdapter(adapter2);
-        
+
         rewsspecific.clear();
         rewsgeneral.clear();
     }
