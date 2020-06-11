@@ -99,10 +99,10 @@ public class OrderActivity extends AppCompatActivity {
 
 
          */
-        Type = "Normal";
-        pid=200;
-        count = 3;  // More intent would be come
-        uid = UID;
+        //Type = "Normal";
+        //pid=200;
+        //count = 3;  // More intent would be come
+        //uid = UID;
 
         /*
         DatabaseReference mydb = FirebaseDatabase.getInstance().getReference();

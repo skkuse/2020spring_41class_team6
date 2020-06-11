@@ -39,6 +39,7 @@ public class ShoppingCart extends AppCompatActivity {
     String shoppingcart;
     String[]firstdivide;
     String[]seconddivide;
+    String UID;
 
     final ArrayList<Integer>clicked=new ArrayList<Integer>();
     final ArrayList<String>images=new ArrayList<String>();
@@ -60,7 +61,7 @@ public class ShoppingCart extends AppCompatActivity {
 
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        String UID=loginPref.getString("UID",null);
+        UID=loginPref.getString("UID",null);
 
         reff = FirebaseDatabase.getInstance().getReference().child("product");
         reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
@@ -121,7 +122,7 @@ public class ShoppingCart extends AppCompatActivity {
 
 
 
-            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart);
+            ShoppingAdapter adapter = new ShoppingAdapter(this, images, productnames, amount,clicked,prices,productids,shoppingcart,UID);
             lv.setAdapter(adapter);
 
             selectednames=adapter.selectednameslist();

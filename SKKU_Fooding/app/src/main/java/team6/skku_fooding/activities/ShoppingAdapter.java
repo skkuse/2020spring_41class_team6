@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -43,12 +44,13 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
     ArrayList<String>selectedprices=new ArrayList<String>();;
     ArrayList<String>selectedproductids=new ArrayList<String>();;
     String shoppingcart;
+    String UID;
 
 
 
 
     public ShoppingAdapter( Context context, ArrayList<String>images,ArrayList<String>names,ArrayList<String>amount,
-                            ArrayList<Integer> clicked,ArrayList<String>prices,ArrayList<String>productids,String shoppingcart){
+                            ArrayList<Integer> clicked,ArrayList<String>prices,ArrayList<String>productids,String shoppingcart, String UID){
 
         super(context,0,names);
         this.c=context;
@@ -59,9 +61,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
         this.prices=prices;
         this.productids=productids;
         this.shoppingcart=shoppingcart;
-
-
-
+        this.UID=UID;
     }
     public String  Retrieveamount(int position){
 
@@ -110,10 +110,6 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-
-
-
-
         if(convertView==null) {
             inflater=(LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.shopping,null);
@@ -174,7 +170,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
                 prices.remove(position);
                 productids.remove(position);
                 ShoppingAdapter.this.notifyDataSetChanged();
-                refresh(removeproduct);
+                refresh(removeproduct, UID);
 
 
             }
@@ -195,8 +191,8 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
         return  convertView;
     }
 
-    public void refresh(String removeproduct){
-        reff= FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+    public void refresh(String removeproduct, String UID){
+        reff= FirebaseDatabase.getInstance().getReference().child("user").child(UID);
         String [] firstdivide;
         String lastversion="";
 

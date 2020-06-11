@@ -76,6 +76,7 @@ String categoryId;
 
         //HERE BELOW
         reff= FirebaseDatabase.getInstance().getReference().child("product").child(product_id);
+        Log.d("Test",UID);
         reff1=FirebaseDatabase.getInstance().getReference().child("user").child(UID);
 
         //The previous intent need to give below info
