@@ -60,11 +60,11 @@ public class CustomListAdapter_delivery extends ArrayAdapter<custom_list_item_de
         TextView txProductId = (TextView)convertView.findViewById(R.id.product_id_delivery);
         Button txButton = (Button) convertView.findViewById(R.id.order_review_delivery);
 
-        txId.setText("Order ID: "+order_id);
+        txId.setText(order_id);
         txDate.setText(order_date);
         txStatus.setText(order_status);
         txProductname.setText(order_product_name);
-        txProductId.setText("Product ID: "+order_product_id);
+        txProductId.setText(order_product_id);
         //txButton.setOnClickListener(getItem(position).OnClickListener);
 
         txButton.setTag(position);

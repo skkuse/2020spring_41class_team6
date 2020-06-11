@@ -43,7 +43,7 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
         String UID=loginPref.getString("UID",null);
 
         DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
-        mdatabase.child("order").orderByChild("user_id").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+        mdatabase.child("order").orderByChild("UID").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                for(DataSnapshot shot : dataSnapshot.getChildren()) {
