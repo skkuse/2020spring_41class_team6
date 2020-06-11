@@ -100,6 +100,7 @@ public class RecommendationActivity extends AppCompatActivity {
         Double rate;
         String company;
         String price;
+        String product_id;
 
     }
 
@@ -155,7 +156,40 @@ public class RecommendationActivity extends AppCompatActivity {
         });
 
 
+        // Bottom menu bar
+        TextView home=(TextView)findViewById(R.id.home);
+        TextView recommendation=(TextView)findViewById(R.id.recommendation);
+        TextView delivery=(TextView)findViewById(R.id.delivery);
+        TextView mypage=(TextView)findViewById(R.id.mypage);
 
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecommendationActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("delivery","I'm here");
+                Intent intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
+                startActivity(intent);
+            }
+        });
+        mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("mypage","I'm here");
+                Intent intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -250,8 +284,8 @@ public class RecommendationActivity extends AppCompatActivity {
                     review1.rate = shot.child("rate").getValue(Double.class);
                     review1.product_id = shot.child("product_id").getValue(Integer.class);
                     rlist.add(review1);
-
-                    adapter.addItem(null, "aaa","aaa","aaa");
+                     //todo What is below?
+                    adapter.addItem(null,null, "aaa","aaa","aaa");
 
                 }
                 Map<Integer, dub> map = new HashMap<Integer, dub>();
@@ -317,6 +351,7 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
                             i.price = shot.child("price").getValue(String.class);
+                            i.product_id=shot.child("product_id").getValue(String.class);
                             i.rate = r;
 
                             Bitmap decodedImage;
@@ -326,7 +361,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
 
                             //리스트뷰 추가 시점
-                            adapter.addItem(decodedImage,i.name,i.price,i.ingredient);
+                            adapter.addItem(i.product_id,decodedImage,i.name,i.price,i.ingredient);
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -356,131 +391,3 @@ public class RecommendationActivity extends AppCompatActivity {
         return true;
     }
 }
-/*
-class ListViewItem {
-    private Bitmap iconDrawable;
-    private String titleStr;
-    private String descStr;
-    private String ingredient;
-
-    public void setIcon(Bitmap icon) {
-        iconDrawable = icon;
-    }
-
-    public void setTitle(String title) {
-        titleStr = title;
-    }
-
-    public void setDesc(String desc) {
-        descStr = desc;
-    }
-
-    public void setIngredient(String ing){ingredient=ing;}
-
-    public Bitmap getIcon() {
-        return this.iconDrawable;
-    }
-
-    public String getTitle() {
-        return this.titleStr;
-    }
-
-    public String getDesc() {
-        return this.descStr;
-    }
-
-    public String getIngredient(){return this.ingredient;}
-}
-
-class ListViewAdapter extends BaseAdapter {
-    public ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
-
-    public ListViewAdapter() {
-
-    }
-
-    @Override
-    public int getCount() {
-        return listViewItemList.size() ;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final int pos = position;
-        final Context context = parent.getContext();
-
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.activity_search_layout, parent, false);
-        };
-
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
-
-        ListViewItem listViewItem = listViewItemList.get(position);
-
-        titleTextView.setText(listViewItem.getTitle());
-        descTextView.setText(listViewItem.getDesc());
-        iconImageView.setImageBitmap(listViewItem.getIcon());
-
-        iconImageView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // To Product List
-                Log.d("image",listViewItemList.get(position).getTitle());
-            }
-        });
-        titleTextView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // To Product List
-                Log.d("title",listViewItemList.get(position).getTitle());
-            }
-        });
-        descTextView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // To Product List
-                Log.d("desc",listViewItemList.get(position).getTitle());
-            }
-        });
-
-        return convertView;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position ;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return listViewItemList.get(position) ;
-    }
-
-    public void addItem(Bitmap icon, String title, String desc, String ingredient) {
-        ListViewItem item = new ListViewItem();
-
-        item.setIcon(icon);
-        item.setTitle(title);
-        item.setDesc(desc);
-        item.setIngredient(ingredient);
-
-        listViewItemList.add(item);
-    }
-
-    public void addItemIndex(Integer index, Bitmap icon, String title, String desc, String ingredient){
-        ListViewItem item = new ListViewItem();
-
-        item.setIcon(icon);
-        item.setTitle(title);
-        item.setDesc(desc);
-        item.setIngredient(ingredient);
-
-        listViewItemList.add(index, item);
-    }
-    public void addListViewItem(ListViewItem item){
-        listViewItemList.add(item);
-    }
-}*/

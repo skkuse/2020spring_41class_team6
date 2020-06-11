@@ -25,8 +25,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import team6.skku_fooding.models.Survey;
-
 
 public class DeliveryActivity extends AppCompatActivity implements CustomListAdapter_delivery.ListBtnClickListener {
     String temp,temp2,temp3,temp4,temp5;
@@ -39,18 +37,13 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
         ListView mlistview = (ListView) findViewById(R.id.list_view_delivery);
         Log.d(TAG,"onCreate : Started.");
         ArrayList<custom_list_item_delivery> item_list_delivery = new ArrayList<>();
-        //uid intent로 받아와야됨
-        //Intent intent = getIntent();
-        //String temp_Uid = intent.getStringExtra(//여기받아온acvitivity.FILTER_STRING);
 
-        //Sharedpreference 쓰면 밑에꺼
-       // public static String getString(Context context, String key) {
-        //    SharedPreferences prefs = getPreferences(context);
-          //  String value = prefs.getString(key, DEFAULT_VALUE_STRING);
-            //return value;
-      //  }
+        SharedPreferences loginPref;
+        loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        String UID=loginPref.getString("UID",null);
+
         DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
-        mdatabase.child("order").orderByChild("user_id").equalTo("williamtest").addListenerForSingleValueEvent(new ValueEventListener() {
+        mdatabase.child("order").orderByChild("user_id").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                for(DataSnapshot shot : dataSnapshot.getChildren()) {
@@ -88,9 +81,44 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
 
         Log.d("ASDFASDFASDF", "" + temp + temp2 + temp3 + temp4);
 
+        // Bottom menu bar
+        TextView home=(TextView)findViewById(R.id.home);
+        TextView recommendation=(TextView)findViewById(R.id.recommendation);
+        TextView delivery=(TextView)findViewById(R.id.delivery);
+        TextView mypage=(TextView)findViewById(R.id.mypage);
 
-
+        home.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Connect to home
+                Intent intent = new Intent(DeliveryActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("recommendation","I'm here");
+                Intent intent = new Intent(DeliveryActivity.this, RecommendationActivity.class);
+                startActivity(intent);
+            }
+        });
+        delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("mypage","I'm here");
+                Intent intent = new Intent(DeliveryActivity.this, MyPageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
     @Override
     public void onListBtnClick(int position){
         String current_product_id = list.get(position).toString();
