@@ -30,7 +30,7 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
         setContentView(R.layout.activity_survey__sweet);
         radioGroup = findViewById(R.id.sweet_group);
 
-
+        /*
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -38,6 +38,8 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
+        */
+         
         Intent intent = getIntent();
         String temp = intent.getStringExtra("UID");
         Button buttonStartSurvey = findViewById(R.id.sweet_next_btn);

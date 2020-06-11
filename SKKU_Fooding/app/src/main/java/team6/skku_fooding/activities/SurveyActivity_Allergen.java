@@ -60,7 +60,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
         //String get_from_recommendation = intent.getStringExtra(RecommandationActivity.name);
         //TextView textView = (TextView) findViewById(R.id.test_survey2);
         //textView.setText(" "+temp);
-
+        /*
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -68,7 +68,7 @@ public class SurveyActivity_Allergen extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
-
+        */
         milk.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
