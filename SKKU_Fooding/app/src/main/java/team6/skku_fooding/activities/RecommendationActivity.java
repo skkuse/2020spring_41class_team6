@@ -284,9 +284,6 @@ public class RecommendationActivity extends AppCompatActivity {
                     review1.rate = shot.child("rate").getValue(Double.class);
                     review1.product_id = shot.child("product_id").getValue(Integer.class);
                     rlist.add(review1);
-                     //todo What is below?
-                    adapter.addItem(null,null, "aaa","aaa","aaa");
-
                 }
                 Map<Integer, dub> map = new HashMap<Integer, dub>();
                 map.clear();
