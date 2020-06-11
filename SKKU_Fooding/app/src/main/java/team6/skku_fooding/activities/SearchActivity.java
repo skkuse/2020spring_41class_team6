@@ -124,6 +124,7 @@ public class SearchActivity extends AppCompatActivity {
                 else{
                     adapter.addItem(product_id, decodedImage, name, price, ingredient);
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
