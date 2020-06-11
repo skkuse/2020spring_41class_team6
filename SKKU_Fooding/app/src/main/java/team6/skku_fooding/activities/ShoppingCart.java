@@ -148,7 +148,7 @@ public class ShoppingCart extends AppCompatActivity {
         }
         public void orderselected(View view) {
             if(!(selectedproductids.size()==0)) {
-            DatabaseReference reff2 = FirebaseDatabase.getInstance().getReference().child("user").child("X7u2ls7ro9PlL4JJTKFnukUpyAk1");
+            DatabaseReference reff2 = FirebaseDatabase.getInstance().getReference().child("user").child(UID);
 
             String createintent = "";
 

@@ -211,13 +211,10 @@ public class OrderActivity extends AppCompatActivity {
                 setdb(key, pcount);
                 pcount += 1;
 
-
-
             }
         }
-        Intent intent=new Intent(OrderActivity.this,SearchActivity.class);
+        Intent intent=new Intent(OrderActivity.this, SearchActivity.class);
         startActivity(intent);
-
     }
 
     public void setdb(final Integer ppid, final Integer ncount) {
