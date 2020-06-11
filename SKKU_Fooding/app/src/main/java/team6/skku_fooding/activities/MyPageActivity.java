@@ -94,7 +94,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         findViewById(R.id.mpReopenSurveyButton).setOnClickListener(v ->
                 startActivity(new Intent(MyPageActivity.this, SurveyActivity.class)
-                        .putExtra(SignupActivity.UID_pass, MyPageActivity.this.uid)));
+                        .putExtra("UID", MyPageActivity.this.uid)));
         /*
         this.userPrefButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

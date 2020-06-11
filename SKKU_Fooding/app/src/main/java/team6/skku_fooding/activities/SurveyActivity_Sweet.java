@@ -15,12 +15,11 @@ import team6.skku_fooding.R;
 
 public class SurveyActivity_Sweet extends AppCompatActivity {
     public static final String ID_NUMBER = "categoryid_william.ID_NUMBER";
-    public static final String USER_ID = "survey_william.USER_ID";
     RadioGroup radioGroup;
     RadioButton radioButton;
     int checked;
     int id;
-    String user_id;
+    String UID;
     @Override
     public void onBackPressed(){
 
@@ -40,13 +39,13 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
 
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
         Intent intent = getIntent();
-        String temp = intent.getStringExtra(SurveyActivity.USER_ID);
+        String temp = intent.getStringExtra("UID");
         Button buttonStartSurvey = findViewById(R.id.sweet_next_btn);
         saveID();
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_id=temp;
+                UID=temp;
                 startSurvey();
             }
         });
@@ -76,7 +75,7 @@ public class SurveyActivity_Sweet extends AppCompatActivity {
             id=60;
         }
         intent.putExtra(ID_NUMBER,id);
-        intent.putExtra(USER_ID,user_id);
+        intent.putExtra("UID",UID);
         startActivity(intent);
         finish();
     }

@@ -2,6 +2,7 @@ package team6.skku_fooding.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,12 @@ public class ReviewListAdapter extends ArrayAdapter<String> {
     ArrayList<String>modifieddate;
     ArrayList<String> score;
     ArrayList<String> description;
-    ArrayList<ArrayList<String>>images;
+    ArrayList<ArrayList<Bitmap>>images;
     Context c;
     LayoutInflater inflater;
 
 
-    public ReviewListAdapter( Context context, ArrayList<String>userid,ArrayList<String>title,ArrayList<String>modifieddate,ArrayList<String> score,ArrayList<String> description,ArrayList<ArrayList<String>>images){
+    public ReviewListAdapter( Context context, ArrayList<String>userid,ArrayList<String>title,ArrayList<String>modifieddate,ArrayList<String> score,ArrayList<String> description,ArrayList<ArrayList<Bitmap>>images){
 
         super(context,0,userid);
         this.c=context;
