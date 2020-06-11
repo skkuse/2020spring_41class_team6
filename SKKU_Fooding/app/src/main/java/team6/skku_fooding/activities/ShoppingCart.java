@@ -178,8 +178,4 @@ public class ShoppingCart extends AppCompatActivity {
             System.out.println("999999999999999");
             //need to give createintent
     }
-
-
-
-
-    }
+}

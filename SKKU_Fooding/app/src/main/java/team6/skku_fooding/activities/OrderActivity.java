@@ -80,7 +80,7 @@ public class OrderActivity extends AppCompatActivity {
 
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
-        String UID=loginPref.getString("UID",null);
+        uid=loginPref.getString("UID",null);
 
 
         Intent intent=getIntent();
@@ -215,8 +215,8 @@ public class OrderActivity extends AppCompatActivity {
 
             }
         }
-
-
+        Intent intent=new Intent(OrderActivity.this,SearchActivity.class);
+        startActivity(intent);
 
     }
 
