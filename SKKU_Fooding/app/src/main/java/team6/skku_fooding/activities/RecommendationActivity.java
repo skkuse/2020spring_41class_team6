@@ -15,11 +15,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.*;
 
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -111,11 +113,9 @@ public class RecommendationActivity extends AppCompatActivity {
     ListView listview;
     ListViewAdapter adapter;
     SharedPreferences loginPref;
+    BottomNavigationView bottomNavigationView;
 
-
-
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +127,8 @@ public class RecommendationActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
 
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
+        bottomNavigationView.setSelectedItemId(R.id.recommendation_menu);
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
 
         getcid();
@@ -156,7 +158,52 @@ public class RecommendationActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(RecommendationActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.recommendation_menu:
+                                return false;
+                            case R.id.delivery_menu:
+                                intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.mypage_menu:
+                                intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                                return true;
+                        }
+                        return false;
+                    }
+                }
+        );
 
+        bottomNavigationView.setOnNavigationItemReselectedListener(
+                new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(RecommendationActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                            case R.id.recommendation_menu:
+                            case R.id.delivery_menu:
+                                intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                            case R.id.mypage_menu:
+                                intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                        }
+                    }
+                }
+        );
 
     }
 

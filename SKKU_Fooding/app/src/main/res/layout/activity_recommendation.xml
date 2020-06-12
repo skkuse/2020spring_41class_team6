@@ -36,31 +36,28 @@
         android:id="@+id/banner2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:weightSum="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="62dp"
         app:layout_constraintEnd_toEndOf="@+id/_listView"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@+id/banner"
-        app:layout_constraintTop_toBottomOf="@+id/banner"
-        >
+        app:layout_constraintStart_toStartOf="@+id/_listView"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
         <Button
             android:id="@+id/criteria"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.3"
-            android:backgroundTint="@color/sub_yellow"
+            android:backgroundTint="@color/main_orange"
             android:text="Criteria"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/change"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.3"
             android:backgroundTint="@color/sub_yellow"
             android:text="Change"
             android:textSize="16sp" />
