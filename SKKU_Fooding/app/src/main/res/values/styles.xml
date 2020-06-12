@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
     </style>
 
     <style name="AppTheme.CustomThemeSurvey" parent="Theme.AppCompat.Light.NoActionBar">
@@ -14,5 +15,9 @@
     </style>
 
     <style name="AppTheme.CustomThemeDelivery" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/main_orange</item>
     </style>
 </resources>

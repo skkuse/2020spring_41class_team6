@@ -44,7 +44,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
-        android:text=" Order List"
+        android:text=" Delivery List"
         android:textSize="21dp"
         android:textColor="@android:color/black"
         android:gravity="center_vertical"
@@ -65,7 +65,7 @@
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:background="@drawable/border_solid"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_linear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/order_textview">
@@ -79,65 +79,29 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalscroll"
+    <LinearLayout
+        android:id="@+id/bottom_linear"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/sub_yellow"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/sub_yellow"/>
 
-            <TextView
-                android:id="@+id/home"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="home"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/recommendation"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="recommendation"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/delivery"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="delivery"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/mypage"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="mypage"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@android:color/white"
+            app:itemIconTint="@drawable/menubar_color"
+            app:itemTextColor="@drawable/menubar_color"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_menubar" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

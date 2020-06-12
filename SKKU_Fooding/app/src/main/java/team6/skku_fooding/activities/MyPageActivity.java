@@ -30,7 +30,7 @@ public class MyPageActivity extends AppCompatActivity {
     private String uid;
     private TextView userIDTextView;
     private TextView userNicknameTextView;
-    Button mpLogoutButton;
+    Button mpReopenSurveyButton, mpcartButton, mpLogoutButton;
     private FirebaseAuth mAuth;
     SharedPreferences loginPref;
     // private Button userPrefButton;
@@ -48,6 +48,8 @@ public class MyPageActivity extends AppCompatActivity {
 
         this.userIDTextView = findViewById(R.id.mpUserIdTextView);
         this.userNicknameTextView = findViewById(R.id.mpUserNicknameTextView);
+        mpReopenSurveyButton = findViewById(R.id.mpReopenSurveyButton);
+        mpcartButton = findViewById(R.id.mpcartButton);
         mpLogoutButton = findViewById(R.id.mpLogoutButton);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
         bottomNavigationView.setSelectedItemId(R.id.mypage_menu);
@@ -102,7 +104,7 @@ public class MyPageActivity extends AppCompatActivity {
         } else this.userNicknameTextView.setText(loginPref.getString("nickname", null));
 
 
-        findViewById(R.id.mpReopenSurveyButton).setOnClickListener(v ->
+        mpReopenSurveyButton.setOnClickListener(v ->
                 startActivity(new Intent(MyPageActivity.this, SurveyActivity.class)
                         .putExtra("UID", MyPageActivity.this.uid)));
         /*
@@ -113,6 +115,15 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
         */
+
+        mpcartButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPageActivity.this, ShoppingCart.class);
+                startActivity(intent);
+            }
+        });
+
         mpLogoutButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -125,6 +136,8 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -132,7 +145,6 @@ public class MyPageActivity extends AppCompatActivity {
                         Intent intent;
                         switch(item.getItemId()) {
                             case R.id.home_menu:
-                                Log.d("LOG:", "SELECT:HOME");
                                 intent = new Intent(MyPageActivity.this, SearchActivity.class);
                                 startActivity(intent);
                                 return true;
@@ -145,7 +157,6 @@ public class MyPageActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 return true;
                             case R.id.mypage_menu:
-                                Log.d("LOG:", "SELECT:MYPAGE");
                                 return false;
                         }
                         return false;
@@ -160,7 +171,6 @@ public class MyPageActivity extends AppCompatActivity {
                         Intent intent;
                         switch(item.getItemId()) {
                             case R.id.home_menu:
-                                Log.d("LOG:", "RESELECT:HOME");
                                 intent = new Intent(MyPageActivity.this, SearchActivity.class);
                                 startActivity(intent);
                             case R.id.recommendation_menu:
@@ -170,7 +180,6 @@ public class MyPageActivity extends AppCompatActivity {
                                 intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
                                 startActivity(intent);
                             case R.id.mypage_menu:
-                                Log.d("LOG:", "RESELECT:MYPAGE");
                         }
                     }
                 }
