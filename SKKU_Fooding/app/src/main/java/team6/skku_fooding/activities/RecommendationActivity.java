@@ -110,6 +110,11 @@ public class RecommendationActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     Button button, setrate;
+
+    @Override
+    public void onBackPressed() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
