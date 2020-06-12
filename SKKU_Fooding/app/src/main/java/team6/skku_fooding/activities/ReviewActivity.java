@@ -80,7 +80,7 @@ public class ReviewActivity extends AppCompatActivity {
         b64Imgs = new ArrayList<>();
 
         this.uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
-                .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
+                .getString("UID", null);
 
         lnrParams = new LinearLayout.LayoutParams(800,800, 1f);
         openDeleteDialog = v -> new AlertDialog
@@ -94,66 +94,55 @@ public class ReviewActivity extends AppCompatActivity {
 
         // This is mock-up data.
         // It will overwrite if query is successfully done.
-        new Thread(() -> {
-            p = new Product(
-                    100, "Dongwon",
-                    convertBitmapToBase64(BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)),
-                    "seafood",
-                    "Fishcake(Square, 12 pieces)",
-                    12000,
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA).format(new Date()));
+        p = new Product(
+                100, "Dongwon",
+                convertBitmapToBase64(BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)),
+                "seafood",
+                "Fishcake(Square, 12 pieces)",
+                12000,
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA).format(new Date()));
 
-            if (productId != -1) {
-                productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot ds) {
-                        if (ds.exists()) {
-                            ReviewActivity.this.p = ds.getValue(Product.class);
-                            Log.d("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " successfully loaded.");
-                        } else {
-                            Log.w("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " not found. Replace to fallback...");
-                            ReviewActivity.this.productId = -1;
-                        }
-                        ReviewActivity.this.refreshProductRelatedViews();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError de) {
-                        ReviewActivity.this.productId = -1;
-                        Log.w("ReviewActivity", "ProductId query cancelled.");
-                        ReviewActivity.this.refreshProductRelatedViews();
-                    }
-                });
-            }
-            categoryId = 0;
-            userRef.child(uid).child("category_id").addListenerForSingleValueEvent(new ValueEventListener() {
+        if (productId != -1) {
+            productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot ds) {
                     if (ds.exists()) {
-                        ReviewActivity.this.categoryId = ds.getValue(Integer.class);
-                        Log.d("ReviewActivity", "categoryId: " + ReviewActivity.this.categoryId + " successfully loaded.");
+                        ReviewActivity.this.p = ds.getValue(Product.class);
+                        Log.d("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " successfully loaded.");
                     } else {
-                        Log.w("ReviewActivity", "categoryId: " + ReviewActivity.this.productId + " not found. Replace to fallback...");
-                        ReviewActivity.this.categoryId = 0;
+                        Log.w("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " not found. Replace to fallback...");
+                        ReviewActivity.this.productId = -1;
                     }
+                    ReviewActivity.this.refreshProductRelatedViews();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError de) {
-                    ReviewActivity.this.categoryId = -1;
-                    Log.w("ReviewActivity", "categoryId query cancelled.");
+                    ReviewActivity.this.productId = -1;
+                    Log.w("ReviewActivity", "ProductId query cancelled.");
                     ReviewActivity.this.refreshProductRelatedViews();
                 }
             });
-        }).start();
+        }
+        categoryId = 0;
+        userRef.child(uid).child("category_id").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot ds) {
+                if (ds.exists()) {
+                    ReviewActivity.this.categoryId = ds.getValue(Integer.class);
+                    Log.d("ReviewActivity", "categoryId: " + ReviewActivity.this.categoryId + " successfully loaded.");
+                } else Log.w("ReviewActivity", "categoryId not found. set it as 0.");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError de) {
+                ReviewActivity.this.categoryId = 0;
+                Log.w("ReviewActivity", "categoryId query cancelled.");
+                ReviewActivity.this.refreshProductRelatedViews();
+            }
+        });
 
         reviewId = -1; // Initialize later with transaction.
-        // TODO: categoryId is missing...
-        /*
-        * Two ways to determine Category Id:
-        * 1. get category id from sharedpreference
-        * 2. query from firebase with user_id key
-        * */
 
         lnrImages = findViewById(R.id.reviewImageLinearLayout);
         findViewById(R.id.addUserImageButton).setOnClickListener(v -> startActivityForResult(
@@ -210,6 +199,7 @@ public class ReviewActivity extends AppCompatActivity {
                                     rid,
                                     ReviewActivity.this.uid,
                                     ReviewActivity.this.productId,
+                                    ReviewActivity.this.categoryId,
                                     now, now,
                                     ReviewActivity.this.description,
                                     ReviewActivity.this.title,
@@ -269,55 +259,25 @@ public class ReviewActivity extends AppCompatActivity {
         }
     }
     public void setStar(View v) {
+
+        ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_white);
+        ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
+        ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+        ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+        ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
         switch (v.getId()) {
-            case R.id.oneStarView:
-                userScore = 1;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
-                break;
-            case R.id.twoStarView:
-                userScore = 2;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
-                break;
-            case R.id.threeStarView:
-                userScore = 3;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
-                break;
-            case R.id.fourStarView:
-                userScore = 4;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
-                break;
-            case R.id.fiveStarView:
-                userScore = 5;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
-                break;
-            default:
-                userScore = 0;
-                ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
-                ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
+            case R.id.oneStarView: userScore = 1; break;
+            case R.id.twoStarView: userScore = 2; break;
+            case R.id.threeStarView: userScore = 3; break;
+            case R.id.fourStarView: userScore = 4; break;
+            case R.id.fiveStarView: userScore = 5; break;
+            default: userScore = 0;
         }
+        if (userScore >= 1) ((ImageView)findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+        if (userScore >= 2) ((ImageView)findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+        if (userScore >= 3) ((ImageView)findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
+        if (userScore >= 4) ((ImageView)findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
+        if (userScore >= 5) ((ImageView)findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
     }
     private void refreshProductRelatedViews() {
         byte[] ib = Base64.decode(p.image, Base64.DEFAULT);

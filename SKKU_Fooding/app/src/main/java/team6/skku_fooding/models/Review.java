@@ -16,10 +16,11 @@ public class Review {
     public List<String> b64Imgs;
 
     public Review() {}
-    public Review(int rid, String uid, int pid, String wDate, String mDate, String desc, String tit, int score, List<String> imgs) {
+    public Review(int rid, String uid, int pid, int cid, String wDate, String mDate, String desc, String tit, int score, List<String> imgs) {
         this.reviewId = rid;
         this.userId = uid;
         this.productId = pid;
+        this.categoryId = cid;
         this.writtenDate = wDate;
         this.modifiedDate = mDate;
         this.description = desc;

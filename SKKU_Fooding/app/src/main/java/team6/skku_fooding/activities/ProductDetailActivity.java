@@ -86,8 +86,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         userRef = db.getReference("user");
         productRef = db.getReference("product");
         reviewRef = db.getReference("review");
-        productId = getIntent().getIntExtra("product_id", 500);
-        //productId = getIntent().getIntExtra("product_id", -1);
+        //productId = getIntent().getIntExtra("product_id", 500);
+        productId = Integer.parseInt(getIntent().getStringExtra("product_id"));
         uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
                 .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
 
@@ -98,22 +98,33 @@ public class ProductDetailActivity extends AppCompatActivity {
         // rev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
         // prefRev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
 
-        sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-
-        addCartDialog = v -> new AlertDialog
+        addCartDialog = v -> {
+            int cnt = Integer.parseInt((String)((TextView)head.findViewById(R.id.countTextView)).getText());
+            userRef.child(uid).child("cart_item").addValueEventListener(new ValueEventListener() {
+                @Override public void onDataChange(@NonNull DataSnapshot ds) {
+                    String d = ds.getValue(String.class);
+                    if (d != null)  userRef.child(uid).child("cart_item").setValue(d + "-" + productId + ":" + cnt);
+                    else userRef.child(uid).child("cart_item").setValue(productId + ":" + cnt);
+                    Log.w("ProductDetailActivity", "ShoppingCart added.");
+                }
+                @Override public void onCancelled(@NonNull DatabaseError de) {
+                    Log.w("ProductDetailActivity", "ShoppingCart query cancelled.");
+                }
+            });
+            new AlertDialog
                 .Builder(ProductDetailActivity.this)
                 .setMessage("Item added in cart.\nWould you want to see shopping cart?")
                 .setTitle("Add to Cart")
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    // TODO...
-                    // Add... into cart...
+
                     startActivity(new Intent(getApplicationContext(), ShoppingCartActivity.class));
                     ProductDetailActivity.this.finish();
                 }).create()
                 .show();
+            };
 
-        String now = sdf.format(new Date());
+        String now = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(new Date());
         p = new Product(
                 100, "Dongwon",
                 convertBitmapToBase64(BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)),
@@ -157,8 +168,26 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                 .filter(it -> it.productId == productId)
                                                 .sorted((o1, o2) -> {
                                                     try {
-                                                        return sdf.parse(o1.writtenDate).compareTo(sdf.parse(o2.writtenDate));
-                                                    } catch (ParseException e) {
+                                                        String[] s1, s2;
+                                                        s1 = o1.writtenDate.split("-");
+                                                        s2 = o2.writtenDate.split("-");
+                                                        if (Integer.parseInt(s1[0]) < Integer.parseInt(s2[0]))
+                                                            return -1;
+                                                        else if (Integer.parseInt(s1[0]) > Integer.parseInt(s2[0]))
+                                                            return 1;
+                                                        else {
+                                                            if (Integer.parseInt(s1[1]) < Integer.parseInt(s2[1]))
+                                                                return -1;
+                                                            else if (Integer.parseInt(s1[1]) > Integer.parseInt(s2[1]))
+                                                                return 1;
+                                                            else {
+                                                                if (Integer.parseInt(s1[2]) < Integer.parseInt(s2[2]))
+                                                                    return -1;
+                                                                else if (Integer.parseInt(s1[2]) > Integer.parseInt(s2[2]))
+                                                                    return 1;
+                                                            }
+                                                        }
+                                                    } catch (NullPointerException e) {
                                                         e.printStackTrace();
                                                     }
                                                     return 0;
@@ -170,8 +199,26 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                 .filter(it -> it.categoryId == categoryId)
                                                 .sorted((o1, o2) -> {
                                                     try {
-                                                        return sdf.parse(o1.writtenDate).compareTo(sdf.parse(o2.writtenDate));
-                                                    } catch (ParseException e) {
+                                                        String[] s1, s2;
+                                                        s1 = o1.writtenDate.split("-");
+                                                        s2 = o2.writtenDate.split("-");
+                                                        if (Integer.parseInt(s1[0]) < Integer.parseInt(s2[0]))
+                                                            return -1;
+                                                        else if (Integer.parseInt(s1[0]) > Integer.parseInt(s2[0]))
+                                                            return 1;
+                                                        else {
+                                                            if (Integer.parseInt(s1[1]) < Integer.parseInt(s2[1]))
+                                                                return -1;
+                                                            else if (Integer.parseInt(s1[1]) > Integer.parseInt(s2[1]))
+                                                                return 1;
+                                                            else {
+                                                                if (Integer.parseInt(s1[2]) < Integer.parseInt(s2[2]))
+                                                                    return -1;
+                                                                else if (Integer.parseInt(s1[2]) > Integer.parseInt(s2[2]))
+                                                                    return 1;
+                                                            }
+                                                        }
+                                                    } catch (NullPointerException e) {
                                                         e.printStackTrace();
                                                     }
                                                     return 0;
@@ -188,13 +235,11 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                 .inflate(R.layout.product_detail_review, mLinearLayout, false);
                                         rev.setOnClickListener(v -> startActivity(
                                                 new Intent(getApplicationContext(), ReviewListActivity.class)
-                                                        .putExtra("product_id", p.productId)
-                                                        .putExtra("product_name", p.name)
+                                                        .putExtra("product_id", productId)
                                                         .putExtra("pref", false)));
                                         prefRev.setOnClickListener(v -> startActivity(
                                                 new Intent(getApplicationContext(), ReviewListActivity.class)
-                                                        .putExtra("product_id", p.productId)
-                                                        .putExtra("product_name", p.name)
+                                                        .putExtra("product_id", productId)
                                                         .putExtra("pref", true)
                                                         .putExtra("category_id", categoryId)));
                                         ((TextView)rev.findViewById(R.id.reviewSubjectView)).setText("Overall Reviews");
