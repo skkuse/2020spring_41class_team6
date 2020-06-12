@@ -54,9 +54,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         new Thread(() -> {
             String reviewId = getIntent().getStringExtra("review_id");
-            if (reviewId == null) {
-                reviewId = "2";// return;
-            }
             reviewRef.child(reviewId).addValueEventListener(new ValueEventListener() {
                 @Override public void onDataChange(@NonNull DataSnapshot ds) {
                     if (ds.exists()) { r = ds.getValue(Review.class); }
