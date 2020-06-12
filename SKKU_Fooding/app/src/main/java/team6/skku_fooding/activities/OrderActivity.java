@@ -37,7 +37,7 @@ public class OrderActivity extends AppCompatActivity {
     final String strToday = sdf.format(c1.getTime());
 
     EditText name_et, phonenumber_et, address_et, cardnumber_et, request_et;
-    TextView orderinfo_tv;
+    TextView orderinfo_tv, orderinfo_tv2;
     Button order_button;
 
     Integer count;
@@ -66,6 +66,7 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         orderinfo_tv = (TextView) findViewById(R.id.orderinfo_tv);
+        orderinfo_tv2 = (TextView) findViewById(R.id.orderinfo_tv2);
         name_et = (EditText) findViewById(R.id.name_et);
         phonenumber_et = (EditText) findViewById(R.id.phonenumber_et);
         address_et = (EditText) findViewById(R.id.address_et);
@@ -176,11 +177,8 @@ public class OrderActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot d: dataSnapshot.getChildren()) {
                     String pname = d.child("name").getValue(String.class);
-                    if(size==1)
-                        orderinfo_tv.setText(size+ " orders including "+ pname+ " have been received.\n" + "Total: " + totalprice + "₩.");
-                    else
-                        orderinfo_tv.setText(size+ " order including "+ pname+ " has been received.\n" + "Total: " + totalprice + "₩.");
-
+                    orderinfo_tv.setText(size+ " order(s) including '"+ pname+ "'.");
+                    orderinfo_tv2.setText("Total: " + totalprice + "₩");
                 }
             }
 
@@ -197,6 +195,16 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     public void onButtonClick(View v) {
+        String name = name_et.getText().toString();
+        String phonenumber = phonenumber_et.getText().toString();
+        String address = address_et.getText().toString();
+        String cardnumber = cardnumber_et.getText().toString();
+        String request = request_et.getText().toString();
+        if (name.length()==0 || phonenumber.length()==0 || address.length() == 0 || cardnumber.length() == 0)
+        {
+            Toast.makeText(this.getApplicationContext(), "Please fill out the form.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(Type == "Normal") {
             setdb(pid, 0);
         }
@@ -211,6 +219,8 @@ public class OrderActivity extends AppCompatActivity {
 
             }
         }
+
+        Toast.makeText(this.getApplicationContext(), "Your order has been received.", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(OrderActivity.this, SearchActivity.class);
         startActivity(intent);
     }
@@ -224,7 +234,7 @@ public class OrderActivity extends AppCompatActivity {
         final String request = request_et.getText().toString();
 
         if (name.length()==0 || phonenumber.length()==0 || address.length() == 0 || cardnumber.length() == 0)
-            Toast.makeText(this.getApplicationContext(), "Please fill out the form.", Toast.LENGTH_SHORT);
+            Toast.makeText(this.getApplicationContext(), "Please fill out the form.", Toast.LENGTH_SHORT).show();
         else
         {
 

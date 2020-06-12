@@ -52,10 +52,21 @@
         <TextView
             android:id="@+id/orderinfo_tv"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textColor="@android:color/black"
+            android:layout_marginBottom="10dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/orderinfo_tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/darker_gray"
             android:textSize="20dp" />
 
         <TextView
@@ -73,6 +84,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#757575"
             android:textColor="@android:color/black"
             android:textSize="20dp" />
 
@@ -91,6 +103,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#757575"
             android:textColor="@android:color/black"
             android:textSize="20dp" />
 
@@ -109,6 +122,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#757575"
             android:textColor="@android:color/black"
             android:textSize="20dp" />
 
@@ -127,13 +141,15 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#757575"
+            android:textColor="@android:color/black"
             android:textSize="20dp" />
 
         <TextView
             android:id="@+id/request_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delivery request"
+            android:text="Delivery request (optional)"
             android:textColor="@android:color/black"
             android:textSize="20dp" />
 
@@ -144,6 +160,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#757575"
             android:textColor="@android:color/black"
             android:textSize="20dp" />
 
