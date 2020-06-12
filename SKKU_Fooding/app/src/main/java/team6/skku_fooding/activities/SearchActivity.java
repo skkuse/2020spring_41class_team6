@@ -10,7 +10,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
     String filter;
     Intent intent;
     SharedPreferences loginPref;
-
+    BottomNavigationView bottomNavigationView;
     private DatabaseReference dbReference;
     private DatabaseReference dbref;
     @Override
@@ -68,7 +71,9 @@ public class SearchActivity extends AppCompatActivity {
 
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
-
+        
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
+        bottomNavigationView.setSelectedItemId(R.id.home_menu);
 
         // Firebase user data load
         dbref= FirebaseDatabase.getInstance().getReference();
@@ -152,13 +157,23 @@ public class SearchActivity extends AppCompatActivity {
                 }
         }});
 
+        // Shopping cart button
+        Button cart_button=findViewById(R.id.cart_button);
+        cart_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                    intent = new Intent(SearchActivity.this, ShoppingCart.class);
+                    startActivity(intent);
+            }
+        });
+
         // Sorting order button
         button_sorting =(Button)findViewById(R.id.button_search2);
         button_sorting.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dlg = new AlertDialog.Builder(SearchActivity.this);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(new ContextThemeWrapper(SearchActivity.this, R.style.AlertDialogCustom));
                 dlg.setTitle("Sorting order");
                 final String[] versionArray = new String[] {"Recent","High Price","Low Price"};
                 dlg.setSingleChoiceItems(versionArray, sorting_order, new DialogInterface.OnClickListener() {
@@ -183,7 +198,7 @@ public class SearchActivity extends AppCompatActivity {
         filter_onoff_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dlg = new AlertDialog.Builder(SearchActivity.this);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(new ContextThemeWrapper(SearchActivity.this, R.style.AlertDialogCustom));
                 dlg.setTitle("Filter ON/OFF");
                 final String[] versionArray = new String[] {"ON","OFF"};
                 dlg.setSingleChoiceItems(versionArray, search_filter, new DialogInterface.OnClickListener() {
@@ -210,42 +225,52 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        // Bottom menu bar
-        home=(TextView)findViewById(R.id.home);
-        recommendation=(TextView)findViewById(R.id.recommendation);
-        delivery=(TextView)findViewById(R.id.delivery);
-        mypage=(TextView)findViewById(R.id.mypage);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                return false;
+                            case R.id.recommendation_menu:
+                                intent = new Intent(SearchActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.delivery_menu:
+                                intent = new Intent(SearchActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.mypage_menu:
+                                intent = new Intent(SearchActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                                return true;
+                        }
+                        return false;
+                    }
+                }
+        );
 
-        home.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // Connect to home (now)
-            }
-        });
-        recommendation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("recommendation","I'm here");
-                intent = new Intent(SearchActivity.this, RecommendationActivity.class);
-                startActivity(intent);
-            }
-        });
-        delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("delivery","I'm here");
-                intent = new Intent(SearchActivity.this, DeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
-        mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("mypage","I'm here");
-                intent = new Intent(SearchActivity.this, MyPageActivity.class);
-                startActivity(intent);
-            }
-        });
+        bottomNavigationView.setOnNavigationItemReselectedListener(
+                new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                            case R.id.recommendation_menu:
+                                intent = new Intent(SearchActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                            case R.id.delivery_menu:
+                                intent = new Intent(SearchActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                            case R.id.mypage_menu:
+                                intent = new Intent(SearchActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -435,7 +460,7 @@ class ListViewAdapter extends BaseAdapter {
         ListViewItem listViewItem = listViewItemList.get(position);
 
         titleTextView.setText(listViewItem.getTitle());
-        descTextView.setText(listViewItem.getDesc());
+        descTextView.setText(listViewItem.getDesc()+" ₩");
         iconImageView.setImageBitmap(listViewItem.getIcon());
 
         View finalConvertView = convertView;
