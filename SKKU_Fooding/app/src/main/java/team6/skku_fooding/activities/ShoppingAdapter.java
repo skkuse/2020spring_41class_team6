@@ -134,7 +134,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
                     selectedproductids.add(productids.get(position).toString());
                     selectedprices.add(prices.get(position).toString());
                     selectednames.add(names.get(position).toString());
-
+                    b1.setText("DESELECT");
 
                 }else{
                     parent.getChildAt(position).setBackgroundColor(Color.rgb(255, 255, 255));
@@ -145,6 +145,7 @@ public class ShoppingAdapter extends ArrayAdapter<String> {
                     selectedprices.remove(prices.get(position));
                     selectedproductids.remove(productids.get(position).toString());
                     selectednames.remove(names.get(position));
+                    b1.setText("SELECT");
                 }
                 ShoppingAdapter.this.notifyDataSetChanged();
 
