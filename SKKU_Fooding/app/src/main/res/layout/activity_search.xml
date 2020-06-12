@@ -112,7 +112,7 @@
             android:backgroundTint="@color/main_orange"
             android:text="ORDER: Recent"
             android:layout_gravity="center"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <Button
             android:id="@+id/button_search3"
@@ -121,7 +121,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@color/sub_yellow"
             android:text="FILTER: ON"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
     </LinearLayout>
 
     <ListView

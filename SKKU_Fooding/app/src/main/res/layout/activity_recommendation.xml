@@ -48,19 +48,20 @@
             android:id="@+id/criteria"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/main_orange"
             android:text="Criteria"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <Button
-            android:id="@+id/change"
-            android:layout_width="130dp"
+            android:id="@+id/change_survey"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/sub_yellow"
-            android:text="Change"
-            android:textSize="16sp" />
+            android:backgroundTint="#D5D5D5"
+            android:text="PREFERENCE SURVEY"
+            android:textSize="16dp" />
     </LinearLayout>
 
     <ListView
