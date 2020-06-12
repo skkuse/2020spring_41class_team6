@@ -70,14 +70,17 @@
         android:id="@+id/_listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="10dp"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalscroll"
+        android:divider="#D5D5D5"
+        android:dividerHeight="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_linear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/banner2"
-        app:layout_constraintTop_toBottomOf="@+id/banner2" />
+        app:layout_constraintTop_toBottomOf="@+id/banner2"/>
 
     <LinearLayout
         android:id="@+id/bottom_linear"

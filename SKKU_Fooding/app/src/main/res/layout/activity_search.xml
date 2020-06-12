@@ -97,21 +97,17 @@
         android:id="@+id/banner2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:weightSum="1"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="62dp"
         app:layout_constraintEnd_toEndOf="@+id/_listView"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/banner"
         app:layout_constraintTop_toBottomOf="@+id/banner">
 
         <Button
             android:id="@+id/button_search2"
-            android:layout_width="wrap_content"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/main_orange"
             android:text="ORDER: Recent"
@@ -120,10 +116,9 @@
 
         <Button
             android:id="@+id/button_search3"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.2"
             android:backgroundTint="@color/sub_yellow"
             android:text="FILTER: ON"
             android:textSize="16sp" />

@@ -157,40 +157,6 @@ public class RecommendationActivity extends AppCompatActivity {
         });
 
 
-        // Bottom menu bar
-        TextView home=(TextView)findViewById(R.id.home);
-        TextView recommendation=(TextView)findViewById(R.id.recommendation);
-        TextView delivery=(TextView)findViewById(R.id.delivery);
-        TextView mypage=(TextView)findViewById(R.id.mypage);
-
-        home.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RecommendationActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        recommendation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("delivery","I'm here");
-                Intent intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
-        mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("mypage","I'm here");
-                Intent intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
