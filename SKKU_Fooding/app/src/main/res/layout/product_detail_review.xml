@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="280dp">
+    android:layout_height="240dp">
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="16dp"
         android:text="Reviews"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,12 +26,12 @@
         android:layout_marginBottom="8dp"
         android:text="Review Title"
         app:layout_constraintBottom_toTopOf="@+id/reviewDescView"
-        app:layout_constraintEnd_toStartOf="@+id/onestarView"
+        app:layout_constraintEnd_toStartOf="@+id/oneStarView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <ImageView
-        android:id="@+id/onestarView"
+        android:id="@+id/oneStarView"
         android:layout_width="20dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

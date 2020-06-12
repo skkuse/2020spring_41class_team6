@@ -48,11 +48,11 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.ProductDetailActivity"
+            android:name=".activities.ShoppingCartActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.ShoppingCartActivity"
+            android:name=".activities.ProductDetailActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity

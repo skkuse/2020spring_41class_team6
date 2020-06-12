@@ -69,8 +69,8 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartItemViewHolder> {
         }
         void bind(CartItem i) {
             itemTitle.setText(i.item);
-            countTextView.setText(Integer.toString(i.count));
-            priceTextView.setText(Integer.toString(i.price));
+            countTextView.setText(String.valueOf(i.count));
+            priceTextView.setText(String.valueOf(i.price));
             check.setChecked(i.check);
         }
     }
@@ -97,7 +97,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartItemViewHolder> {
     public void refresh() {
         try {
             totalPriceTextView.setText("Total price: "+
-                    Integer.toString(cart.stream()
+                    String.valueOf(cart.stream()
                             .filter(it -> it.check)
                             .map(it -> it.count * it.price)
                             .filter(res -> res > 0)

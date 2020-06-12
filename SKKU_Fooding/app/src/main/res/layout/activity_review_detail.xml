@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ReviewView" />
 
     <ImageView
-        android:id="@+id/onestarView"
+        android:id="@+id/oneStarView"
         android:layout_width="0dp"
         android:layout_height="24dp"
         app:srcCompat="@drawable/star_white"

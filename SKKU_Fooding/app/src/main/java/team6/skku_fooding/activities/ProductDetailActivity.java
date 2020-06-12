@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,6 +54,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView productImageView;
     private TextView productTitleView;
+    private TextView productPriceView;
     private ImageButton plusButton;
     private ImageButton minusButton;
     private TextView countView;
@@ -72,7 +74,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private DatabaseReference reviewRef;
     private DatabaseReference productRef;
-    private String productId;
+    private int productId;
     private View.OnClickListener addCartDialog;
 
     @Override
@@ -88,6 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         productImageView = head.findViewById(R.id.productImageView);
         productTitleView = head.findViewById(R.id.productTitleView);
+        productPriceView = head.findViewById(R.id.productPriceView);
         plusButton = head.findViewById(R.id.plusCountButton);
         minusButton = head.findViewById(R.id.minusCountButton);
         countView = head.findViewById(R.id.countTextView);
@@ -104,6 +107,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         fourStarView = rev.findViewById(R.id.fourStarView);
         fiveStarView = rev.findViewById(R.id.fiveStarView);
         reviewLinearLayout = rev.findViewById(R.id.reviewLinearLayout);
+        rev.setOnClickListener(v -> startActivity(
+                new Intent(getApplicationContext(), ReviewListActivity.class)
+                        .putExtra("product_id", p.productId)
+                        .putExtra("product_name", p.name)));
 
         mLinearLayout.addView(head);
         mLinearLayout.addView(body);
@@ -112,7 +119,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         reviewRef = db.getReference("review");
         productRef = db.getReference("product");
-        productId = getIntent().getStringExtra("product_id");
+        productId = getIntent().getIntExtra("product_id", 500);
+        //productId = getIntent().getIntExtra("product_id", -1);
 
         uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
             .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
@@ -137,21 +145,21 @@ public class ProductDetailActivity extends AppCompatActivity {
                     12000,
                     now);
 
-            if (productId != null) {
-                productRef.child(productId).addValueEventListener(new ValueEventListener() {
+            if (productId != -1) {
+                productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
                     @Override public void onDataChange(@NonNull DataSnapshot ds) {
                         if (ds.exists()) {
                             ProductDetailActivity.this.p = ds.getValue(Product.class);
                             Log.d("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " successfully loaded.");
                         } else {
                             Log.w("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " not found. Replace to fallback...");
-                            ProductDetailActivity.this.productId = null;
+                            ProductDetailActivity.this.productId = -1;
                         }
                         ProductDetailActivity.this.refreshProductViews();
                     }
                     @Override public void onCancelled(@NonNull DatabaseError de) {
                         Log.w("ReviewActivity", "ProductId query cancelled.");
-                        ProductDetailActivity.this.productId = null;
+                        ProductDetailActivity.this.productId = -1;
                         ProductDetailActivity.this.refreshProductViews();
                     }
                 });
@@ -176,7 +184,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 ProductDetailActivity.this.refreshReviewViews();
                             }
                             @Override public void onCancelled(@NonNull DatabaseError de) {
-                                Log.w("ReviewActivity", "Review query cancelled.");
+                                Log.w("ProductDetailActivity", "Review query cancelled.");
                                 ProductDetailActivity.this.r = null;
                                 ProductDetailActivity.this.refreshReviewViews();
                             }
@@ -186,33 +194,31 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
     private void refreshProductViews() {
         byte[] ib = Base64.decode(p.image, Base64.DEFAULT);
-        productImageView.setImageBitmap(
-                BitmapFactory.decodeByteArray(ib, 0, ib.length)
-        );
+        productImageView.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
         productTitleView.setText(p.name);
+        productPriceView.setText("Price: "+String.valueOf(p.price));
+        countView.setText("1");
     }
     private void refreshReviewViews() {
-        if (r.title.length() > 20) {
-            reviewTitleView.setText(r.title.substring(0, 17)+"...");
-        } else {
-            reviewTitleView.setText(r.title);
+        if (r != null) {
+            if (r.title.length() > 20) reviewTitleView.setText(r.title.substring(0, 17) + "...");
+            else reviewTitleView.setText(r.title);
+            if (r.description.length() > 50)
+                reviewTitleView.setText(r.description.substring(0, 47) + "...");
+            else reviewTitleView.setText(r.description);
+            r.b64Imgs.forEach(s -> {
+                byte[] ib = Base64.decode(s, Base64.DEFAULT);
+                ImageView iv = new ImageView(this);
+                iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
+                reviewLinearLayout.addView(iv);
+            });
+            if (r.rate >= 1) oneStarView.setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 2) twoStarView.setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 3) threeStarView.setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 4) fourStarView.setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 5) fiveStarView.setImageResource(R.drawable.star_yellow);
+            // Toast.makeText(this, "haha!", Toast.LENGTH_LONG).show();
         }
-        if (r.description.length() > 50) {
-            reviewTitleView.setText(r.description.substring(0, 47)+"...");
-        } else {
-            reviewTitleView.setText(r.description);
-        }
-        r.b64Imgs.forEach(s -> {
-            byte[] ib = Base64.decode(s, Base64.DEFAULT);
-            ImageView iv = new ImageView(this);
-            iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
-            reviewLinearLayout.addView(iv);
-        });
-        if (r.rate >= 1) oneStarView.setImageResource(R.drawable.star_yellow);
-        if (r.rate >= 2) twoStarView.setImageResource(R.drawable.star_yellow);
-        if (r.rate >= 3) threeStarView.setImageResource(R.drawable.star_yellow);
-        if (r.rate >= 4) fourStarView.setImageResource(R.drawable.star_yellow);
-        if (r.rate >= 5) fiveStarView.setImageResource(R.drawable.star_yellow);
     }
     private String convertBitmapToBase64(Bitmap b) {
         ByteArrayOutputStream bs = new ByteArrayOutputStream();

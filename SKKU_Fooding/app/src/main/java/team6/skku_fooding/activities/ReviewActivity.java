@@ -52,6 +52,8 @@ public class ReviewActivity extends AppCompatActivity {
     private Product p;
     private LinearLayout lnrImages;
     private LinearLayout.LayoutParams lnrParams;
+
+    private DatabaseReference userRef;
     private DatabaseReference reviewRef;
     private DatabaseReference productRef;
     public int reviewId;
@@ -73,6 +75,7 @@ public class ReviewActivity extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         reviewRef = db.getReference("review");
         productRef = db.getReference("product");
+        userRef = db.getReference("user");
         productId = getIntent().getIntExtra("product_id", -1);
         b64Imgs = new ArrayList<>();
 
@@ -108,8 +111,8 @@ public class ReviewActivity extends AppCompatActivity {
                             ReviewActivity.this.p = ds.getValue(Product.class);
                             Log.d("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " successfully loaded.");
                         } else {
-                            ReviewActivity.this.productId = -1;
                             Log.w("ReviewActivity", "ProductId: " + ReviewActivity.this.productId + " not found. Replace to fallback...");
+                            ReviewActivity.this.productId = -1;
                         }
                         ReviewActivity.this.refreshProductRelatedViews();
                     }
@@ -122,6 +125,26 @@ public class ReviewActivity extends AppCompatActivity {
                     }
                 });
             }
+            categoryId = 0;
+            userRef.child(uid).child("category_id").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot ds) {
+                    if (ds.exists()) {
+                        ReviewActivity.this.categoryId = ds.getValue(Integer.class);
+                        Log.d("ReviewActivity", "categoryId: " + ReviewActivity.this.categoryId + " successfully loaded.");
+                    } else {
+                        Log.w("ReviewActivity", "categoryId: " + ReviewActivity.this.productId + " not found. Replace to fallback...");
+                        ReviewActivity.this.categoryId = 0;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError de) {
+                    ReviewActivity.this.categoryId = -1;
+                    Log.w("ReviewActivity", "categoryId query cancelled.");
+                    ReviewActivity.this.refreshProductRelatedViews();
+                }
+            });
         }).start();
 
         reviewId = -1; // Initialize later with transaction.
@@ -192,7 +215,7 @@ public class ReviewActivity extends AppCompatActivity {
                                     ReviewActivity.this.title,
                                     ReviewActivity.this.userScore,
                                     b64Imgs);
-                            md.child(Integer.toString(rid)).setValue(r);
+                            md.child(String.valueOf(rid)).setValue(r);
                             return Transaction.success(md);
                         }
 
