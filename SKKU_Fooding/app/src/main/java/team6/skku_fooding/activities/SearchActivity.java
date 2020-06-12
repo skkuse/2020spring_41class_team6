@@ -429,8 +429,8 @@ class ListViewAdapter extends BaseAdapter {
         };
 
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.address_tv) ;
+        TextView descTextView = (TextView) convertView.findViewById(R.id.cardnumber_tv) ;
 
         ListViewItem listViewItem = listViewItemList.get(position);
 

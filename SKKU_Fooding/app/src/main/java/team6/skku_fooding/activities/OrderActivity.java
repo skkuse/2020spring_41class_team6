@@ -7,15 +7,11 @@ import team6.skku_fooding.R;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class OrderActivity extends AppCompatActivity {
@@ -42,9 +36,9 @@ public class OrderActivity extends AppCompatActivity {
 
     final String strToday = sdf.format(c1.getTime());
 
-    EditText et, et1, et2;
-    TextView tv;
-    Button button;
+    EditText name_et, phonenumber_et, address_et, cardnumber_et, request_et;
+    TextView orderinfo_tv;
+    Button order_button;
 
     Integer count;
     Integer pid;
@@ -71,12 +65,13 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        tv = (TextView) findViewById(R.id.textView);
-        button = (Button) findViewById(R.id.button);
-        et = (EditText) findViewById(R.id.address);
-        et1 = (EditText) findViewById(R.id.cardnumber);
-        et2 = (EditText) findViewById(R.id.comment);
-
+        orderinfo_tv = (TextView) findViewById(R.id.orderinfo_tv);
+        name_et = (EditText) findViewById(R.id.name_et);
+        phonenumber_et = (EditText) findViewById(R.id.phonenumber_et);
+        address_et = (EditText) findViewById(R.id.address_et);
+        cardnumber_et = (EditText) findViewById(R.id.cardnumber_et);
+        request_et = (EditText) findViewById(R.id.request_et);
+        order_button = (Button) findViewById(R.id.order_button);
 
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
@@ -174,14 +169,17 @@ public class OrderActivity extends AppCompatActivity {
 
         Map.Entry<Integer, pair> entry = listmap.entrySet().iterator().next();
         int key = entry.getKey();
-        final int size = listmap.size() - 1;
+        final int size = listmap.size();
 
         parsedb.child("product").orderByChild("product_id").equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot d: dataSnapshot.getChildren()) {
                     String pname = d.child("name").getValue(String.class);
-                    tv.setText(pname+ " 외 " + size + "건의 주문이 접수되었습니다.\n" + "총 결제금액은 " + totalprice + "원 입니다.");
+                    if(size==1)
+                        orderinfo_tv.setText(size+ " orders including "+ pname+ " have been received.\n" + "Total: " + totalprice + "₩.");
+                    else
+                        orderinfo_tv.setText(size+ " order including "+ pname+ " has been received.\n" + "Total: " + totalprice + "₩.");
 
                 }
             }
@@ -219,14 +217,16 @@ public class OrderActivity extends AppCompatActivity {
 
     public void setdb(final Integer ppid, final Integer ncount) {
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
-        final String address = et.getText().toString();
-        final String cardnumber = et1.getText().toString();
-        final String comment = et2.getText().toString();
+        final String name = name_et.getText().toString();
+        final String phonenumber = phonenumber_et.getText().toString();
+        final String address = address_et.getText().toString();
+        final String cardnumber = cardnumber_et.getText().toString();
+        final String request = request_et.getText().toString();
 
-        if (address.length() == 0 || cardnumber.length() == 0) {
-            Toast erring1 = Toast.makeText(this.getApplicationContext(), "주소와 카드번호를 제대로 입력해주세요", Toast.LENGTH_SHORT);
-            erring1.show();
-        } else {
+        if (name.length()==0 || phonenumber.length()==0 || address.length() == 0 || cardnumber.length() == 0)
+            Toast.makeText(this.getApplicationContext(), "Please fill out the form.", Toast.LENGTH_SHORT);
+        else
+        {
 
             dbref.child("order").orderByChild("order_id").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -241,10 +241,12 @@ public class OrderActivity extends AppCompatActivity {
                         dbref2.child("order").child("order_id" + id_count).child("product_id").setValue(ppid);
                         dbref2.child("order").child("order_id" + id_count).child("date").setValue(strToday);
                         dbref2.child("order").child("order_id" + id_count).child("UID").setValue(uid);
+                        dbref2.child("order").child("order_id" + id_count).child("name").setValue(name);
+                        dbref2.child("order").child("order_id" + id_count).child("phonenumber").setValue(phonenumber);
                         dbref2.child("order").child("order_id" + id_count).child("address").setValue(address);
                         dbref2.child("order").child("order_id" + id_count).child("cardnumber").setValue(cardnumber);
-                        if (comment.length() != 0) {
-                            dbref2.child("order").child("order_id" + id_count).child("comment").setValue(comment);
+                        if (request.length() != 0) {
+                            dbref2.child("order").child("order_id" + id_count).child("request").setValue(request);
                         }
                         dbref2.child("order").child("order_id" + id_count).child("status").setValue("Delivering");
 

@@ -34,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class ShoppingCart extends AppCompatActivity {
-    /*
+
     DatabaseReference reff;
     DatabaseReference reff1;
     String shoppingcart;
@@ -225,6 +225,6 @@ public class ShoppingCart extends AppCompatActivity {
     }
 
 
-*/
+
 
     }
