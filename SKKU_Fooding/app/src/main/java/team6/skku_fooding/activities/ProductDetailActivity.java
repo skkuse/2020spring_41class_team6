@@ -212,6 +212,11 @@ public class ProductDetailActivity extends AppCompatActivity {
                 iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
                 reviewLinearLayout.addView(iv);
             });
+            oneStarView.setImageResource(R.drawable.star_white);
+            twoStarView.setImageResource(R.drawable.star_white);
+            threeStarView.setImageResource(R.drawable.star_white);
+            fourStarView.setImageResource(R.drawable.star_white);
+            fiveStarView.setImageResource(R.drawable.star_white);
             if (r.rate >= 1) oneStarView.setImageResource(R.drawable.star_yellow);
             if (r.rate >= 2) twoStarView.setImageResource(R.drawable.star_yellow);
             if (r.rate >= 3) threeStarView.setImageResource(R.drawable.star_yellow);

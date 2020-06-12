@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,6 +99,11 @@ public class ReviewListActivity extends AppCompatActivity {
                 else ((TextView)v.findViewById(R.id.reviewTitleView)).setText(r.title);
                 if (r.description.length() > 50) ((TextView)v.findViewById(R.id.reviewDescView)).setText(r.description.substring(0, 47) + "...");
                 else ((TextView)v.findViewById(R.id.reviewDescView)).setText(r.description);
+                ((ImageView)v.findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)v.findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)v.findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+                ((ImageView)v.findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
                 if (r.rate >= 1) ((ImageView)v.findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 2) ((ImageView)v.findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 3) ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
@@ -108,6 +114,10 @@ public class ReviewListActivity extends AppCompatActivity {
                         ImageView iv = new ImageView(this);
                         iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
                         ((LinearLayout)v.findViewById(R.id.reviewLinearLayout)).addView(iv);
+                });
+                v.setOnClickListener(v2 -> {
+                    startActivity(new Intent(getApplicationContext(), ReviewDetailActivity.class)
+                            .putExtra("review_id", r.reviewId));
                 });
 
                 reviewLinearLayout.addView(v);
