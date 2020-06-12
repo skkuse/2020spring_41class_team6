@@ -159,15 +159,6 @@ public class ShoppingCart extends AppCompatActivity {
 
 
         }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent i = new Intent(ShoppingCart.this, Product_detail.class);
-            startActivity(i);
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
         public void orderselected(View view) {
             if(!(selectedproductids.size()==0)) {
