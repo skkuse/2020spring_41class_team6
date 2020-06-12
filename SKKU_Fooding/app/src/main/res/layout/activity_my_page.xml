@@ -136,6 +136,32 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/cart_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/sub_orange"
+                android:src="@drawable/shoppingcart_icon"/>
+
+            <Button
+                android:id="@+id/mpcartButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/sub_orange"
+                android:text="SHOPPING CART"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/logout_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
