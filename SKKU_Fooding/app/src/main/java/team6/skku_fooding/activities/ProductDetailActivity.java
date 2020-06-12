@@ -98,9 +98,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         // rev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
         // prefRev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
 
-        mLinearLayout.addView(head);
-        mLinearLayout.addView(body);
-
         sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 
         addCartDialog = v -> new AlertDialog
@@ -202,6 +199,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                         .putExtra("category_id", categoryId)));
                                         ((TextView)rev.findViewById(R.id.reviewSubjectView)).setText("Overall Reviews");
                                         ((TextView)prefRev.findViewById(R.id.reviewSubjectView)).setText("Preference Reviews");
+                                        mLinearLayout.addView(head);
+                                        mLinearLayout.addView(body);
                                         mLinearLayout.addView(rev);
                                         mLinearLayout.addView(prefRev);
                                         ProductDetailActivity.this.refreshReviewViews(rev, o);
