@@ -162,7 +162,7 @@ public class SearchActivity extends AppCompatActivity {
         cart_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                    intent = new Intent(SearchActivity.this, ShoppingCart.class);
+                    intent = new Intent(SearchActivity.this, ShoppingCartActivity.class);
                     startActivity(intent);
             }
         });
@@ -468,7 +468,7 @@ class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // To Product List
-                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
+                Intent intent = new Intent(finalConvertView.getContext(), ProductDetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("product_id",listViewItem.getProductId());
                 context.startActivity(intent);
@@ -478,7 +478,7 @@ class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // To Product List
-                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
+                Intent intent = new Intent(finalConvertView.getContext(), ProductDetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("product_id",listViewItem.getProductId());
                 context.startActivity(intent);
@@ -488,7 +488,7 @@ class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // To Product List
-                Intent intent = new Intent(finalConvertView.getContext(), Product_detail.class);
+                Intent intent = new Intent(finalConvertView.getContext(), ProductDetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("product_id",listViewItem.getProductId());
                 context.startActivity(intent);

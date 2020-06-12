@@ -119,7 +119,7 @@ public class MyPageActivity extends AppCompatActivity {
         mpcartButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyPageActivity.this, ShoppingCart.class);
+                Intent intent = new Intent(MyPageActivity.this, ShoppingCartActivity.class);
                 startActivity(intent);
             }
         });

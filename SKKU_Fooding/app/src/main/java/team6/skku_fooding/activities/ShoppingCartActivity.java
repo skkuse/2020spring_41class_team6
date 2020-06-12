@@ -22,20 +22,29 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import team6.skku_fooding.R;
 
 class CartItem {
     boolean check;
     int count;
+    final int pid;
     final String item;
     final int price;
 
-    CartItem (String item, int price) {
+    CartItem (int pid, String item, int price) {
         this.check = true;
         this.count = 1;
+        this.pid = pid;
         this.item = item;
         this.price = price;
     }
@@ -139,10 +148,6 @@ public class ShoppingCartActivity extends AppCompatActivity {
         cartRecView.setHasFixedSize(true);
 
         shoppingCart = new ArrayList<>();
-        shoppingCart.add(new CartItem("참치", 10000));
-        shoppingCart.add(new CartItem("꽁치", 8000));
-        shoppingCart.add(new CartItem("김치", 4000));
-        shoppingCart.add(new CartItem("날치", 12000));
 
         lm = new LinearLayoutManager(this);
         cad = new CartAdapter(shoppingCart, totalPriceTextView);
