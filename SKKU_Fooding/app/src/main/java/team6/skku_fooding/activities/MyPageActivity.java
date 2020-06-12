@@ -132,7 +132,6 @@ public class MyPageActivity extends AppCompatActivity {
                         Intent intent;
                         switch(item.getItemId()) {
                             case R.id.home_menu:
-                                Log.d("LOG:", "SELECT:HOME");
                                 intent = new Intent(MyPageActivity.this, SearchActivity.class);
                                 startActivity(intent);
                                 return true;
@@ -145,7 +144,6 @@ public class MyPageActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 return true;
                             case R.id.mypage_menu:
-                                Log.d("LOG:", "SELECT:MYPAGE");
                                 return false;
                         }
                         return false;
@@ -160,7 +158,6 @@ public class MyPageActivity extends AppCompatActivity {
                         Intent intent;
                         switch(item.getItemId()) {
                             case R.id.home_menu:
-                                Log.d("LOG:", "RESELECT:HOME");
                                 intent = new Intent(MyPageActivity.this, SearchActivity.class);
                                 startActivity(intent);
                             case R.id.recommendation_menu:
@@ -170,7 +167,6 @@ public class MyPageActivity extends AppCompatActivity {
                                 intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
                                 startActivity(intent);
                             case R.id.mypage_menu:
-                                Log.d("LOG:", "RESELECT:MYPAGE");
                         }
                     }
                 }

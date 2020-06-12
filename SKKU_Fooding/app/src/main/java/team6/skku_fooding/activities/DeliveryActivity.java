@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +31,7 @@ import java.util.List;
 public class DeliveryActivity extends AppCompatActivity implements CustomListAdapter_delivery.ListBtnClickListener {
     String temp,temp2,temp3,temp4,temp5;
     List<String> list = new ArrayList<>();
+    BottomNavigationView bottomNavigationView;
     private static final String TAG = "DeliveryActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,10 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
         String UID=loginPref.getString("UID",null);
-
+        
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
+        bottomNavigationView.setSelectedItemId(R.id.delivery_menu);
+        
         DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
         mdatabase.child("order").orderByChild("UID").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -80,42 +86,54 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
 
 
         Log.d("ASDFASDFASDF", "" + temp + temp2 + temp3 + temp4);
+        
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(DeliveryActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.recommendation_menu:
+                                intent = new Intent(DeliveryActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.delivery_menu:
+                                return false;
+                            case R.id.mypage_menu:
+                                intent = new Intent(DeliveryActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                                return true;
+                        }
+                        return false;
+                    }
+                }
+        );
 
-        // Bottom menu bar
-        TextView home=(TextView)findViewById(R.id.home);
-        TextView recommendation=(TextView)findViewById(R.id.recommendation);
-        TextView delivery=(TextView)findViewById(R.id.delivery);
-        TextView mypage=(TextView)findViewById(R.id.mypage);
+        bottomNavigationView.setOnNavigationItemReselectedListener(
+                new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(DeliveryActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                            case R.id.recommendation_menu:
+                                intent = new Intent(DeliveryActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                            case R.id.delivery_menu:
 
-        home.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // Connect to home
-                Intent intent = new Intent(DeliveryActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        recommendation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("recommendation","I'm here");
-                Intent intent = new Intent(DeliveryActivity.this, RecommendationActivity.class);
-                startActivity(intent);
-            }
-        });
-        delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("mypage","I'm here");
-                Intent intent = new Intent(DeliveryActivity.this, MyPageActivity.class);
-                startActivity(intent);
-            }
-        });
+                            case R.id.mypage_menu:
+                                intent = new Intent(DeliveryActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                        }
+                    }
+                }
+        );
     }
 
 
