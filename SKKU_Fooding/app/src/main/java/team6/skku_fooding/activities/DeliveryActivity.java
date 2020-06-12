@@ -33,6 +33,12 @@ public class DeliveryActivity extends AppCompatActivity implements CustomListAda
     List<String> list = new ArrayList<>();
     BottomNavigationView bottomNavigationView;
     private static final String TAG = "DeliveryActivity";
+
+    @Override
+    public void onBackPressed(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
