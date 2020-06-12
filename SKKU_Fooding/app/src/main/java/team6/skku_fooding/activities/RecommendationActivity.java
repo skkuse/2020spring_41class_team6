@@ -2,41 +2,37 @@ package team6.skku_fooding.activities;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import team6.skku_fooding.R;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.*;
 
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.*;
 
 public class RecommendationActivity extends AppCompatActivity {
 
@@ -111,10 +107,13 @@ public class RecommendationActivity extends AppCompatActivity {
     ListView listview;
     ListViewAdapter adapter;
     SharedPreferences loginPref;
+    BottomNavigationView bottomNavigationView;
 
+    Button button, setrate;
 
-
-
+    @Override
+    public void onBackPressed() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,12 +126,14 @@ public class RecommendationActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id._listView);
         listview.setAdapter(adapter);
 
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
+        bottomNavigationView.setSelectedItemId(R.id.recommendation_menu);
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
+        button = (Button)findViewById(R.id.change_survey);
+        setrate = (Button)findViewById(R.id.criteria);
 
         getcid();
 
-        Button button = (Button)findViewById(R.id.change);
-        Button setrate = (Button)findViewById(R.id.criteria);
 
         setrate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,53 +157,66 @@ public class RecommendationActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(RecommendationActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.recommendation_menu:
+                                return false;
+                            case R.id.delivery_menu:
+                                intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.mypage_menu:
+                                intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                                return true;
+                        }
+                        return false;
+                    }
+                }
+        );
 
-        // Bottom menu bar
-        TextView home=(TextView)findViewById(R.id.home);
-        TextView recommendation=(TextView)findViewById(R.id.recommendation);
-        TextView delivery=(TextView)findViewById(R.id.delivery);
-        TextView mypage=(TextView)findViewById(R.id.mypage);
-
-        home.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RecommendationActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        recommendation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("delivery","I'm here");
-                Intent intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
-        mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("mypage","I'm here");
-                Intent intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
-                startActivity(intent);
-            }
-        });
+        bottomNavigationView.setOnNavigationItemReselectedListener(
+                new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(RecommendationActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                            case R.id.recommendation_menu:
+                            case R.id.delivery_menu:
+                                intent = new Intent(RecommendationActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                            case R.id.mypage_menu:
+                                intent = new Intent(RecommendationActivity.this, MyPageActivity.class);
+                                startActivity(intent);
+                        }
+                    }
+                }
+        );
 
     }
 
     public void show() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(RecommendationActivity.this, R.style.AlertDialogCustom));
         String UID=loginPref.getString("UID",null);
 
         alert.setTitle("Change rate criteria");
-        alert.setMessage("Input your rate criteria");
-
+        alert.setMessage("Input your rate criteria (0.0~5.0)");
 
         final EditText criteria = new EditText(this);
+        criteria.setGravity(Gravity.CENTER_HORIZONTAL);
+        criteria.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#A5A5A5")));
+        criteria.setTextColor(Color.BLACK);
         alert.setView(criteria);
 
         alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
@@ -219,7 +233,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
                 }
                 if(cri > 5.0 || cri < 0.0) {
-                    errshow();
+                    errshow2();
                     flag = false;
                 }
                 if(flag) {
@@ -238,7 +252,12 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public void errshow() {
-        Toast erring = Toast.makeText(this.getApplicationContext(), "소수로 입력해주세요 ex) 3.5", Toast.LENGTH_SHORT);
+        Toast erring = Toast.makeText(this.getApplicationContext(), "Please enter a decimal number. ex) 3.5", Toast.LENGTH_SHORT);
+        erring.show();
+    }
+
+    public void errshow2() {
+        Toast erring = Toast.makeText(this.getApplicationContext(), "Please enter a number between 0.0~5.0", Toast.LENGTH_SHORT);
         erring.show();
     }
 
@@ -260,6 +279,8 @@ public class RecommendationActivity extends AppCompatActivity {
 
 
                 Double criteria = dataSnapshot.child("criteria").getValue(Double.class);
+                Log.d("LOG:", criteria.toString());
+                setrate.setText("CRITERIA: "+criteria);
                 String filter = dataSnapshot.child("filter").getValue(String.class);
                 Log.d("value", "category_id" + category_id);
                 getreview(category_id, criteria, filter);
