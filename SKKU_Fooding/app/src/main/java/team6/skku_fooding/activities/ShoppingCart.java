@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,7 +15,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import team6.skku_fooding.R;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,8 +31,6 @@ import java.util.Date;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import team6.skku_fooding.R;
 
 
 public class ShoppingCart extends AppCompatActivity {
@@ -59,7 +58,6 @@ public class ShoppingCart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppingcart);
-
         SharedPreferences loginPref;
         loginPref = getSharedPreferences("user_SP", this.MODE_PRIVATE);
         UID=loginPref.getString("UID",null);
@@ -70,7 +68,7 @@ public class ShoppingCart extends AppCompatActivity {
         Intent myIntent = getIntent();
 
         shoppingcart = myIntent.getStringExtra("shoppingcartvalues");
-        System.out.println("ooffffffffffff");
+
         System.out.println(shoppingcart);
         reff1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -134,18 +132,42 @@ public class ShoppingCart extends AppCompatActivity {
         }
 
         public void orderall(View view){
+            DatabaseReference reff2 = FirebaseDatabase.getInstance().getReference().child("user").child(UID);
+            reff2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    shoppingcart = dataSnapshot.child("shopping_cart").getValue().toString();
 
-        //Before the below statement shoppingcart will be given with intent
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+            if(!(reff2.child("shopping_cart").equals("none"))&&!(reff2.child("shopping_cart").equals(""))&&!(reff2.child("shopping_cart").equals("@"))){
             Intent intent = new Intent(ShoppingCart.this, OrderActivity.class);
             intent.putExtra("sending_item", shoppingcart);
             startActivity(intent);
             reff1.child("shopping_cart").setValue("none");
+            }
 
 
 
 
         }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Intent i = new Intent(ShoppingCart.this, Product_detail.class);
+            startActivity(i);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
         public void orderselected(View view) {
             if(!(selectedproductids.size()==0)) {
             DatabaseReference reff2 = FirebaseDatabase.getInstance().getReference().child("user").child(UID);
@@ -200,4 +222,8 @@ public class ShoppingCart extends AppCompatActivity {
             //need to give createintent
         }
     }
-}
+
+
+
+
+    }

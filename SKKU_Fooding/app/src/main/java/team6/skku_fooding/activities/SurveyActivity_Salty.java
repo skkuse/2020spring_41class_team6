@@ -29,15 +29,17 @@ public class SurveyActivity_Salty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey__salty);
         radioGroup = findViewById(R.id.salty_group);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
         Intent intent = getIntent();
         String temp = intent.getStringExtra("UID");
+
+        Button buttonStartSurvey = findViewById(R.id.salty_next_btn);
+        /*
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width= dm.widthPixels;
         int height = dm.heightPixels;
+        getWindow().setLayout((int)(width*0.9),(int)(height*0.85));*/
 
-        getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
-        Button buttonStartSurvey = findViewById(R.id.salty_next_btn);
         saveID();
         buttonStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override

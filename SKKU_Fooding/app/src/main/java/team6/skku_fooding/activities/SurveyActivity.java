@@ -1,11 +1,15 @@
 package team6.skku_fooding.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,13 +42,17 @@ public class SurveyActivity extends AppCompatActivity {
         String temp=loginPref.getString("UID",null);
         //String temp =getIntent().getStringExtra("UID");
         Log.d("sakfjlaskf",""+ temp);
+        Button button_next =findViewById(R.id.taste_next_btn);
+        radioGroup = findViewById(R.id.radio_group);
+
+        /* 죄송합니다....8ㅅ8
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        radioGroup = findViewById(R.id.radio_group);
-        Button button_next =findViewById(R.id.taste_next_btn);
+
         int width= dm.widthPixels;
         int height = dm.heightPixels;
         getWindow().setLayout((int)(width*0.9),(int)(height*0.85));
+        */
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

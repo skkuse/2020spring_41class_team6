@@ -99,8 +99,8 @@ public class RecommendationActivity extends AppCompatActivity {
         String ingredient;
         Double rate;
         String company;
-        String price;
-        String product_id;
+        Integer price;
+        Integer product_id;
 
     }
 
@@ -120,6 +120,7 @@ public class RecommendationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
+
 
         // Listview
         adapter = new ListViewAdapter() ;
@@ -195,6 +196,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
     public void show() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        String UID=loginPref.getString("UID",null);
 
         alert.setTitle("Change rate criteria");
         alert.setMessage("Input your rate criteria");
@@ -222,7 +224,7 @@ public class RecommendationActivity extends AppCompatActivity {
                 }
                 if(flag) {
                     DatabaseReference d = FirebaseDatabase.getInstance().getReference();
-                    d.child("user").child("3mOXMr3hU6XYJ7l2aVAIwQBdLDp1").child("criteria").setValue(cri);
+                    d.child("user").child(UID).child("criteria").setValue(cri);
                     Intent in1 = new Intent(getApplicationContext(), RecommendationActivity.class);
                     startActivity(in1);
                 }
@@ -276,17 +278,24 @@ public class RecommendationActivity extends AppCompatActivity {
     }
 
     public void getreview(Integer cid, final Double criteria, final String filter) {
-        dbref.child("review").orderByChild("category_id").equalTo(cid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.d("check", "msg" + cid + criteria + filter);
+        dbref.child("review").orderByChild("categoryId").equalTo(cid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot shot : dataSnapshot.getChildren()) {
                     Review review1 = new Review();
+                    Log.d("check", "msg");
                     review1.rate = shot.child("rate").getValue(Double.class);
-                    review1.product_id = shot.child("product_id").getValue(Integer.class);
-                    rlist.add(review1);
-                     //todo What is below?
-                    adapter.addItem(null,null, "aaa","aaa","aaa");
+                    review1.product_id = shot.child("productId").getValue(Integer.class);
 
+                    rlist.add(review1);
+                    //todo What is below?
+
+
+                }
+
+                for (Review r : rlist) {
+                    Log.d("List", "product_id : "+r.product_id + " rate : " +r.rate);
                 }
                 Map<Integer, dub> map = new HashMap<Integer, dub>();
                 map.clear();
@@ -350,8 +359,8 @@ public class RecommendationActivity extends AppCompatActivity {
                             i.image = shot.child("image").getValue(String.class);
                             i.name = shot.child("name").getValue(String.class);
                             i.company = shot.child("company").getValue(String.class);
-                            i.price = shot.child("price").getValue(String.class);
-                            i.product_id=shot.child("product_id").getValue(String.class);
+                            i.price = shot.child("price").getValue(Integer.class);
+                            i.product_id=shot.child("product_id").getValue(Integer.class);
                             i.rate = r;
 
                             Bitmap decodedImage;
@@ -361,7 +370,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
 
                             //리스트뷰 추가 시점
-                            adapter.addItem(i.product_id,decodedImage,i.name,i.price,i.ingredient);
+                            adapter.addItem(i.product_id.toString(),decodedImage,i.name,i.price.toString(),i.ingredient);
                         }
                     }
                     adapter.notifyDataSetChanged();
