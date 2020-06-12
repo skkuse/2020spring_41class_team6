@@ -1,6 +1,7 @@
 package team6.skku_fooding.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,15 +29,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import team6.skku_fooding.R;
 import team6.skku_fooding.models.Product;
@@ -52,30 +61,19 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private LinearLayout.LayoutParams lnrParams;
 
-    private ImageView productImageView;
-    private TextView productTitleView;
-    private TextView productPriceView;
-    private ImageButton plusButton;
-    private ImageButton minusButton;
-    private TextView countView;
-    private Button addCartButton;
+    private View head;
+    private View body;
+    private View rev;
+    private View prefRev;
 
-    private TextView productDescView;
-    private TextView productIngView;
-
-    private TextView reviewTitleView;
-    private ImageView oneStarView;
-    private ImageView twoStarView;
-    private ImageView threeStarView;
-    private ImageView fourStarView;
-    private ImageView fiveStarView;
-    private TextView reviewDescView;
-    private LinearLayout reviewLinearLayout;
-
-    private DatabaseReference reviewRef;
+    private DatabaseReference userRef;
     private DatabaseReference productRef;
+    private DatabaseReference reviewRef;
+    private int categoryId;
     private int productId;
     private View.OnClickListener addCartDialog;
+
+    private SimpleDateFormat sdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,145 +82,195 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         mLinearLayout = findViewById(R.id.lnrLayout);
 
-        View head = LayoutInflater.from(this).inflate(R.layout.product_detail_head, mLinearLayout, false);
-        View body = LayoutInflater.from(this).inflate(R.layout.product_detail_body, mLinearLayout, false);
-        View rev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        userRef = db.getReference("user");
+        productRef = db.getReference("product");
+        reviewRef = db.getReference("review");
+        productId = getIntent().getIntExtra("product_id", 500);
+        //productId = getIntent().getIntExtra("product_id", -1);
+        uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
+                .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
 
-        productImageView = head.findViewById(R.id.productImageView);
-        productTitleView = head.findViewById(R.id.productTitleView);
-        productPriceView = head.findViewById(R.id.productPriceView);
-        plusButton = head.findViewById(R.id.plusCountButton);
-        minusButton = head.findViewById(R.id.minusCountButton);
-        countView = head.findViewById(R.id.countTextView);
-        addCartButton = head.findViewById(R.id.addCartButton);
+        lnrParams = new LinearLayout.LayoutParams(800, 800, 1f);
 
-        productDescView = body.findViewById(R.id.productDescTextView);
-        productIngView = body.findViewById(R.id.productIngTextView);
-
-        reviewTitleView = rev.findViewById(R.id.reviewTitleView);
-        reviewDescView = rev.findViewById(R.id.reviewDescView);
-        oneStarView = rev.findViewById(R.id.oneStarView);
-        twoStarView = rev.findViewById(R.id.twoStarView);
-        threeStarView = rev.findViewById(R.id.threeStarView);
-        fourStarView = rev.findViewById(R.id.fourStarView);
-        fiveStarView = rev.findViewById(R.id.fiveStarView);
-        reviewLinearLayout = rev.findViewById(R.id.reviewLinearLayout);
-        rev.setOnClickListener(v -> startActivity(
-                new Intent(getApplicationContext(), ReviewListActivity.class)
-                        .putExtra("product_id", p.productId)
-                        .putExtra("product_name", p.name)));
+        head = LayoutInflater.from(this).inflate(R.layout.product_detail_head, mLinearLayout, false);
+        body = LayoutInflater.from(this).inflate(R.layout.product_detail_body, mLinearLayout, false);
+        // rev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
+        // prefRev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
 
         mLinearLayout.addView(head);
         mLinearLayout.addView(body);
-        mLinearLayout.addView(rev);
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        reviewRef = db.getReference("review");
-        productRef = db.getReference("product");
-        productId = getIntent().getIntExtra("product_id", 500);
-        //productId = getIntent().getIntExtra("product_id", -1);
+        sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 
-        uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
-            .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
-
-        lnrParams = new LinearLayout.LayoutParams(800, 800, 1f);
         addCartDialog = v -> new AlertDialog
                 .Builder(ProductDetailActivity.this)
                 .setMessage("Item added in cart.\nWould you want to see shopping cart?")
                 .setTitle("Add to Cart")
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    // TODO...
+                    // Add... into cart...
                     startActivity(new Intent(getApplicationContext(), ShoppingCartActivity.class));
                     ProductDetailActivity.this.finish();
-                });
-        new Thread(() -> {
-            String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA).format(new Date());
-            p = new Product(
-                    100, "Dongwon",
-                    convertBitmapToBase64(BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)),
-                    "seafood",
-                    "Fishcake(Square, 12 pieces)",
-                    12000,
-                    now);
+                }).create()
+                .show();
 
-            if (productId != -1) {
-                productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
-                    @Override public void onDataChange(@NonNull DataSnapshot ds) {
-                        if (ds.exists()) {
-                            ProductDetailActivity.this.p = ds.getValue(Product.class);
-                            Log.d("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " successfully loaded.");
-                        } else {
-                            Log.w("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " not found. Replace to fallback...");
-                            ProductDetailActivity.this.productId = -1;
-                        }
-                        ProductDetailActivity.this.refreshProductViews();
-                    }
-                    @Override public void onCancelled(@NonNull DatabaseError de) {
-                        Log.w("ReviewActivity", "ProductId query cancelled.");
+        String now = sdf.format(new Date());
+        p = new Product(
+                100, "Dongwon",
+                convertBitmapToBase64(BitmapFactory.decodeResource(getResources(), R.drawable.test_prod)),
+                "seafood",
+                "Fishcake(Square, 12 pieces)",
+                12000,
+                now);
+
+        if (productId != -1) {
+            productRef.child(String.valueOf(productId)).addValueEventListener(new ValueEventListener() {
+                @Override public void onDataChange(@NonNull DataSnapshot ds) {
+                    if (ds.exists()) {
+                        ProductDetailActivity.this.p = ds.getValue(Product.class);
+                        Log.d("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " successfully loaded.");
+                    } else {
+                        Log.w("ProductDetailActivity", "ProductId: " + ProductDetailActivity.this.productId + " not found.");
                         ProductDetailActivity.this.productId = -1;
-                        ProductDetailActivity.this.refreshProductViews();
                     }
-                });
-                reviewRef.equalTo(productId, "productId")
-                        .orderByChild("modifiedDate")
-                        .addValueEventListener(new ValueEventListener() {
+                    ProductDetailActivity.this.refreshProductViews();
+                }
+                @Override public void onCancelled(@NonNull DatabaseError de) {
+                    Log.w("ReviewActivity", "ProductId query cancelled.");
+                    ProductDetailActivity.this.productId = -1;
+                    ProductDetailActivity.this.refreshProductViews();
+                }
+            });
+            userRef.child(uid).child("category_id").addValueEventListener(new ValueEventListener() {
+                @Override public void onDataChange(@NonNull DataSnapshot ds) {
+                    if (ds.exists()) {
+                        categoryId = ds.getValue(Integer.class);
+                        Log.d("ProductDetailActivity", "user categoryId: " + categoryId + " successfully loaded.");
+                        reviewRef.addValueEventListener(new ValueEventListener() {
                             @Override public void onDataChange(@NonNull DataSnapshot ds) {
                                 if (ds.exists()) {
                                     ArrayList<Review> ar = ds.getValue(new GenericTypeIndicator<ArrayList<Review>>() {});
                                     if (ar != null) {
-                                        ar.removeAll(Collections.singleton(null));
-                                        ProductDetailActivity.this.r = ar.get(ar.size() - 1);
-                                        Log.d("ProductDetailActivity", "Review " + ProductDetailActivity.this.r.reviewId + " successfully loaded.");
-                                    } else {
-                                        Log.w("ProductDetailActivity", "Review not found. Set it to null.");
-                                        ProductDetailActivity.this.r = null;
+                                        Log.d("ProductDetailActivity", "Reviews: " + ar.size() + " successfully loaded.");
+                                        ArrayList<Review> overall = (ArrayList<Review>) ar
+                                                .stream()
+                                                .filter(Objects::nonNull)
+                                                .filter(it -> it.productId == productId)
+                                                .sorted((o1, o2) -> {
+                                                    try {
+                                                        return sdf.parse(o1.writtenDate).compareTo(sdf.parse(o2.writtenDate));
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    return 0;
+                                                }).collect(Collectors.toList());
+                                        ArrayList<Review> pref = (ArrayList<Review>) ar
+                                                .stream()
+                                                .filter(Objects::nonNull)
+                                                .filter(it -> it.productId == productId)
+                                                .filter(it -> it.categoryId == categoryId)
+                                                .sorted((o1, o2) -> {
+                                                    try {
+                                                        return sdf.parse(o1.writtenDate).compareTo(sdf.parse(o2.writtenDate));
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    return 0;
+                                                }).collect(Collectors.toList());
+                                        Review o = overall.get(overall.size()-1);
+                                        Review pr = pref.get(pref.size()-1);
+                                        if (o.b64Imgs == null) rev = LayoutInflater.from(ProductDetailActivity.this)
+                                                    .inflate(R.layout.product_detail_review_noimage, mLinearLayout, false);
+                                        else rev = LayoutInflater.from(ProductDetailActivity.this)
+                                                    .inflate(R.layout.product_detail_review, mLinearLayout, false);
+                                        if (pr.b64Imgs == null) prefRev = LayoutInflater.from(ProductDetailActivity.this)
+                                                .inflate(R.layout.product_detail_review_noimage, mLinearLayout, false);
+                                        else prefRev = LayoutInflater.from(ProductDetailActivity.this)
+                                                .inflate(R.layout.product_detail_review, mLinearLayout, false);
+                                        rev.setOnClickListener(v -> startActivity(
+                                                new Intent(getApplicationContext(), ReviewListActivity.class)
+                                                        .putExtra("product_id", p.productId)
+                                                        .putExtra("product_name", p.name)
+                                                        .putExtra("pref", false)));
+                                        prefRev.setOnClickListener(v -> startActivity(
+                                                new Intent(getApplicationContext(), ReviewListActivity.class)
+                                                        .putExtra("product_id", p.productId)
+                                                        .putExtra("product_name", p.name)
+                                                        .putExtra("pref", true)
+                                                        .putExtra("category_id", categoryId)));
+                                        ((TextView)rev.findViewById(R.id.reviewSubjectView)).setText("Overall Reviews");
+                                        ((TextView)prefRev.findViewById(R.id.reviewSubjectView)).setText("Preference Reviews");
+                                        mLinearLayout.addView(rev);
+                                        mLinearLayout.addView(prefRev);
+                                        ProductDetailActivity.this.refreshReviewViews(rev, o);
+                                        ProductDetailActivity.this.refreshReviewViews(prefRev, pr);
+
                                     }
-                                } else {
-                                    Log.w("ProductDetailActivity", "Review query failed. Set it to null.");
-                                    ProductDetailActivity.this.r = null;
                                 }
-                                ProductDetailActivity.this.refreshReviewViews();
                             }
-                            @Override public void onCancelled(@NonNull DatabaseError de) {
-                                Log.w("ProductDetailActivity", "Review query cancelled.");
-                                ProductDetailActivity.this.r = null;
-                                ProductDetailActivity.this.refreshReviewViews();
-                            }
+                            @Override public void onCancelled(@NonNull DatabaseError de) { Log.w("ProductDetailActivity", "review query cancelled."); }
                         });
-            }
-        }).start();
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "Login required.", Toast.LENGTH_LONG).show();
+                        ProductDetailActivity.this.finish();
+                    }
+                }
+                @Override public void onCancelled(@NonNull DatabaseError de) { Log.w("ProductDetailActivity", "user query cancelled."); }
+            });
+        }
+
+        ((TextView)head.findViewById(R.id.countTextView)).setText("1");
+        (head.findViewById(R.id.plusCountButton)).setOnClickListener(v -> plus());
+        (head.findViewById(R.id.minusCountButton)).setOnClickListener(v -> minus());
+        (head.findViewById(R.id.addCartButton)).setOnClickListener(addCartDialog);
+    }
+    private void plus() {
+        int cnt = Integer.parseInt((String)((TextView)head.findViewById(R.id.countTextView)).getText());
+        ((TextView)head.findViewById(R.id.countTextView)).setText(String.valueOf(cnt+1));
+    }
+    private void minus() {
+        int cnt = Integer.parseInt((String)((TextView)head.findViewById(R.id.countTextView)).getText());
+        if (cnt > 1) ((TextView)head.findViewById(R.id.countTextView)).setText(String.valueOf(cnt-1));
     }
     private void refreshProductViews() {
         byte[] ib = Base64.decode(p.image, Base64.DEFAULT);
-        productImageView.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
-        productTitleView.setText(p.name);
-        productPriceView.setText("Price: "+String.valueOf(p.price));
-        countView.setText("1");
+
+        ((ImageView)head.findViewById(R.id.productImageView)).setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
+        ((TextView)head.findViewById(R.id.productTitleView)).setText(p.name);
+        ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price);
     }
-    private void refreshReviewViews() {
+    private void refreshReviewViews(View v, Review r) {
         if (r != null) {
-            if (r.title.length() > 20) reviewTitleView.setText(r.title.substring(0, 17) + "...");
-            else reviewTitleView.setText(r.title);
-            if (r.description.length() > 50)
-                reviewTitleView.setText(r.description.substring(0, 47) + "...");
-            else reviewTitleView.setText(r.description);
-            r.b64Imgs.forEach(s -> {
+            if (r.title.length() > 20) {
+                ((TextView)v.findViewById(R.id.reviewTitleView)).setText(r.title.substring(0, 17) + "...");
+            }
+            else {
+                ((TextView)v.findViewById(R.id.reviewTitleView)).setText(r.title);
+            }
+            if (r.description.length() > 50) {
+                ((TextView)v.findViewById(R.id.reviewDescView)).setText(r.description.substring(0, 47) + "...");
+            }
+            else {
+                ((TextView)v.findViewById(R.id.reviewDescView)).setText(r.description);
+            }
+            if (r.b64Imgs != null) r.b64Imgs.forEach(s -> {
                 byte[] ib = Base64.decode(s, Base64.DEFAULT);
                 ImageView iv = new ImageView(this);
                 iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
-                reviewLinearLayout.addView(iv);
+                ((LinearLayout)v.findViewById(R.id.reviewLinearLayout)).addView(iv);
             });
-            oneStarView.setImageResource(R.drawable.star_white);
-            twoStarView.setImageResource(R.drawable.star_white);
-            threeStarView.setImageResource(R.drawable.star_white);
-            fourStarView.setImageResource(R.drawable.star_white);
-            fiveStarView.setImageResource(R.drawable.star_white);
-            if (r.rate >= 1) oneStarView.setImageResource(R.drawable.star_yellow);
-            if (r.rate >= 2) twoStarView.setImageResource(R.drawable.star_yellow);
-            if (r.rate >= 3) threeStarView.setImageResource(R.drawable.star_yellow);
-            if (r.rate >= 4) fourStarView.setImageResource(R.drawable.star_yellow);
-            if (r.rate >= 5) fiveStarView.setImageResource(R.drawable.star_yellow);
-            // Toast.makeText(this, "haha!", Toast.LENGTH_LONG).show();
+            ((ImageView)v.findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_white);
+            ((ImageView)v.findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_white);
+            ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_white);
+            ((ImageView)v.findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_white);
+            ((ImageView)v.findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_white);
+            if (r.rate >= 1) ((ImageView)v.findViewById(R.id.oneStarView)).setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 2) ((ImageView)v.findViewById(R.id.twoStarView)).setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 3) ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 4) ((ImageView)v.findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
+            if (r.rate >= 5) ((ImageView)v.findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
         }
     }
     private String convertBitmapToBase64(Bitmap b) {

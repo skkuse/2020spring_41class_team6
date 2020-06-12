@@ -41,6 +41,8 @@ import team6.skku_fooding.models.Review;
 public class ReviewListActivity extends AppCompatActivity {
     private int productId;
     private String productName;
+    private boolean pref;
+    private int categoryId;
     private ArrayList<Review> reviews;
     private LinearLayout reviewLinearLayout;
     private DatabaseReference reviewRef;
@@ -51,6 +53,8 @@ public class ReviewListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review_list);
         productId = getIntent().getIntExtra("product_id", -1);
         productName = getIntent().getStringExtra("product_name");
+        pref = getIntent().getBooleanExtra("pref", false);
+        categoryId = getIntent().getIntExtra("category_id", -1);
 
         reviewLinearLayout = findViewById(R.id.reviewLinearLayout);
 
@@ -66,13 +70,21 @@ public class ReviewListActivity extends AppCompatActivity {
                     @Override public void onDataChange(@NonNull DataSnapshot ds) {
                         if (ds.exists()) {
                             ArrayList<Review> ar = ds.getValue(new GenericTypeIndicator<ArrayList<Review>>() {});
-
                             if (ar != null) {
-                                ReviewListActivity.this.reviews = (ArrayList<Review>) ar
-                                        .stream()
-                                        .filter(Objects::nonNull)
-                                        .filter(r -> r.productId == productId)
-                                        .collect(Collectors.toList());
+                                if (pref && categoryId != -1) {
+                                    ReviewListActivity.this.reviews = (ArrayList<Review>) ar
+                                            .stream()
+                                            .filter(Objects::nonNull)
+                                            .filter(r -> r.productId == productId)
+                                            .filter(r -> r.categoryId == categoryId)
+                                            .collect(Collectors.toList());
+                                } else {
+                                    ReviewListActivity.this.reviews = (ArrayList<Review>) ar
+                                            .stream()
+                                            .filter(Objects::nonNull)
+                                            .filter(r -> r.productId == productId)
+                                            .collect(Collectors.toList());
+                                }
                                 Log.d("ReviewListActivity", "Total Reviews: " + ReviewListActivity.this.reviews.size() + ".");
                             } else {
                                 Log.w("ReviewListActivity", "Review not found. Set it to null.");
@@ -93,8 +105,18 @@ public class ReviewListActivity extends AppCompatActivity {
     private void refreshReviewList() {
         if (reviews != null && !reviews.isEmpty()) {
             reviews.forEach(r -> {
-                View v = LayoutInflater.from(this).inflate(R.layout.product_detail_review, reviewLinearLayout, false);
-
+                View v;
+                if (r.b64Imgs == null) {
+                    v = LayoutInflater.from(this).inflate(R.layout.product_detail_review_noimage, reviewLinearLayout, false);
+                } else {
+                    v = LayoutInflater.from(this).inflate(R.layout.product_detail_review, reviewLinearLayout, false);
+                    r.b64Imgs.forEach(s -> {
+                        byte[] ib = Base64.decode(s, Base64.DEFAULT);
+                        ImageView iv = new ImageView(this);
+                        iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
+                        ((LinearLayout) v.findViewById(R.id.reviewLinearLayout)).addView(iv);
+                    });
+                }
                 if (r.title.length() > 20) ((TextView)v.findViewById(R.id.reviewTitleView)).setText(r.title.substring(0, 17) + "...");
                 else ((TextView)v.findViewById(R.id.reviewTitleView)).setText(r.title);
                 if (r.description.length() > 50) ((TextView)v.findViewById(R.id.reviewDescView)).setText(r.description.substring(0, 47) + "...");
@@ -109,17 +131,11 @@ public class ReviewListActivity extends AppCompatActivity {
                 if (r.rate >= 3) ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 4) ((ImageView)v.findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 5) ((ImageView)v.findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
-                if (r.b64Imgs != null) r.b64Imgs.forEach(s -> {
-                        byte[] ib = Base64.decode(s, Base64.DEFAULT);
-                        ImageView iv = new ImageView(this);
-                        iv.setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
-                        ((LinearLayout)v.findViewById(R.id.reviewLinearLayout)).addView(iv);
-                });
+                ((TextView)v.findViewById(R.id.reviewSubjectView)).setText("Review");
                 v.setOnClickListener(v2 -> {
                     startActivity(new Intent(getApplicationContext(), ReviewDetailActivity.class)
-                            .putExtra("review_id", r.reviewId));
+                            .putExtra("review_id", String.valueOf(r.reviewId)));
                 });
-
                 reviewLinearLayout.addView(v);
             });
         }
