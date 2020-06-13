@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/textView4"
@@ -12,18 +13,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Product Description"
+        android:text="Product Company"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/productDescTextView"
+        android:id="@+id/productCompanyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Description of product HERE."
+        android:layout_marginEnd="25dp"
+        android:text="Company of product HERE."
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,18 +40,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="Product Ingredients"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productDescTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/productCompanyView" />
 
     <TextView
         android:id="@+id/productIngTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="40dp"
         android:text="Ingredients of product HERE."
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

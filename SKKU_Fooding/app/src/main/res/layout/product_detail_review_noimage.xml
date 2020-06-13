@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="120dp"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/reviewSubjectView"
@@ -12,18 +13,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:text="All Reviews"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+<!--
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Read More"/>
+        -->
     <TextView
         android:id="@+id/reviewTitleView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="Review Title"
+        android:textSize="17dp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/reviewDescView"
         app:layout_constraintEnd_toStartOf="@+id/oneStarView"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,14 +105,27 @@
         android:id="@+id/reviewDescView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="42dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Review Description"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reviewSubjectView" />
+
+    <Button
+        android:id="@+id/readMoreButton"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="0dp"
+        android:layout_marginVertical="0dp"
+        android:text="Read More"
+        android:background="@color/sub_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewSubjectView"
+        app:layout_constraintEnd_toEndOf="@+id/fiveStarView"
+        app:layout_constraintTop_toTopOf="@+id/reviewSubjectView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

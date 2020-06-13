@@ -20,4 +20,10 @@
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/main_orange</item>
     </style>
+
+    <style name="AlertDialogCustom2" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/main_orange</item>
+        <item name="windowMinWidthMajor">90%</item>
+        <item name="windowMinWidthMinor">90%</item>
+    </style>
 </resources>

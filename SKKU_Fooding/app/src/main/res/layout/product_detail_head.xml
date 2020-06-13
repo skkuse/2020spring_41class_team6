@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="170dp"
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/productImageView"
         android:layout_width="120dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +24,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:gravity="center"
         android:text="Product Title"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/productPriceView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/productImageView"
@@ -42,6 +45,8 @@
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="Price: 0"
+        android:textColor="@android:color/black"
+        android:textSize="17dp"
         app:layout_constraintBottom_toTopOf="@+id/countTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/productImageView"
@@ -49,38 +54,41 @@
 
     <ImageButton
         android:id="@+id/minusCountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="28dp"
+        android:scaleType="centerCrop"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/productImageView"
-        app:srcCompat="@drawable/baseline_remove_circle_outline_24" />
+        app:srcCompat="@drawable/baseline_remove_circle_outline_black_48" />
 
     <TextView
         android:id="@+id/countTextView"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="20dp"
         android:gravity="center|center_horizontal"
         android:text="0"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/plusCountButton"
         app:layout_constraintStart_toEndOf="@+id/minusCountButton" />
 
     <ImageButton
         android:id="@+id/plusCountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="28dp"
+        android:scaleType="centerCrop"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addCartButton"
-        app:srcCompat="@drawable/baseline_add_circle_outline_24" />
+        app:srcCompat="@drawable/baseline_add_circle_outline_black_48" />
 
     <Button
         android:id="@+id/addCartButton"
@@ -88,8 +96,11 @@
         android:layout_height="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:gravity="center"
-        android:text="Add Cart"
+        android:background="@color/main_orange"
+        android:text="Add To Cart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

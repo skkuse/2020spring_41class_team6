@@ -103,9 +103,9 @@ public class ReviewListActivity extends AppCompatActivity {
             reviews.forEach(r -> {
                 View v;
                 if (r.b64Imgs == null) {
-                    v = LayoutInflater.from(this).inflate(R.layout.product_detail_review_noimage, reviewLinearLayout, false);
+                    v = LayoutInflater.from(this).inflate(R.layout.review_list_part_noimage, reviewLinearLayout, false);
                 } else {
-                    v = LayoutInflater.from(this).inflate(R.layout.product_detail_review, reviewLinearLayout, false);
+                    v = LayoutInflater.from(this).inflate(R.layout.review_list_part, reviewLinearLayout, false);
                     r.b64Imgs.forEach(s -> {
                         byte[] ib = Base64.decode(s, Base64.DEFAULT);
                         ImageView iv = new ImageView(this);
@@ -127,13 +127,15 @@ public class ReviewListActivity extends AppCompatActivity {
                 if (r.rate >= 3) ((ImageView)v.findViewById(R.id.threeStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 4) ((ImageView)v.findViewById(R.id.fourStarView)).setImageResource(R.drawable.star_yellow);
                 if (r.rate >= 5) ((ImageView)v.findViewById(R.id.fiveStarView)).setImageResource(R.drawable.star_yellow);
-                ((TextView)v.findViewById(R.id.reviewSubjectView)).setText("Review");
                 v.setOnClickListener(v2 -> {
                     startActivity(new Intent(getApplicationContext(), ReviewDetailActivity.class)
                             .putExtra("review_id", String.valueOf(r.reviewId)));
                 });
                 reviewLinearLayout.addView(v);
             });
+        } else {
+            View v = LayoutInflater.from(this).inflate(R.layout.reviewless_list, reviewLinearLayout, false);
+            reviewLinearLayout.addView(v);
         }
     }
 }
