@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@android:color/background_light"
     tools:context=".activities.SurveyActivity_Allergen">
 
@@ -13,11 +14,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="200px"
-        android:background="@color/sub_orange"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/allergen_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="@color/sub_orange">
 
         <ImageView
             android:id="@+id/app_bar_icon"
@@ -36,109 +33,110 @@
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/allergen_layout"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/allergen_layout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ALLERGEN"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="40dp" />
+            android:layout_height="0dp"
+            android:gravity="center">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/radio_group"
-            android:text="Any allergies?"
-            android:textAlignment="center"
-            android:textSize="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ALLERGEN"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="40dp" />
 
-        <CheckBox
-            android:id="@+id/allergen_milk"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Milk"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/radio_group"
+                android:text="Any allergies?"
+                android:textAlignment="center"
+                android:textSize="20dp" />
 
-        <CheckBox
-            android:id="@+id/allergen_egg"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Egg"/>
+            <CheckBox
+                android:id="@+id/allergen_milk"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Milk"/>
 
-        <CheckBox
-            android:id="@+id/allergen_flour"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Flour"/>
+            <CheckBox
+                android:id="@+id/allergen_egg"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Egg"/>
 
-        <CheckBox
-            android:id="@+id/allergen_nuts"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Nuts"/>
+            <CheckBox
+                android:id="@+id/allergen_flour"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Flour"/>
 
-        <CheckBox
-            android:id="@+id/allergen_shellfish"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Shellfish"/>
+            <CheckBox
+                android:id="@+id/allergen_nuts"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Nuts"/>
 
-        <CheckBox
-            android:id="@+id/allergen_fish"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_selector"
-            android:buttonTint="@color/sub_yellow"
-            android:gravity="center"
-            android:textSize="25dp"
-            android:text="Fish"/>
+            <CheckBox
+                android:id="@+id/allergen_shellfish"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Shellfish"/>
 
-        <Button
-            android:id="@+id/allergen_next_btn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/radio_group"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:text="Complete"
-            android:textSize="15dp"/>
+            <CheckBox
+                android:id="@+id/allergen_fish"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_selector"
+                android:buttonTint="@color/sub_yellow"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:text="Fish"/>
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/allergen_next_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radio_group"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="50dp"
+                android:text="Complete"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -283,7 +283,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         ((TextView)body.findViewById(R.id.productCompanyView)).setText(p.company);
         ((TextView)body.findViewById(R.id.productIngTextView)).setText(p.ingredient);
         ((TextView)head.findViewById(R.id.productTitleView)).setText(p.name);
-        ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price);
+        ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price+"₩");
     }
     private void refreshReviewViews(View v, Review r) {
         if (r != null) {
