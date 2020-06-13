@@ -7,6 +7,31 @@
     tools:context=".activities.ReviewDetailActivity"
     android:background="@android:color/white">
 
+    <LinearLayout
+        android:id="@+id/app_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:background="@color/sub_orange"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/app_bar_icon"
+            android:src="@drawable/app_icon"
+            android:layout_width="170px"
+            android:layout_height="170px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="15px" />
+
+        <ImageView
+            android:id="@+id/app_bar_title"
+            android:src="@drawable/app_title"
+            android:layout_width="520px"
+            android:layout_height="150px"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/ReviewView"
         android:layout_width="wrap_content"
@@ -14,20 +39,22 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Review"
+        android:textSize="18dp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
     <TextView
         android:id="@+id/reviewTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="Review Title"
         android:textColor="@android:color/black"
+        android:textSize="17dp"
         app:layout_constraintBottom_toTopOf="@+id/reviewDescView"
         app:layout_constraintEnd_toStartOf="@+id/oneStarView"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,9 +119,9 @@
         android:id="@+id/reviewDescView"
         android:layout_width="0dp"
         android:layout_height="240dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="25dp"
         android:text="Review Description"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,9 +132,9 @@
         android:id="@+id/reviewImageScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="100dp"
     android:background="@android:color/white">
 
     <TextView
@@ -17,6 +17,7 @@
         android:layout_marginBottom="8dp"
         android:text="Review Title"
         android:textColor="@android:color/black"
+        android:textSize="17dp"
         app:layout_constraintBottom_toTopOf="@+id/reviewDescView"
         app:layout_constraintEnd_toStartOf="@+id/oneStarView"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,15 +87,33 @@
         android:id="@+id/reviewDescView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="42dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="Review Description"
         android:textColor="@android:color/black"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#D5D5D5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+        app:layout_constraintVertical_bias="0.0">
+    </View>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

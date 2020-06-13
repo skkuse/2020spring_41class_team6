@@ -3,13 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="55dp">
+    android:layout_height="55dp"
+    android:background="@android:color/white">
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:buttonTint="@color/main_orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,6 +22,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="TextView"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/minusCountButton"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
@@ -27,10 +30,11 @@
 
     <ImageButton
         android:id="@+id/minusCountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:scaleType="centerCrop"
         android:background="#00FFFFFF"
-        android:src="@drawable/baseline_remove_circle_outline_24"
+        android:src="@drawable/baseline_remove_circle_outline_black_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/countTextView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,17 +45,19 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/plusCountButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/plusCountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
         android:background="#00FFFFFF"
-        android:src="@drawable/baseline_add_circle_outline_24"
+        android:src="@drawable/baseline_add_circle_outline_black_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/priceTextView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,6 +69,7 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:text="12000"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
