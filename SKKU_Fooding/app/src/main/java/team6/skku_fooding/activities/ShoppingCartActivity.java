@@ -90,7 +90,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartItemViewHolder> {
         void bind(CartItem i) {
             itemTitle.setText(i.item);
             countTextView.setText(String.valueOf(i.count));
-            priceTextView.setText(String.valueOf(i.price));
+            priceTextView.setText(String.valueOf(i.price+"₩"));
             check.setChecked(i.check);
         }
     }
@@ -121,7 +121,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartItemViewHolder> {
                             .filter(it -> it.check)
                             .map(it -> it.count * it.price)
                             .filter(res -> res > 0)
-                            .reduce(Integer::sum).get()));
+                            .reduce(Integer::sum).get())+"₩");
         } catch (NoSuchElementException e) {
             totalPriceTextView.setText("No items selected.");
         }
