@@ -43,7 +43,7 @@ public class OrderActivity extends AppCompatActivity {
     Integer count;
     Integer pid;
     String uid;
-    Integer id_count = 0;
+
     String Type;
     Integer totalprice = 0;
     Integer pcount = 0;
@@ -144,7 +144,8 @@ public class OrderActivity extends AppCompatActivity {
             //parsingall(parse); //Algi에게 intent로 shopping_cart 정보를 받아온 것을 parsing
         }
 */
-    parsingall(getting_item);
+        Log.d("check", "list" + getting_item);
+        parsingall(getting_item);
     }
     //문자열 파싱 후 db호출
     public void parsingall(String parse) {
@@ -205,19 +206,15 @@ public class OrderActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(), "Please fill out the form.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(Type == "Normal") {
-            setdb(pid, 0);
-        }
-        else if(Type == "All") {
-            Log.d("check", "list : " + listmap.entrySet());
 
-            for (Map.Entry<Integer, pair> entry1 : listmap.entrySet()) {
-                int key = entry1.getKey();
-                Log.d("check", "count");
-                setdb(key, pcount);
-                pcount += 1;
 
-            }
+        for (Map.Entry<Integer, pair> entry1 : listmap.entrySet()) {
+            int key = entry1.getKey();
+
+
+            setdb(key, entry1.getValue().number, pcount);
+            pcount += 1;
+
         }
 
         Toast.makeText(this.getApplicationContext(), "Your order has been received.", Toast.LENGTH_SHORT).show();
@@ -228,7 +225,7 @@ public class OrderActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void setdb(final Integer ppid, final Integer ncount) {
+    public void setdb(final Integer ppid, final Integer num, final Integer ncount) {
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
         final String name = name_et.getText().toString();
         final String phonenumber = phonenumber_et.getText().toString();
@@ -246,10 +243,10 @@ public class OrderActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
 
-                        id_count = d.child("order_id").getValue(Integer.class) + ncount + 1;
+                        final Integer id_count = d.child("order_id").getValue(Integer.class) + ncount + 1;
                         DatabaseReference dbref2 = FirebaseDatabase.getInstance().getReference();
 
-                        dbref2.child("order").child("order_id" + id_count).child("counter").setValue(count);
+                        dbref2.child("order").child("order_id" + id_count).child("counter").setValue(num);
                         dbref2.child("order").child("order_id" + id_count).child("order_id").setValue(id_count);
                         dbref2.child("order").child("order_id" + id_count).child("product_id").setValue(ppid);
                         dbref2.child("order").child("order_id" + id_count).child("date").setValue(strToday);
@@ -264,15 +261,15 @@ public class OrderActivity extends AppCompatActivity {
                         dbref2.child("order").child("order_id" + id_count).child("status").setValue("Delivering");
 
                         DatabaseReference mydb = FirebaseDatabase.getInstance().getReference();
-                        mydb.child("product").orderByChild("product_id").equalTo(pid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        mydb.child("product").orderByChild("product_id").equalTo(ppid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Integer price = 0;
+
                                 for (DataSnapshot d : dataSnapshot.getChildren()) {
-                                    price = d.child("price").getValue(Integer.class);
+                                    Integer price = d.child("price").getValue(Integer.class);
                                     String name = d.child("name").getValue(String.class);
                                     DatabaseReference mydb1 = FirebaseDatabase.getInstance().getReference();
-                                    mydb1.child("order").child("order_id" + id_count).child("price").setValue(price * count);
+                                    mydb1.child("order").child("order_id" + id_count).child("price").setValue(price * num);
                                     mydb1.child("order").child("order_id" + id_count).child("product_name").setValue(name);
 
                                 }
