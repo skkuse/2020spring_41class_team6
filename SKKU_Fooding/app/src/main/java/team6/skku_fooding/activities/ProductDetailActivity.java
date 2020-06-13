@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -75,6 +76,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private SimpleDateFormat sdf;
 
+    private SharedPreferences loginPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,31 +89,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         userRef = db.getReference("user");
         productRef = db.getReference("product");
         reviewRef = db.getReference("review");
-        //productId = getIntent().getIntExtra("product_id", 500);
         productId = Integer.parseInt(getIntent().getStringExtra("product_id"));
-        uid = this.getSharedPreferences("user_SP", MODE_PRIVATE)
-                .getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
+        loginPref = getSharedPreferences("user_SP", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = loginPref.edit();
+        uid = loginPref.getString("UID", "IPli1mXAUUYm3npYJ48B43Pp7tQ2");
 
         lnrParams = new LinearLayout.LayoutParams(800, 800, 1f);
 
         head = LayoutInflater.from(this).inflate(R.layout.product_detail_head, mLinearLayout, false);
         body = LayoutInflater.from(this).inflate(R.layout.product_detail_body, mLinearLayout, false);
-        // rev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
-        // prefRev = LayoutInflater.from(this).inflate(R.layout.product_detail_review, mLinearLayout, false);
 
         addCartDialog = v -> {
             int cnt = Integer.parseInt((String)((TextView)head.findViewById(R.id.countTextView)).getText());
-            userRef.child(uid).child("cart_item").addValueEventListener(new ValueEventListener() {
-                @Override public void onDataChange(@NonNull DataSnapshot ds) {
-                    String d = ds.getValue(String.class);
-                    if (d != null)  userRef.child(uid).child("cart_item").setValue(d + "-" + productId + ":" + cnt);
-                    else userRef.child(uid).child("cart_item").setValue(productId + ":" + cnt);
-                    Log.w("ProductDetailActivity", "ShoppingCart added.");
-                }
-                @Override public void onCancelled(@NonNull DatabaseError de) {
-                    Log.w("ProductDetailActivity", "ShoppingCart query cancelled.");
-                }
-            });
+            String s = loginPref.getString("cart_item", null);
+            if (s != null) s += "-" + productId + ":" + cnt + ":" + p.price;
+            else s = productId + ":" + cnt + ":" + p.price;
+            editor.putString("cart_item", s).apply();
             new AlertDialog
                 .Builder(ProductDetailActivity.this)
                 .setMessage("Item added in cart.\nWould you want to see shopping cart?")

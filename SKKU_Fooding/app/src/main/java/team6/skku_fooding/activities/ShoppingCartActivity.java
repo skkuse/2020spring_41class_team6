@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +43,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import team6.skku_fooding.R;
+import team6.skku_fooding.models.Product;
 
 class CartItem {
     boolean check;
@@ -131,10 +142,14 @@ public class ShoppingCartActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
     private DatabaseReference productRef;
+    private SharedPreferences loginPref;
+    private SharedPreferences.Editor editor;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
+        loginPref = getSharedPreferences("user_SP", MODE_PRIVATE);
+        editor = loginPref.edit();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -156,16 +171,58 @@ public class ShoppingCartActivity extends AppCompatActivity {
         cartRecView.setAdapter(cad);
         deleteItemButton.setOnClickListener(v -> deleteItem());
         orderAllButton.setOnClickListener(v -> orderAll());
+
+        productRef.addValueEventListener(new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot ds) {
+                if (ds.exists()) {
+                    HashMap<String, Object> res = ds.getValue(new GenericTypeIndicator<HashMap<String, Object>>() {});
+                    if (res != null) {
+                        for (String s : loginPref.getString("cart_item", "").split("-")) {
+                            try {
+                                String[] as = s.split(":");
+                                int pid = Integer.parseInt(as[0]);
+                                int cnt = Integer.parseInt(as[1]);
+                                int price = Integer.parseInt(as[2]);
+                                String name = res.entrySet().stream().filter(it -> Integer.parseInt(it.getKey()) == pid)
+                                        .map(it -> (String)((HashMap<String, Object>)it.getValue()).get("name")).findFirst().get();
+                                CartItem c = new CartItem(pid, name, price);
+                                c.count = cnt;
+                                shoppingCart.add(c);
+                            } catch (IllegalArgumentException | NoSuchElementException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        cad.refresh();
+                    }
+                }
+                Log.d("ShoppingCartActivity", "Product query success.");
+            }
+
+            @Override public void onCancelled(@NonNull DatabaseError de) { Log.w("ShoppingCartActivity", "Product query cancelled."); }
+        });
     }
 
     public void deleteItem() {
         shoppingCart.removeIf(it -> it.check);
+        editor.putString("cart_item", serializer(shoppingCart)).apply();
         cad.refresh();
     }
     public void orderAll() {
         if (shoppingCart.isEmpty()) {
             Toast.makeText(this, "No items in shopping cart.", Toast.LENGTH_LONG).show();
             return;
+        }
+        startActivity(new Intent(this, OrderActivity.class)
+                .putExtra("sending_item", serializer(shoppingCart)));
+        this.finish();
+    }
+    // Unfortunately, firebase query is asynchronous, so I can't make deserializer separately.
+
+    public static String serializer(ArrayList<CartItem> ac) {
+        try {
+            return ac.stream().map(c -> c.pid+":"+c.count+":"+c.price).reduce((x, y) -> x+"-"+y).get();
+        } catch (NoSuchElementException e) {
+            return "";
         }
     }
 }
