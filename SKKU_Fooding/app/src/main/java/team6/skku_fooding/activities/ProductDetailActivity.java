@@ -281,7 +281,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         ((ImageView)head.findViewById(R.id.productImageView)).setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
         ((TextView)head.findViewById(R.id.productTitleView)).setText(p.name);
-        ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price);
+        ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price+"₩");
     }
     private void refreshReviewViews(View v, Review r) {
         if (r != null) {
