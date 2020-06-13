@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@android:color/background_light"
     tools:context=".activities.SurveyActivity_Vegetarian">
 
@@ -13,11 +14,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="200px"
-        android:background="@color/sub_orange"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/vegan_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="@color/sub_orange">
 
         <ImageView
             android:id="@+id/app_bar_icon"
@@ -36,128 +33,129 @@
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/vegan_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar">
-
-        <TextView
+        android:layout_height="wrap_content">
+        
+        <LinearLayout
+            android:id="@+id/vegan_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="VEGAN"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="40dp" />
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/radio_group"
-            android:text="Are you vegetarian?"
-            android:textAlignment="center"
-            android:textSize="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VEGAN"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="40dp" />
 
-        <RadioGroup
-            android:id="@+id/vegan_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/radio_group"
+                android:text="Are you vegetarian?"
+                android:textAlignment="center"
+                android:textSize="20dp" />
 
-            <RadioButton
-                android:id="@+id/vegan_none"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="None"
-                android:textSize="25dp"
-                android:checked="true"/>
+            <RadioGroup
+                android:id="@+id/vegan_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
 
-            <RadioButton
-                android:id="@+id/vegan_vegan"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Vegan (Only vegetable)"
-                android:textSize="25dp" />
+                <RadioButton
+                    android:id="@+id/vegan_none"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="None"
+                    android:textSize="25dp"
+                    android:checked="true"/>
 
-            <RadioButton
-                android:id="@+id/vegan_ovo"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Ovo (Eggs)"
-                android:textSize="25dp" />
+                <RadioButton
+                    android:id="@+id/vegan_vegan"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Vegan (Only vegetable)"
+                    android:textSize="25dp" />
 
-            <RadioButton
-                android:id="@+id/vegan_lacto"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Lacto (Milk)"
-                android:textSize="25dp" />
+                <RadioButton
+                    android:id="@+id/vegan_ovo"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Ovo (Eggs)"
+                    android:textSize="25dp" />
 
-            <RadioButton
-                android:id="@+id/vegan_lacto_ovo"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Lacto Ovo (Egg,Milk)"
-                android:textSize="25dp" />
+                <RadioButton
+                    android:id="@+id/vegan_lacto"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Lacto (Milk)"
+                    android:textSize="25dp" />
 
-            <RadioButton
-                android:id="@+id/vegan_pesco"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Pesco (Egg,Milk,Fish)"
-                android:textSize="25dp" />
+                <RadioButton
+                    android:id="@+id/vegan_lacto_ovo"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Lacto Ovo (Egg,Milk)"
+                    android:textSize="25dp" />
 
-            <RadioButton
-                android:id="@+id/vegan_pollo"
-                android:layout_width="330dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_selector"
-                android:buttonTint="@color/sub_yellow"
-                android:gravity="center"
-                android:text="Pollo (Egg,Milk,Fish,Bird)"
-                android:textSize="25dp" />
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/vegan_pesco"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Pesco (Egg,Milk,Fish)"
+                    android:textSize="25dp" />
 
-        <Button
-            android:id="@+id/vegan_next_btn"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/radio_group"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:text="NEXT"
-            android:textSize="15dp"/>
+                <RadioButton
+                    android:id="@+id/vegan_pollo"
+                    android:layout_width="330dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_selector"
+                    android:buttonTint="@color/sub_yellow"
+                    android:gravity="center"
+                    android:text="Pollo (Egg,Milk,Fish,Bird)"
+                    android:textSize="25dp" />
+            </RadioGroup>
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/vegan_next_btn"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radio_group"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:text="NEXT"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
