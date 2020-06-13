@@ -17,6 +17,7 @@
         android:layout_marginBottom="8dp"
         android:text="Review Title"
         android:textColor="@android:color/black"
+        android:textSize="17dp"
         app:layout_constraintBottom_toTopOf="@+id/reviewDescView"
         app:layout_constraintEnd_toStartOf="@+id/oneStarView"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,6 +92,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="100dp"
         android:text="Review Description"
+        android:gravity="center_vertical"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,4 +120,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical" />
     </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#D5D5D5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+        app:layout_constraintVertical_bias="0.0">
+    </View>
 </androidx.constraintlayout.widget.ConstraintLayout>

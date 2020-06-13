@@ -106,17 +106,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             else s = productId + ":" + cnt + ":" + p.price;
             editor.putString("cart_item", s).apply();
             new AlertDialog
-                .Builder(ProductDetailActivity.this)
-                .setMessage("Item added in cart.\nWould you want to see shopping cart?")
-                .setTitle("Add to Cart")
-                .setNegativeButton("No", (dialogInterface, i) -> {})
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    .Builder(ProductDetailActivity.this)
+                    .setMessage("Item added in cart.\nWould you want to see shopping cart?")
+                    .setTitle("Add to Cart")
+                    .setNegativeButton("No", (dialogInterface, i) -> {})
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
 
-                    startActivity(new Intent(getApplicationContext(), ShoppingCartActivity.class));
-                    ProductDetailActivity.this.finish();
-                }).create()
-                .show();
-            };
+                        startActivity(new Intent(getApplicationContext(), ShoppingCartActivity.class));
+                        ProductDetailActivity.this.finish();
+                    }).create()
+                    .show();
+        };
 
         String now = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(new Date());
         p = new Product(
@@ -223,15 +223,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                                         if (!overall.isEmpty()) {
                                             o = overall.get(overall.size()-1);
                                             if (o.b64Imgs == null) rev = LayoutInflater.from(ProductDetailActivity.this)
-                                                        .inflate(R.layout.product_detail_review_noimage, mLinearLayout, false);
+                                                    .inflate(R.layout.product_detail_review_noimage, mLinearLayout, false);
                                             else rev = LayoutInflater.from(ProductDetailActivity.this)
-                                                        .inflate(R.layout.product_detail_review, mLinearLayout, false);
+                                                    .inflate(R.layout.product_detail_review, mLinearLayout, false);
                                             rev.findViewById(R.id.readMoreButton).setOnClickListener(v -> startActivity(
                                                     new Intent(getApplicationContext(), ReviewListActivity.class)
                                                             .putExtra("product_id", productId)
                                                             .putExtra("pref", false)));
                                         } else rev = LayoutInflater.from(ProductDetailActivity.this)
-                                            .inflate(R.layout.product_detail_reviewless, mLinearLayout, false);
+                                                .inflate(R.layout.product_detail_reviewless, mLinearLayout, false);
                                         ((TextView)rev.findViewById(R.id.reviewSubjectView)).setText("All Reviews");
                                         mLinearLayout.addView(rev);
                                         ProductDetailActivity.this.refreshReviewViews(rev, o);
@@ -248,7 +248,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             .putExtra("pref", true)
                                                             .putExtra("category_id", categoryId)));
                                         } else prefRev = LayoutInflater.from(ProductDetailActivity.this)
-                                            .inflate(R.layout.product_detail_reviewless, mLinearLayout, false);
+                                                .inflate(R.layout.product_detail_reviewless, mLinearLayout, false);
                                         ((TextView)prefRev.findViewById(R.id.reviewSubjectView)).setText("Preference Reviews");
                                         mLinearLayout.addView(prefRev);
                                         ProductDetailActivity.this.refreshReviewViews(prefRev, pr);
