@@ -106,7 +106,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             else s = productId + ":" + cnt + ":" + p.price;
             editor.putString("cart_item", s).apply();
             new AlertDialog
-                    .Builder(ProductDetailActivity.this)
+                    .Builder(ProductDetailActivity.this, R.style.AlertDialogCustom2)
                     .setMessage("Item added in cart.\nWould you want to see shopping cart?")
                     .setTitle("Add to Cart")
                     .setNegativeButton("No", (dialogInterface, i) -> {})
