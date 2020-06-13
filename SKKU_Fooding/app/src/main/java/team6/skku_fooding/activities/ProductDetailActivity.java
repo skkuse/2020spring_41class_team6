@@ -280,6 +280,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         byte[] ib = Base64.decode(p.image, Base64.DEFAULT);
 
         ((ImageView)head.findViewById(R.id.productImageView)).setImageBitmap(BitmapFactory.decodeByteArray(ib, 0, ib.length));
+        ((TextView)body.findViewById(R.id.productCompanyView)).setText(p.company);
+        ((TextView)body.findViewById(R.id.productIngTextView)).setText(p.ingredient);
         ((TextView)head.findViewById(R.id.productTitleView)).setText(p.name);
         ((TextView)head.findViewById(R.id.productPriceView)).setText("Price: " + p.price);
     }

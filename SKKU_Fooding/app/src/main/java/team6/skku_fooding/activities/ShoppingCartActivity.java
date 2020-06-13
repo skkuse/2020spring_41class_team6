@@ -173,8 +173,6 @@ public class ShoppingCartActivity extends AppCompatActivity {
         deleteItemButton.setOnClickListener(v -> deleteItem());
         orderAllButton.setOnClickListener(v -> orderAll());
 
-        
-
         productRef.addValueEventListener(new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot ds) {
                 if (ds.exists()) {
