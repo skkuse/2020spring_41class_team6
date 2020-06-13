@@ -12,7 +12,7 @@ public class Product {
     public int productId;
     public String company;
     public String image;
-    public String ingredients;
+    public String ingredient;
     public String name;
     public int price;
     public String uploadedDate;
@@ -25,7 +25,7 @@ public class Product {
         this.productId = pid;
         this.company = comp;
         this.image = img;
-        this.ingredients = ing;
+        this.ingredient = ing;
         this.name = pn;
         this.price = p;
         this.uploadedDate = upd;

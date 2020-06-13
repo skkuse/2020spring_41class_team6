@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/productDescTextView"
+        android:id="@+id/productCompanyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -43,7 +43,7 @@
         android:textColor="@android:color/black"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productDescTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/productCompanyView" />
 
     <TextView
         android:id="@+id/productIngTextView"

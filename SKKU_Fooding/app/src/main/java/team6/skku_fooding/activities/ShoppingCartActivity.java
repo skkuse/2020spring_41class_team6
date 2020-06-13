@@ -148,6 +148,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
+
         loginPref = getSharedPreferences("user_SP", MODE_PRIVATE);
         editor = loginPref.edit();
 
@@ -200,6 +201,11 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
             @Override public void onCancelled(@NonNull DatabaseError de) { Log.w("ShoppingCartActivity", "Product query cancelled."); }
         });
+    }
+    @Override protected void onStop() {
+        super.onStop();
+        String uid = loginPref.getString("UID", null);
+        if (uid != null) userRef.child(uid).child("shopping_cart").setValue(loginPref.getString("cart_item", ""));
     }
 
     public void deleteItem() {

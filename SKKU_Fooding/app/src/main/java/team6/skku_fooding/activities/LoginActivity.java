@@ -56,9 +56,35 @@ public class LoginActivity extends AppCompatActivity {
         // Login SharedPreferences
         final SharedPreferences.Editor editor = loginPref.edit();
         String defaultValue = loginPref.getString("login", null);
+
+
+
+
+
         if (defaultValue != null) {
             Toast.makeText(LoginActivity.this, "Start Auto-Login", Toast.LENGTH_SHORT).show();
             intent = new Intent(LoginActivity.this, SearchActivity.class); //여기!!!!! 수정!!!!!
+            try {
+                FirebaseDatabase.getInstance()
+                        .getReference()
+                        .child("user")
+                        .child(mAuth.getUid())
+                        .child("shopping_cart")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot ds) {
+                                String s = ds.getValue(String.class);
+                                editor.putString("cart_item", s).apply();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError de) {
+                            }
+                        });
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
             /* 앞으로의 activity에 필요한 intent 넘겨주기*/
 
             // get user's user_id & nickname from firebase database
