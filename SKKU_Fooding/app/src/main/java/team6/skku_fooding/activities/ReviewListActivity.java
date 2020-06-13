@@ -40,7 +40,6 @@ import team6.skku_fooding.models.Review;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class ReviewListActivity extends AppCompatActivity {
     private int productId;
-    private String productName;
     private boolean pref;
     private int categoryId;
     private ArrayList<Review> reviews;
@@ -52,7 +51,6 @@ public class ReviewListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_list);
         productId = getIntent().getIntExtra("product_id", -1);
-        productName = getIntent().getStringExtra("product_name");
         pref = getIntent().getBooleanExtra("pref", false);
         categoryId = getIntent().getIntExtra("category_id", -1);
 
@@ -60,12 +58,10 @@ public class ReviewListActivity extends AppCompatActivity {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         reviewRef = db.getReference("review");
-        productId = 500;
-        productName = "Yes?";
 
         new Thread(() -> {
-            String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA).format(new Date());
-            if (productId != -1 && productName != null) {
+            String now = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(new Date());
+            if (productId != -1) {
                 reviewRef.addValueEventListener(new ValueEventListener() {
                     @Override public void onDataChange(@NonNull DataSnapshot ds) {
                         if (ds.exists()) {
