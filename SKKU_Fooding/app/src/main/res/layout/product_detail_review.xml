@@ -15,6 +15,7 @@
         android:layout_marginTop="16dp"
         android:text="Reviews"
         android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,4 +130,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical" />
     </HorizontalScrollView>
+    <Button
+        android:id="@+id/readMoreButton"
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="0dp"
+        android:layout_marginVertical="0dp"
+        android:text="Read More"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewSubjectView"
+        app:layout_constraintEnd_toEndOf="@+id/fiveStarView"
+        app:layout_constraintTop_toTopOf="@+id/reviewSubjectView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
