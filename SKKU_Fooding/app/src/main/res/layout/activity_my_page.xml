@@ -1,30 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".activities.MyPageActivity">
+
+    <LinearLayout
+        android:id="@+id/app_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:background="@color/sub_orange"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/app_bar_icon"
+            android:src="@drawable/app_icon"
+            android:layout_width="170px"
+            android:layout_height="170px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="15px" />
+
+        <ImageView
+            android:id="@+id/app_bar_title"
+            android:src="@drawable/app_title"
+            android:layout_width="520px"
+            android:layout_height="150px"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/mpImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/baseline_face_24"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/mypage_icon"
+        android:tint="@color/main_orange"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/app_bar" />
+
+    <TextView
+        android:id="@+id/userID_tv"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:text=" User ID:"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/mpImageView"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"/>
 
     <TextView
         android:id="@+id/mpUserIdTextView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:text="Retrieving User ID from Database..."
         android:gravity="center"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/mpUserNicknameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mpImageView"
-        app:layout_constraintTop_toTopOf="@+id/mpImageView"
+        app:layout_constraintStart_toEndOf="@+id/userID_tv"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
         tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/nickname_tv"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:text=" Nickname:"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/mpUserNicknameTextView"
+        app:layout_constraintStart_toEndOf="@+id/mpImageView"
+        app:layout_constraintTop_toBottomOf="@+id/userID_tv"/>
 
     <TextView
         android:id="@+id/mpUserNicknameTextView"
@@ -32,10 +92,11 @@
         android:layout_height="0dp"
         android:text="Retrieving User Nickname from Database..."
         android:gravity="center"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/mpImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/mpImageView"
+        app:layout_constraintStart_toEndOf="@+id/nickname_tv"
         app:layout_constraintTop_toBottomOf="@+id/mpUserIdTextView"
         tools:ignore="HardcodedText" />
 
@@ -44,89 +105,111 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_linear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mpUserNicknameTextView"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/mpUserNicknameTextView">
 
-        <Button
-            android:id="@+id/mpReopenSurveyButton"
+        <LinearLayout
+            android:id="@+id/survey_linear"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:text="Reopen Survey" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/plate"/>
+
+            <Button
+                android:id="@+id/mpReopenSurveyButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:background="#D5D5D5"
+                android:text="REOPEN PREFERENCE SURVEY"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cart_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/sub_orange"
+                android:src="@drawable/shoppingcart_icon"/>
+
+            <Button
+                android:id="@+id/mpcartButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/sub_orange"
+                android:text="SHOPPING CART"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/logout_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/logout_icon"/>
+
+            <Button
+                android:id="@+id/mpLogoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/sub_yellow"
+                android:text="LOGOUT"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalscroll"
+    <LinearLayout
+        android:id="@+id/bottom_linear"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/sub_yellow"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/sub_yellow"/>
 
-            <TextView
-                android:id="@+id/home"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="home"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                />
-
-            <TextView
-                android:id="@+id/recommendation"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="recommendation"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/delivery"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="delivery"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/mypage"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="mypage"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-
-    <Button
-        android:id="@+id/mpLogoutButton"
-        android:layout_width="80dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="82dp"
-        android:text="logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@android:color/white"
+            app:itemIconTint="@drawable/menubar_color"
+            app:itemTextColor="@drawable/menubar_color"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_menubar" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

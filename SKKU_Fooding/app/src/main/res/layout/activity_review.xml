@@ -210,7 +210,7 @@
         android:paddingRight="10dp"
         android:background="@drawable/border_round"
         android:clickable="true"
-        android:focusable="auto"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -219,11 +219,11 @@
 
         <LinearLayout
             android:id="@+id/reviewImageLinearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:clickable="true"
-            android:focusable="auto"
+            android:focusable="true"
             android:orientation="horizontal"/>
     </HorizontalScrollView>
 

@@ -48,6 +48,22 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".activities.ShoppingCartActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.ProductDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.ReviewListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.ReviewDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".activities.SurveyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomThemeSurvey" />

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,10 +30,16 @@ public class MyPageActivity extends AppCompatActivity {
     private String uid;
     private TextView userIDTextView;
     private TextView userNicknameTextView;
-    Button mpLogoutButton;
+    Button mpReopenSurveyButton, mpcartButton, mpLogoutButton;
     private FirebaseAuth mAuth;
     SharedPreferences loginPref;
     // private Button userPrefButton;
+    BottomNavigationView bottomNavigationView;
+
+    @Override
+    public void onBackPressed(){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,11 @@ public class MyPageActivity extends AppCompatActivity {
 
         this.userIDTextView = findViewById(R.id.mpUserIdTextView);
         this.userNicknameTextView = findViewById(R.id.mpUserNicknameTextView);
+        mpReopenSurveyButton = findViewById(R.id.mpReopenSurveyButton);
+        mpcartButton = findViewById(R.id.mpcartButton);
         mpLogoutButton = findViewById(R.id.mpLogoutButton);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navi);
+        bottomNavigationView.setSelectedItemId(R.id.mypage_menu);
         // this.mpLinear = findViewById(R.id.mpLinearLayout);
         // private LinearLayout mpLinear;
         // this.userPrefButton = findViewById(R.id.mpUserPrefButton);
@@ -92,7 +104,7 @@ public class MyPageActivity extends AppCompatActivity {
         } else this.userNicknameTextView.setText(loginPref.getString("nickname", null));
 
 
-        findViewById(R.id.mpReopenSurveyButton).setOnClickListener(v ->
+        mpReopenSurveyButton.setOnClickListener(v ->
                 startActivity(new Intent(MyPageActivity.this, SurveyActivity.class)
                         .putExtra("UID", MyPageActivity.this.uid)));
         /*
@@ -103,6 +115,15 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
         */
+
+        mpcartButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPageActivity.this, ShoppingCartActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mpLogoutButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -115,40 +136,54 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
-        // Bottom menu bar
-        TextView home=(TextView)findViewById(R.id.home);
-        TextView recommendation=(TextView)findViewById(R.id.recommendation);
-        TextView delivery=(TextView)findViewById(R.id.delivery);
-        TextView mypage=(TextView)findViewById(R.id.mypage);
 
-        home.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.d("mypage","I'm here");
-                Intent intent = new Intent(MyPageActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        recommendation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("recommendation","I'm here");
-                Intent intent = new Intent(MyPageActivity.this, RecommendationActivity.class);
-                startActivity(intent);
-            }
-        });
-        delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("delivery","I'm here");
-                Intent intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
-        mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(MyPageActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.recommendation_menu:
+                                intent = new Intent(MyPageActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.delivery_menu:
+                                intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.mypage_menu:
+                                return false;
+                        }
+                        return false;
+                    }
+                }
+        );
+
+        bottomNavigationView.setOnNavigationItemReselectedListener(
+                new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
+                        Intent intent;
+                        switch(item.getItemId()) {
+                            case R.id.home_menu:
+                                intent = new Intent(MyPageActivity.this, SearchActivity.class);
+                                startActivity(intent);
+                            case R.id.recommendation_menu:
+                                intent = new Intent(MyPageActivity.this, RecommendationActivity.class);
+                                startActivity(intent);
+                            case R.id.delivery_menu:
+                                intent = new Intent(MyPageActivity.this, DeliveryActivity.class);
+                                startActivity(intent);
+                            case R.id.mypage_menu:
+                        }
+                    }
+                }
+        );
     }
+
 }

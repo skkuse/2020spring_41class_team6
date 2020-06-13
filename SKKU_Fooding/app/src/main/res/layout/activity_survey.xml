@@ -79,7 +79,8 @@
                 android:onClick="checkButton"
                 android:gravity="center"
                 android:text="Spicy"
-                android:textSize="25dp" />
+                android:textSize="25dp"
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/sweet_btn"
