@@ -117,7 +117,6 @@ public class SearchActivity extends AppCompatActivity {
                     Integer flag=0;
                     String[] ingredients_parsed=ingredient.split(",");
                     for (String ing:ingredients_parsed){
-                        Log.d("Test_wrong",filter);
                         if(filter.toLowerCase().contains(ing)){
                             flag=1;
                             break;
@@ -313,13 +312,17 @@ public class SearchActivity extends AppCompatActivity {
                 }else{
                     imageString=null; decodedImage=null;
                 }
-
+                Log.d("Debugging",search_filter.toString());
+                Log.d("Debugging_ingredient",ingredient);
+                Log.d("Debugging_filter",filter);
                 if(sorting_order==1) {
                     if(search_filter==0){
                         Integer flag=0;
                         String[] ingredients_parsed=ingredient.split(",");
                         for (String ing:ingredients_parsed){
-                            if(filter.toLowerCase().contains(ingredient)){
+                            Log.d("Debugging_ing",ing);
+                            Log.d("Debugging_value",String.valueOf(filter.toLowerCase().contains(ingredient)));
+                            if(filter.toLowerCase().contains(ing)){
                                 flag=1;
                                 break;
                             }
@@ -337,7 +340,7 @@ public class SearchActivity extends AppCompatActivity {
                         Integer flag=0;
                         String[] ingredients_parsed=ingredient.split(",");
                         for (String ing:ingredients_parsed){
-                            if(filter.toLowerCase().contains(ingredient)){
+                            if(filter.toLowerCase().contains(ing)){
                                 flag=1;
                                 break;
                             }
