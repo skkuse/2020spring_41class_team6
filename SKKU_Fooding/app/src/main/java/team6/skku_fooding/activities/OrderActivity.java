@@ -222,7 +222,10 @@ public class OrderActivity extends AppCompatActivity {
 
         Toast.makeText(this.getApplicationContext(), "Your order has been received.", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(OrderActivity.this, SearchActivity.class);
+        FirebaseDatabase.getInstance().getReference().child("user").child(uid).child("shopping_cart").setValue("");
+        getSharedPreferences("user_SP", MODE_PRIVATE).edit().putString("cart_item", "").apply();
         startActivity(intent);
+        this.finish();
     }
 
     public void setdb(final Integer ppid, final Integer ncount) {

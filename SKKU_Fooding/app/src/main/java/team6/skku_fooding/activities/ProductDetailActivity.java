@@ -98,6 +98,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         head = LayoutInflater.from(this).inflate(R.layout.product_detail_head, mLinearLayout, false);
         body = LayoutInflater.from(this).inflate(R.layout.product_detail_body, mLinearLayout, false);
+        mLinearLayout.addView(head);
+        mLinearLayout.addView(body);
 
         addCartDialog = v -> {
             int cnt = Integer.parseInt((String)((TextView)head.findViewById(R.id.countTextView)).getText());
@@ -217,8 +219,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                     }
                                                     return 0;
                                                 }).collect(Collectors.toList());
-                                        mLinearLayout.addView(head);
-                                        mLinearLayout.addView(body);
                                         Review o = null;
                                         if (!overall.isEmpty()) {
                                             o = overall.get(overall.size()-1);
